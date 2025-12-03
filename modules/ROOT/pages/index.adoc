@@ -1,0 +1,5 @@
+= INTERLIS 2.4 Benutzerhandbuch
+:page-aliases: README
+
+// This page reuses the repository's README so the same content appears in the Antora site and on GitHub.
+include::../../../README.adoc[]

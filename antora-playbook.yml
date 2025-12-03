@@ -1,0 +1,28 @@
+site:
+  title: INTERLIS 2.4 Benutzerhandbuch
+  url: https://example.com/docs
+  start_page: userhb24-docs::ROOT:index
+  # The start_page above uses the component name from antora.yml and points to modules/ROOT/pages/index.adoc.
+  # Update the url with the final deployment location when the site is published.
+content:
+  sources:
+    - url: .
+      branches: HEAD
+      start_path: .
+      # The start_path points at the repository root so Antora can pick up the module files in modules/ and the README includes.
+ui:
+  bundle:
+    url: https://gitlab.com/antora/antora-ui-default/-/archive/master/antora-ui-default-master.zip
+    snapshot: true
+    # Using the default Antora UI bundle; set snapshot false to pin to a fixed revision when you are ready.
+output:
+  dir: build/site
+  # The generated site will land in build/site; clean or serve from there as needed.
+antora:
+  extensions:
+    # Add extensions here if you need Asciidoctor or site processing plugins.
+    # Leave the list empty until you have a specific use case.
+    []
+runtime:
+  fetch: true
+  # When set to true, Antora will fetch remote content sources. With a local repo, this keeps everything self-contained.

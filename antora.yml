@@ -1,0 +1,6 @@
+name: userhb24-docs
+version: '0.0.1'
+display_version: '0.0.1'
+start_page: ROOT:index
+nav:
+  - modules/ROOT/nav.adoc

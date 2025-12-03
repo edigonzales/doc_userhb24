@@ -1,0 +1,4 @@
+= Lektüre zwischen Dichtung und Wahrheit
+
+// This page embeds the existing chapter content from the docs/ folder.
+include::../../../docs/userhb24_1.adoc[]
