@@ -1,0 +1,42 @@
+ifndef::env-github[:toc: left]
+:toc-title: Inhalt
+:toclevels: 5
+:figure-caption: Abbildung
+:example-caption!:
+:table-caption: Tabelle
+:note-caption: Hinweis
+:icons: font
+// zum Generieren eines PDF aus VS Code (HTML muss mit eingebetteten Bildern generiert werden, damit daraus ein korrektes PDF erstellt werden kann)
+:data-uri:
+:source-highlighter: highlight.js
+:sectnums:
+:sectnumlevels: 5
+:sectlinks:
+:sectanchors:
+:includedir: docs
+// Format der Referenzen auf andere Kapitel
+:xrefstyle: full
+:chapter-refsig: Kapitel
+:section-refsig: Kapitel
+
+= INTERLIS 2.4 Benutzerhandbuch
+Hans Muster <hans.muster@example.com>
+// Versionierung
+:revdate: {docdate}
+:revnumber: 0.0.1
+// Pdf output
+:title-page:
+:chapter-label: // deprecated
+
+// Die Verweise auf die Inhalte der Dokumentation sollen im README auf Github nicht angezeigt werden.
+ifndef::env-github[]
+include::{includedir}/userhb24_1.adoc[]
+
+endif::[]
+
+// Erklärung und Link auf Website
+//ifdef::env-github[]
+//In diesem Repository wird die Online-Version des INTERLIS 2.4 Referenzhandbuches gepflegt. Die Quelldateien der einzelnen Haupt- und Unterkapitel befinden sich im Verzeichnis `docs`. Ergänzungen und Korrekturen bitte als Issue oder allenfalls PR erfassen.
+
+//Die aktuelle Website ist unter https://geostandards-ch.github.io/doc_refhb24/ erreichbar.
+//endif::[]
