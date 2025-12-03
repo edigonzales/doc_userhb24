@@ -1,1 +1,7 @@
 .DS_Store
+.sass-cache/
+.bundle/
+node_modules/
+.antora-cache/
+build/
+public/

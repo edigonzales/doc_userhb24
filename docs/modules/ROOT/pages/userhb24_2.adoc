@@ -1,0 +1,22 @@
+== Überblick am Beispiel Ilistal
+
+=== Aufbruchstimmung im Ilistal
+
+==== Der Startschuss
+
+Die Ferienregion Ilistal hat sich entschlossen, ihre Webpage auf Vordermann zu bringen. Das
+vielfältige Transportangebot soll interaktiv mittels eines grafischen Dialogs abrufbar sein. Die
+Präsentation im Gemeindehaus war beeindruckend: Schöne Bilder, trendige Abkürzungen
+wie HTML, XML, GIS, SVG! Sogleich kamen natürlich weitere Wünsche auf. Im Bauamt
+entschloss man sich kürzlich, die Adressen nach der neuen Norm zu erfassen. Das könnte
+man doch nutzen! Der Direktor der Ilishornbahnen erinnert sich, dass der nationale
+Bergbahnenverband einen Dienst einrichten möchte, über den das landesweite Bergbahn-
+angebot verfügbar ist. Dabei sollen auch die Fahrpreise und insbesondere die verschiedenen
+Verbundabonnemente abrufbar sein. Sein Kollege, der für die technischen Belange zustän-
+dig ist, macht darauf aufmerksam, dass er auf seinem Compi die ganze Infrastruktur ver-
+walte. Informationen über die Bahntrassees und die Pisten könne er schon liefern. Da sei
+aber nicht alles klar. Kürzlich habe er nämlich auf dem Bauamt gefragt, ob er nicht die Daten
+der neuen Überbauung «Im Oberboden» haben könne. Sie hätten es dann schliesslich hin-
+gekriegt. Einige Informationen seien zwar verloren gegangen. Die seien aber nicht so wichtig
+gewesen.
+Da wird die Gemeindepräsidentin hellhörig. Eine Kollegin, die in einer Gemeinde nahe der
