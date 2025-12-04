@@ -2,5 +2,14 @@
 
 Eine Einführung unter Berücksichtigung von UML und INTERLIS.
 
-asdfasdf asdf
+(auf INTERLIS 2.3 angepasste und ergänzte Ausgabe)
+
+== Autoren
+Joseph Dorfschmid · do@adasys.ch +
+Sascha Brawer · sb@adasys.ch +
+Adasys AG, Dörflistrasse 67, CH – 8050 Zürich +
+www.adasys.ch
+
+== Dank
+Die Autoren danken allen, die mit Anregungen, Kritik und präziser Lektüre zu diesem Papier beigetragen haben.
 
