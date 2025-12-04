@@ -22,7 +22,7 @@ gekriegt. Einige Informationen seien zwar verloren gegangen. Die seien aber nich
 gewesen.
 Da wird die Gemeindepräsidentin hellhörig. Eine Kollegin, die in einer Gemeinde nahe der
 
-[,ruby,linenums]
+[,interlis]
 ----
 INTERLIS 2.3;
 
