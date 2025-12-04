@@ -1,8 +1,8 @@
-== Überblick am Beispiel Ilistal
+= Überblick am Beispiel Ilistal
 
-=== Aufbruchstimmung im Ilistal
+== Aufbruchstimmung im Ilistal
 
-==== Der Startschuss
+=== Der Startschuss
 
 Die Ferienregion Ilistal hat sich entschlossen, ihre Webpage auf Vordermann zu bringen. Das
 vielfältige Transportangebot soll interaktiv mittels eines grafischen Dialogs abrufbar sein. Die

@@ -1,10 +1,6 @@
-= Modellieren raumbezogener Daten -- Eine Einführung unter Berücksichtigung von UML und INTERLIS
-:page-layout: page
+= Modellieren raumbezogener Daten 
 
-// This page only includes other files
-// No direct content here
+Eine Einführung unter Berücksichtigung von UML und INTERLIS.
 
-include::userhb24_1.adoc[]
-
-include::userhb24_2.adoc[]
+asdfasdf asdf
 
