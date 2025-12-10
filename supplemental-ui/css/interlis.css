@@ -1,0 +1,43 @@
+/* Top navbar background and text */
+.navbar {
+    background-color: rgb(250, 250, 250) !important;
+    color: #004b82; /* dark blue-ish text */
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  /* Brand link (logo + title) */
+  .navbar .brand-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+  }
+  
+  /* Logo */
+  .navbar .brand-logo {
+    width: 36px !important;
+    height: 36px !important;
+    display: block;
+    object-fit: contain;
+  }
+  
+  /* Site title text */
+  .navbar .site-title {
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: #004b82;
+  }
+  
+  /* Hover state */
+  .navbar .brand-link:hover .site-title {
+    text-decoration: none;
+    opacity: 0.8;
+  }
+
+  .doc pre {
+    font-size:.7778rem !important;
+    line-height:1.5;
+    margin:0;
+    /*font-family: "JetBrains Mono", Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace !important;*/
+  }
+  

@@ -1,18 +1,23 @@
 = Überblick am Beispiel Ilistal
-:source-highlighter: rouge
 
 == Aufbruchstimmung im Ilistal
 
 === Der Startschuss
 
-Die Ferienregion Ilistal hat sich entschlossen, ihre Webpage auf Vordermann zu bringen. Das
-vielfältige Transportangebot soll interaktiv mittels eines grafischen Dialogs abrufbar sein. Die
-Präsentation im Gemeindehaus war beeindruckend: Schöne Bilder, trendige Abkürzungen
-wie HTML, XML, GIS, SVG! Sogleich kamen natürlich weitere Wünsche auf. Im Bauamt
-entschloss man sich kürzlich, die Adressen nach der neuen Norm zu erfassen. Das könnte
-man doch nutzen! Der Direktor der Ilishornbahnen erinnert sich, dass der nationale
-Bergbahnenverband einen Dienst einrichten möchte, über den das landesweite Bergbahn-
-angebot verfügbar ist. Dabei sollen auch die Fahrpreise und insbesondere die verschiedenen
+Die Ferienregion Ilistal hat sich entschlossen, ihre Webpage auf Vordermann zu bringen. Das vielfältige Transportangebot soll interaktiv mittels eines grafischen Dialogs abrufbar sein. Die Präsentation im Gemeindehaus war beeindruckend: Schöne Bilder, trendige Abkürzungen wie HTML, XML, GIS, SVG! Sogleich kamen natürlich weitere Wünsche auf. Im Bauamt entschloss man sich kürzlich, die Adressen nach der neuen Norm zu erfassen. Das könnte man doch nutzen! Der Direktor der Ilishornbahnen erinnert sich, dass der nationale Bergbahnenverband einen Dienst einrichten möchte, über den das landesweite Bergbahnangebot verfügbar ist. Dabei sollen auch die Fahrpreise und insbesondere die verschiedenen
+
+[graphviz]
+----
+digraph foo {
+  node [style=rounded]
+  node1 [shape=box]
+  node2 [fillcolor=yellow, style="rounded,filled", shape=diamond]
+  node3 [shape=record, label="{ a | b | c }"]
+
+  node1 -> node2 -> node3
+}
+----
+
 Verbundabonnemente abrufbar sein. Sein Kollege, der für die technischen Belange zustän-
 dig ist, macht darauf aufmerksam, dass er auf seinem Compi die ganze Infrastruktur ver-
 walte. Informationen über die Bahntrassees und die Pisten könne er schon liefern. Da sei

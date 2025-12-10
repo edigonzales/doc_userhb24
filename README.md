@@ -18,11 +18,25 @@ Die Datei `build-ui.zip` in das Doku-Repo kopieren und im `playbook.yml` referen
 ```
 ui:
   bundle:
-    url: ./build/ui-bundle.zip   
+    url: ./sup/ui-bundle.zip   
     snapshot: true
 ```
 
 Das Bundle kann natürlich auch irgendwo online gestellt werden.
 
 ### PlantUML
-https://chatgpt.com/c/6931a1c9-a5d0-8333-aee7-3dc223af345f
+
+```
+npm i asciidoctor-kroki
+```
+
+```
+asciidoc:
+  attributes:
+    kroki-fetch-diagram: true    
+  extensions:
+    - asciidoctor-kroki
+````
+
+- https://github.com/asciidoctor/asciidoctor-kroki
+- https://docs.antora.org/antora/latest/page/include-a-partial/#include-diagram
