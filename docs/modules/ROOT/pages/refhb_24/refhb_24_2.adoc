@@ -1,0 +1,10 @@
+= Referenzhandbuch: Details
+
+== Begriffe
+Einige wichtige Begriffe werden hier knapp erläutert, um bei Bedarf schnell nachschlagen zu können.
+
+== Konzepte
+Kurze Beschreibungen der zentralen Konzepte mit Verweisen auf weiterführende Kapitel.
+
+== Beispiele
+Beispielhafte Fragmente und Muster, die bei der Modellierung unterstützen.

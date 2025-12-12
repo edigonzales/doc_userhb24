@@ -1,3 +1,9 @@
-* xref:index.adoc[Start]
-* xref:userhb24_1.adoc[Lektüre zwischen Dichtung und Wahrheit]
-* xref:userhb24_2.adoc[Installation]
+* xref:userhb24/userhb_index.adoc[Start]
+* Benutzerhandbuch
+** xref:userhb24/userhb_index.adoc[Titelseite]
+** xref:userhb24/userhb24_1.adoc[Lektüre zwischen Dichtung und Wahrheit]
+** xref:userhb24/userhb24_2.adoc[Installation]
+* Referenzhandbuch
+** xref:refhb_24/refhb_index.adoc[Titelseite]
+** xref:refhb_24/refhb_24_1.adoc[Referenzübersicht]
+** xref:refhb_24/refhb_24_2.adoc[Referenzdetails]

@@ -1,0 +1,7 @@
+= Referenzhandbuch
+
+Dieses Referenzhandbuch bündelt technische Details, Schnittstellen und Nachschlageinformationen.
+
+== Überblick
+
+Die Kapitel in diesem Referenzhandbuch liefern kurze, prägnante Antworten auf häufige Fragen und dokumentieren die relevanten Schnittstellen.
