@@ -1,3 +1,0 @@
-* xref:index.adoc[Start]
-* xref:userhb24_1.adoc[Lektüre zwischen Dichtung und Wahrheit]
-* xref:userhb24_2.adoc[Installation]

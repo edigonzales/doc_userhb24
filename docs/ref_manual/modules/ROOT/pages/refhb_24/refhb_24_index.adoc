@@ -1,0 +1,16 @@
+= Referenzhandbuch
+
+****
+Das vorliegende Dokument ist eine Kopie des Standards https://ech.ch/de/ech/ech-0031/2.1.0[eCH-0031 INTERLIS 2-Referenzhanduch Version 2.1.0 (2024)]. Die Bereitstellung als Website erlaubt es, aus anderen Webapplikationen (Forum, GitHub usw.) direkt auf ein Kapitel zu verweisen, wenn daraus zitiert wird. Ein umständliches Nachschlagen in einem zusätzlichen PDF-Dokument entfällt.
+
+Abgelöste Versionen des Standards:
+
+* Version 2.0 (INTERLIS 2.4, 2017) https://ech.ch/de/ech/ech-0031/2.0[(nur als PDF bei eCH verfügbar)]
+* Version 1.0 (INTERLIS 2.3, 2006) https://ech.ch/de/ech/ech-0031/1.0[(nur als PDF bei eCH verfügbar)]
+
+
+[NOTE]
+Als Ergänzung zu den HTML-Ankern vor den Kapiteln und Unterkapiteln wurden, wo sinnvoll, zusätzliche Anker bei den Codeblöcken (EBNF) eingearbeitet. Diese sind durch das Zeichen &#8251; gekennzeichnet. Damit lässt sich direkt auf einen Codeblock innerhalb eines Kapitels verweisen.
+
+Fehler oder Abweichungen zum Standarddokument von eCH können im zugrunde liegenden https://github.com/geostandards-ch/doc_refhb24[Github Repository] als Issue erfasst werden. Für inhaltliche Änderungen muss bei der eCH Fachgruppe Geoinformation ein https://ech.ch/de/ech-standards/standardisierungsprozess/request-change-rfc?ech_nummer=eCH-0031&version=2.1.0[Request for Change (RFC)] eingereicht werden.
+****
