@@ -1,0 +1,6 @@
+name: reference_manual
+title: Referenzhandbuch
+version: '0.0.1'
+start_page: refhb_24/refhb_index.adoc
+nav:
+  - modules/ROOT/nav.adoc
