@@ -6,7 +6,10 @@ content:
   sources:
     - url: .
       branches: [HEAD]
-      start_path: docs
+      start_path: docs/user_manual
+    - url: .
+      branches: [HEAD]
+      start_path: docs/ref_manual
 
 ui:
   bundle:
