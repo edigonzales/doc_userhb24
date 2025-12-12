@@ -1,9 +1,0 @@
-= Referenzhandbuch: Übersicht
-
-== Zweck des Referenzhandbuchs
-Dieses Referenzhandbuch fasst die wichtigsten Elemente der Modellbeschreibung zusammen und dient als Nachschlagewerk.
-
-== Kapitelstruktur
-* Begriffe
-* Konzepte
-* Beispiele
