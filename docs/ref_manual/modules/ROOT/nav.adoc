@@ -1,3 +1,4 @@
-** xref:refhb_24/refhb24_index.adoc[Titelseite]
-** xref:refhb_24/refhb24_1_einleitung.adoc[Einleitung]
-** xref:refhb_24/refhb24_2_grundprinzipien.adoc[Grundprinzipien]
+** xref:refhb24/refhb24_index.adoc[Titelseite]
+** xref:refhb24/refhb24_1_einleitung.adoc[Einleitung]
+** xref:refhb24/refhb24_2_grundprinzipien.adoc[Grundprinzipien]
+** xref:refhb24/refhb24_3_beschreibungssprache.adoc[Beschreibungssprache]

@@ -1,3 +1,0 @@
-= Grundprinzipien
-
-include::refhb24_2_1.adoc[]

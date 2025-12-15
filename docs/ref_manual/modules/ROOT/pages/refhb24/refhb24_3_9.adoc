@@ -1,0 +1,97 @@
+=== Einheiten
+Einheiten werden immer durch eine Bezeichnung und (in [ ]-Klammern) ein Kurzzeichen beschrieben. Bezeichnung und Kurzzeichen müssen Namen sein. Fehlt die Kurzzeichen-Angabe, ist sie gleich der Bezeichnung. Je nach Art der Einheit können weitere Angaben folgen. Der Gebrauch einer Einheit erfolgt immer über das Kurzzeichen. Die Bezeichnung hat damit nur dokumentarischen Charakter.
+
+==== Basiseinheiten
+Basis-Einheiten sind Meter, Sekunden, etc. Sie brauchen keine weiteren Angaben mehr. Basis-Einheiten können aber auch abstrakt (Schlüsselwort `ABSTRACT`) definiert werden, wenn die Einheit selbst noch nicht bekannt ist, wohl aber der zu bezeichnende Gegenstand (z.B. Temperatur, Geld). Abstrakten Einheiten ist noch kein Kurzzeichen zugeordnet. Konkrete Einheiten können nicht mehr erweitert werden.
+
+.Beispiele:
+====
+----
+UNIT
+  Laenge (ABSTRACT);
+  Zeit (ABSTRACT);
+  Geld (ABSTRACT);
+  Temperatur (ABSTRACT);
+  Meter [m] EXTENDS Laenge;
+  Sekunde [s] EXTENDS Zeit;
+  SchweizerFranken [CHF] EXTENDS Geld;
+  Celsius [C] EXTENDS Temperatur;
+----
+====
+
+Durch INTERLIS selbst ist die abstrakte Einheit `ANYUNIT` definiert. Alle anderen Einheiten erben sie direkt oder indirekt (vgl. <<_referenzsysteme>>), ohne dass dies definiert werden muss. Folgende Einheiten sind durch INTERLIS direkt (d.h. intern) definiert:
+
+----
+UNIT
+  ANYUNIT            (ABSTRACT);
+  DIMENSIONLESS      (ABSTRACT);
+  LENGTH             (ABSTRACT);
+  MASS               (ABSTRACT);
+  TIME               (ABSTRACT);
+  ELECTRIC_CURRENT   (ABSTRACT);
+  TEMPERATURE        (ABSTRACT);
+  AMOUNT_OF_MATTER   (ABSTRACT);
+  ANGLE              (ABSTRACT);
+  SOLID_ANGLE        (ABSTRACT);
+  LUMINOUS_INTENSITY (ABSTRACT);
+  MONEY              (ABSTRACT);
+
+  METER [m]          EXTENDS LENGTH;
+  KILOGRAMM [kg]     EXTENDS MASS;
+  SECOND [s]         EXTENDS TIME;
+  AMPERE [A]         EXTENDS ELECTRIC_CURRENT;
+  DEGREE_KELVIN [K]  EXTENDS TEMPERATURE;
+  MOLE [mol]         EXTENDS AMOUNT_OF_MATTER;
+  RADIAN [rad]       EXTENDS ANGLE;
+  STERADIAN [sr]     EXTENDS SOLID_ANGLE;
+  CANDELA [cd]       EXTENDS LUMINOUS_INTENSITY;
+----
+
+Hinweis: Im Anhang H Einheiten-Definitionen sind die gebräuchlichsten Einheiten in einem erweiterten Typenmodell zusammengefasst.
+
+==== Abgeleitete Einheiten
+Abgeleitete Einheiten sind durch Multiplikationen bzw. Divisionen mit Konstanten oder Funktion in eine andere Einheit umrechenbar.
+
+.Beispiele:
+====
+----
+UNIT
+  Kilometer [km] = 1000 [m];
+  Centimeter [cm] = 1 / 100 [m];
+  Inch [in] = 0.0254 [m];         !! 1 Zoll ist 2.54 cm
+  Fahrenheit [oF] = FUNCTION // (oF + 459.67) / 1.8 // [K];
+----
+Werte in Kilometer müssen mit Tausend multipliziert werden, um Werte in Meter zu werden. Werte in Inch müssen mit 2.54 multipliziert werden um Werte in Zentimeter zu werden. Werte in Grad Fahrenheit müssen um 459.67 erhöht und durch 1.8 dividiert werden um zu Kelvin-Werten zu werden.
+====
+
+Eine abgeleitete Einheit ist automatisch eine Erweiterung der gleichen abstrakten Einheit, wie diejenige in die sie umgerechnet werden kann.
+
+==== Zusammengesetze Einheiten
+Zusammengesetzte Einheiten (z.B. km pro h) ergeben sich durch Multiplikationen oder Divisionen von anderen Einheiten (Basis-Einheit, abgeleitete oder zusammengesetzte Einheit). Zusammengesetzte Einheiten können auch als abstrakte Einheiten definiert werden. Sie müssen sich dann vollständig auf andere abstrakte Einheiten beziehen.
+
+Die bei der konkreten Erweiterung verwendeten Einheiten müssen dann konkrete Erweiterungen der in der abstrakten Definition verwendeten Einheiten sein.
+
+.Beispiel:
+====
+----
+UNIT
+  Geschwindigkeit (ABSTRACT) = ( Laenge / Zeit );
+  Stundenkilometer [kmph] EXTENDS Geschwindigkeit = ( km / h );
+----
+====
+
+.Syntaxregeln
+----
+UnitDef = 'UNIT'
+            { Unit-Name
+                [ '(' 'ABSTRACT' ')' | '[' UnitShort-Name ']' ]
+                [ 'EXTENDS' Abstract-UnitRef ]
+                [ '=' ( DerivedUnit | ComposedUnit ) ] ';' }.
+
+DerivedUnit = [ DecConst { ( '*' | '/' ) DecConst }
+              | 'FUNCTION' Explanation ] '[' UnitRef ']'.
+
+ComposedUnit = '(' UnitRef { ( '*' | '/' ) UnitRef } ')'.
+
+UnitRef = [ Model-Name '.' [ Topic-Name '.' ] ] UnitShort-Name.
+----

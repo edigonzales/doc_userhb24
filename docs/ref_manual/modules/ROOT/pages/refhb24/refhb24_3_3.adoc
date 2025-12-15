@@ -1,0 +1,15 @@
+== Hauptregel
+Jede Beschreibungseinheit beginnt mit der Angabe der Sprach-Version. Damit wird die Basis für spätere Sprachzusätze gelegt. Die in diesem Dokument beschriebene Version von INTERLIS ist *2.4*.
+
+Nachher folgen die Modellbeschreibungen.
+
+++++
+<a href="#3_3_C1">&#x203B</a>
+<div id="2_3_C1"></div>
+++++
+[#3_3_C1]
+.Syntaxregel:
+----
+INTERLIS2Def = 'INTERLIS' Version-Dec ';'
+               { ModelDef }.
+----

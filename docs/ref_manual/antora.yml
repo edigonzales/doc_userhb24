@@ -1,7 +1,7 @@
 name: reference_manual
 title: Referenzhandbuch
-version: '0.0.1'
-start_page: refhb_24/refhb24_index.adoc
+version: '2.1.0'
+start_page: refhb24/refhb24_index.adoc
 nav:
   - modules/ROOT/nav.adoc
 
