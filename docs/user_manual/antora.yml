@@ -1,0 +1,10 @@
+name: user_manual
+title: Benutzerhandbuch
+version: '0.0.1'
+start_page: userhb24/userhb_index.adoc
+nav:
+  - modules/ROOT/nav.adoc
+
+asciidoc:
+  attributes:
+    sectnums: true

@@ -4,6 +4,7 @@ Eine Einführung unter Berücksichtigung von UML und INTERLIS.
 
 (auf INTERLIS 2.3 angepasste und ergänzte Ausgabe)
 
+:!sectnums:
 == Autoren
 Joseph Dorfschmid · do@adasys.ch +
 Sascha Brawer · sb@adasys.ch +

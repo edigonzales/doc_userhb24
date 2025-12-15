@@ -1,12 +1,15 @@
 site:
   title: INTERLIS // Documentation
-  start_page: user_manual::index.adoc
+  start_page: user_manual::userhb24/userhb_index.adoc
   
 content:
   sources:
     - url: .
       branches: [HEAD]
-      start_path: docs
+      start_path: docs/user_manual
+    - url: .
+      branches: [HEAD]
+      start_path: docs/ref_manual
 
 ui:
   bundle:

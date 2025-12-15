@@ -1,0 +1,31 @@
+{
+  "name": "doc_userhb24",
+  "version": "1.0.0",
+  "description": "``` npx antora playbook.yml ```",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edigonzales/doc_userhb24.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/edigonzales/doc_userhb24/issues"
+  },
+  "homepage": "https://github.com/edigonzales/doc_userhb24#readme",
+  "devDependencies": {
+    "@antora/asciidoc-loader": "^3.1.14",
+    "@antora/site-generator-default": "^3.1.14",
+    "@asciidoctor/core": "^3.0.4"
+  },
+  "dependencies": {
+    "asciidoctor-kroki": "^0.18.1"
+  }
+}

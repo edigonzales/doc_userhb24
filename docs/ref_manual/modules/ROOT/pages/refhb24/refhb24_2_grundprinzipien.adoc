@@ -1,0 +1,21 @@
+= Grundprinzipien
+
+include::refhb24_2_1.adoc[]
+
+include::refhb24_2_2.adoc[]
+
+include::refhb24_2_3.adoc[]
+
+include::refhb24_2_4.adoc[]
+
+include::refhb24_2_5.adoc[]
+
+include::refhb24_2_6.adoc[]
+
+include::refhb24_2_7.adoc[]
+
+include::refhb24_2_8.adoc[]
+
+include::refhb24_2_9.adoc[]
+
+include::refhb24_2_10.adoc[]

@@ -1,0 +1,87 @@
+=== Umgang mit Metaobjekten
+==== Allgemeine Aussagen zu Metaobjekten
+Metaobjekte im Sinne von INTERLIS 2 sind Objekte, die im Rahmen der Beschreibung von Anwendungsmodellen von Bedeutung sind. Dies wird für Referenzsysteme und Grafiksignaturen genutzt.
+
+Der Aufbau von Referenzsystem- oder Signaturobjekten muss in einem `REFSYSTEM MODEL` oder einem `SYMBOLOGY MODEL` mit den üblichen Mitteln von Klassen und Strukturen definiert sein. Referenzsystem-, Achsen- bzw. Signatur-Klassen müssen dabei Erweiterungen der durch INTERLIS angebotenen Klassen `COORDSYSTEM`, `REFSYSTEM`, `AXIS` bzw. `SIGN` sein, die ihrerseits Erweiterungen der Klasse `METAOBJECT` sind. Diese weist ein Attribut Name auf, das im Rahmen aller Metaobjekte eines Behälters eindeutig sein muss.
+
+Für die eigentliche Beschreibung eines Anwendungsmodells wird das Metaobjekt selbst nicht gebraucht. Es genügt, den Namen als Stellvertreter des Metaobjektes zu kennen. Für ein laufendes System müssen die Metaobjekte jedoch in der Regel vollständig, also mit allen ihren Attributen, bekannt sein. Für ein Laufzeitsystem muss es darum klar sein, in welchem Behälter ein Metaobjekt mit einem bestimmten Namen enthalten ist. Damit Metaobjekte (bzw. ihre Namen) in Modellen verwendet werden können, müssen sie deklariert werden. Dabei wird ein Behältername eingeführt, das dabei vorausgesetzte Thema angegeben und dann (pro Klasse) die Namen der dort erwarteten Objekte aufgezählt (Regel MetaDataBasketDef). Der Behältername kann dabei auch als Erweiterung eines bereits eingeführten Namens definiert werden (`EXTENDS`). Das zugehörige Thema muss dann das gleiche wie beim Basisnamen oder eine Erweiterung davon sein.
+
+Wird der Bezug auf ein Metaobjekt (Regel MetaObjectRef) unter dem erweiterten Behälternamen gemacht, muss der Name des Metaobjektes dort oder in einer geerbten Definition erwähnt sein. Von einem Laufzeitsystem wird das Metaobjekt zuerst im zugehörigen Behälter gesucht. Wird dort kein solches Metaobjekt gefunden, wird die Suche in den Behältern gemäss den direkt oder indirekt geerbten Behälternamen fortgesetzt. Damit können Metaobjekte in mehreren Stufen bereitgestellt und verfeinert werden. Zum Beispiel können zunächst allgemeine Grafiksignaturen definiert werden, die dann auf regionaler Stufe verfeinert und ergänzt werden. Wie der konkrete Behälter auf Grund des Behälternamens angesprochen werden kann, ist dabei Sache des eingesetzten Laufzeitsystems.
+
+In einem übersetzten Anwendungsmodell (vgl. <<_modelle>>), kann einem Behälternamen auch ein konkreter Behälter zugewiesen werden, der nur Übersetzungen enthält (METAOBJECT_TRANSLATION Objekte; vgl. Anhang A Das interne INTERLIS-Datenmodell). Damit werden diejenigen Metaobjekte übersetzt, die durch den entsprechenden Behälter im zu Grunde liegenden Modell eingeführt wurden. Ist das zu Grunde liegende Modell selbst eine Übersetzung, kann auch da dem Behälternamen ein konkreter Behälter zugewiesen sein, der nur Übersetzungen enthält. Ist das Modell keine Übersetzung, kann einem Behälternamen nur ein konkreter Behälter zugewiesen werden, der keine Übersetzungen (d.h. keine METAOBJECT_TRANSLATION Objekte) enthält.
+
+++++
+<a href="#3_10_C1">&#x203B</a>
+<div id="2_10_C1"></div>
+++++
+[#3_10_C1]
+.Syntaxregeln:
+----
+MetaDataBasketDef = ( 'SIGN' | 'REFSYSTEM' ) 'BASKET' Basket-Name
+                       Properties<FINAL>
+                       [ 'EXTENDS' MetaDataBasketRef ]
+                           '~' TopicRef
+                       { 'OBJECTS' 'OF' Class-Name ':' MetaObject-Name
+                           { ',' MetaObject-Name } } ';'.
+
+MetaDataBasketRef = [ Model-Name '.' [ Topic-Name '.' ] ] Basket-Name.
+
+MetaObjectRef = [ MetaDataBasketRef '.' ] Metaobject-Name.
+----
+
+Wird im aktuellen Kontext nur ein Metadaten-Behältername benötigt, muss die Referenz auf den Metadatenbehälter (MetaDataBasketRef) in der Metaobjekt-Referenz nicht angegeben werden.
+
+==== Parameter
+Mittels Parametern werden im Metamodell diejenigen Eigenschaften bezeichnet, die nicht das Metaobjekt selbst, sondern dessen Gebrauch in der Anwendung betreffen. Ihre Definition ist durch das Schlüsselwort `PARAMETER` eingeleitet und ist ähnlich aufgebaut wie diejenige der Attribute.
+
+===== Parameter für Referenz- und Koordinatensysteme
+Für Referenz- und Koordinatensysteme bzw. ihre Achsen ist nur der vordefinierte Parameter Unit zulässig.
+
+Wird in der Definition eines numerischen Datentyps (vgl. <<_numerische_datentypen>>) oder eines Koordinatentyps (vgl. <<_koordinaten>>) auf ein Referenz- oder Koordinatensystem verwiesen (Regel RefSys) muss eine Einheit angegeben sein, die derjenigen der entsprechenden Achse des Koordinatensystems bzw. der einzigen Achse des Referenzsystems (vgl. <<_referenzsysteme>>) verträglich ist.
+
+===== Parameter von Signaturen
+Die Parameter von Signaturen sind frei definierbar. Diese Parameter entsprechen den Angaben (z.B. Punktsymbol-Identifikation, Position, Drehung), die einem Grafiksystem übergeben werden müssen, damit es die Grafik erzeugen kann. Primär muss die Signatur selbst gewählt werden können. Dies erfolgt durch die Definition eines Parameters für die Referenz zur Signaturklasse, in der der Parameter definiert ist (`METAOBJECT`). Als Parameter einer Signatur kann auch eine Referenz zu einem anderen Meta-Objekt angegeben werden (`METAOBJECT OF`). In beiden Fällen wird in der Anwendung (vgl. <<_darstellungsbeschreibungen>>) eine Metaobjekt-Referenz angegeben, d.h. es werden der Behälterreferenzname und der Metaobjektname angegeben. Damit können die effektive Behälter-Identifikation und MetaObjektidentifikation durch das jeweilige Werkzeug bestimmt werden.
+
+Nebst diesen speziellen Parametern können Parameter gleich wie Attribute definiert werden.
+
+++++
+<a href="#3_10_C2">&#x203B</a>
+<div id="2_10_C2"></div>
+++++
+[#3_10_C2]
+.Syntaxregel:
+----
+ParameterDef = Parameter-Name Properties<ABSTRACT,EXTENDED,FINAL>
+                 ':' ( AttrTypeDef
+                     | 'METAOBJECT' [ 'OF' MetaObject-ClassRef ] ) ';'.
+----
+
+==== Referenzsysteme
+Ohne weitere Angaben sind numerische Werte und Koordinaten Differenzangaben; sie haben keinen definierten absoluten Bezug. Um dies zu erreichen, muss ein Koordinatensystem bzw. ein Skalarsystem definiert sein. Die Modelldefinition erfolgt dabei in einem `REFSYSTEM MODEL`. INTERLIS stellt dafür die folgenden Klassen zur Verfügung:
+
+----
+CLASS METAOBJECT (ABSTRACT) =
+  Name: MANDATORY NAME;
+UNIQUE Name;
+END METAOBJECT;
+
+STRUCTURE AXIS =
+  PARAMETER
+    Unit: NUMERIC [ ANYUNIT ];
+END AXIS;
+
+CLASS REFSYSTEM (ABSTRACT) EXTENDS METAOBJECT =
+END REFSYSTEM;
+
+CLASS COORDSYSTEM (ABSTRACT) EXTENDS REFSYSTEM =
+  ATTRIBUTE
+    Axis: LIST {1..3} OF AXIS;
+END COORDSYSTEM;
+
+CLASS SCALSYSTEM (ABSTRACT) EXTENDS REFSYSTEM =
+  PARAMETER
+    Unit: NUMERIC [ ANYUNIT ];
+END SCALSYSTEM;
+----
+
+In Erweiterungen können weitere für die Art der Skalar- und Koordinatensysteme typische Attribute beigefügt werden und auch die Einheit durch eine Erweiterung ersetzt werden (Syntax für die Parameterdefinition vgl. <<_parameter>> und <<_klassen_und_strukturen>>). Die in einem Wertebereich definierte Einheit muss dann mit ihr verträglich sein (vgl. <<_einheiten>>).

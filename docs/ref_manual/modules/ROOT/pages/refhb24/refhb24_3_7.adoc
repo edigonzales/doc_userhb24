@@ -1,0 +1,118 @@
+== Eigentliche Beziehungen
+=== Beschreibung von Beziehungen
+Eigentliche Beziehungen (im Gegensatz zu Referenzattributen; vgl. <<_attribute>>) werden als eigenständige Konstrukte beschrieben. Sie haben aber weitgehend gleiche Eigenschaften wie Klassen. So können sie selbst lokale Attribute und Konsistenzbedingungen aufweisen. Der Assoziationsname darf auch fehlen. Er wird dann implizit aus der Zusammensetzung der Rollennamen (erster, dann zweiter, usw.) gebildet. Die wichtigste Eigenschaft einer Beziehung besteht jedoch in der Auflistung von mindestens zwei Rollen mit den zugeordneten Klassen oder Beziehungen (Regeln wie bei den Referenzattributen, vgl. <<_referenzattribute>>) und den Detaileigenschaften wie Stärke der Beziehung und Kardinalität. Die Rollennamen sollen typischerweise Substantive sein. Sie können, müssen aber nicht, mit den Namen der zugeordneten Klassen oder Beziehungen übereinstimmen. Die zu definierende Beziehung darf aber nicht Erweiterung einer so zugeordneten Beziehung sein. Einer Rolle können auch alternativ verschiedene Klassen oder Beziehungen zugeordnet sein. Eine solche alternative Klasse oder Beziehung darf keine Erweiterung einer anderen alternativen Klasse oder Beziehung derselben Rolle sein.
+
+Beispiel einer Beziehung, zwischen der Klasse K einerseits und den Klassen K oder L andererseits:
+++++
+<a href="#3_7_C1">&#x203B</a>
+<div id="2_7_C1"></div>
+++++
+[#3_7_C1]
+----
+ASSOCIATION A =
+  K –- K;
+  KL –- K OR L;
+END A;
+----
+
+Beziehungen können primär wie Klassen erweitert werden. Damit die Bedeutung der Beziehung klar und unveränderlich ist, dürfen in Erweiterungen keine zusätzlichen Rollen beigefügt werden. Die zugeordneten Klassen oder Beziehungen und die Kardinalität können aber eingeschränkt werden. Unveränderte Rollen müssen nicht aufgeführt werden.
+
+Beispiel, wie die Beziehung A zu A1 spezialisiert wird, wo nur noch Bezüge zu K1 (einer Subklasse von K) einerseits und zu K, L1, L2 (Subklassen von L) andererseits zulässig sind:
+++++
+<a href="#3_7_C2">&#x203B</a>
+<div id="2_7_C2"></div>
+++++
+[#3_7_C2]
+----
+ASSOCIATION A1 EXTENDS A =
+  K (EXTENDED) –- K1;
+  KL (EXTENDED) –- K OR L RESTRICTION (L1, L2);
+END A1;
+----
+
+Ein Objekt der Klasse K1 kann damit entweder über eine Beziehung A mit Objekten der Klassen K oder L (zulässig, da K1 eine Subklasse von K ist) oder über eine Beziehung A1 mit Objekten der Klassen K, L1 oder L2 verbunden sein. Möchte man zusätzlich erreichen, dass ein Objekt K1 in der Rolle K nur die spezialisierte Beziehung A1 (und nicht auch die allgemeine Beziehung A) eingehen kann, ist die Rolle K als verdeckend (`HIDING`) zu kennzeichnen.
+++++
+<a href="#3_7_C3">&#x203B</a>
+<div id="2_7_C3"></div>
+++++
+[#3_7_C3]
+----
+ASSOCIATION A1 EXTENDS A =
+  K (EXTENDED, HIDING) –- K1;
+  KL (EXTENDED) –- K OR L RESTRICTION (L1, L2);
+END A1;
+----
+
+Dies ist allerdings nur zulässig, wenn für K1 keine anderen aus A erweiterten Beziehungen definiert sind, bei denen die Rolle K nicht als verdeckend gekennzeichnet ist.
+
+++++
+<a href="#3_7_C4">&#x203B</a>
+<div id="2_7_C4"></div>
+++++
+[#3_7_C4]
+.Syntaxregeln:
+----
+AssociationDef = 'ASSOCIATION' [ Association-Name ]
+                   Properties<ABSTRACT,EXTENDED,FINAL,OID>
+                   [ 'EXTENDS' AssociationRef ]
+                   [ 'DERIVED' 'FROM' RenamedViewableRef ] '='
+                   [ ( 'OID' 'AS' OID-DomainRef | 'NO' 'OID' ) ';' ]
+                   { RoleDef }
+                   [ 'ATTRIBUTE' ] { AttributeDef }
+                   [ 'CARDINALITY' '=' Cardinality ';' ]
+                   { ConstraintDef }
+                 'END' [ Association-Name ] ';'.
+
+AssociationRef = [ Model-Name '.' [ Topic-Name '.' ] ] Association-Name.
+
+RoleDef = Role-Name Properties<ABSTRACT,EXTENDED,FINAL,HIDING,
+                               ORDERED,EXTERNAL>
+            ( '--' | '-<>' | '-<#>' ) [ Cardinality ]
+            RestrictedClassOrAssRef { 'OR' RestrictedClassOrAssRef }
+            [ ':=' Role-Factor ] ';'.
+
+Cardinality = '{' ( '*' | PosNumber [ '..' ( PosNumber | '*' ) ] ) '}'.
+----
+
+Eine Instanz einer Beziehung zwischen Objekten kann als eigenständiges Objekt (Beziehungsinstanz) betrachtet werden. Primär werden auf dieser Beziehungsinstanz für alle Rollen die Bezüge zu den Bezugsobjekten festgehalten (alle müssen definiert sein!). Ohne weitere Angabe wird die Beziehungsinstanz durch die Bezüge zu den Objekten, die sie verbindet, identifiziert. Zwischen diesen Objekten ist dann nur eine solche Beziehungsinstanz zulässig. Mehrere Beziehungsinstanzen zwischen derselben Objektkombination sind nur zulässig, wenn für die Beziehung explizit eine Kardinalität mit Obergrenze grösser eins verlangt wird (`CARDINALITY`). In diesem Fall muss auch eine Objektidentifikation (mittels Property OID) verlangt werden. Wird eine eigene Objektidentifikation verlangt, kann die Beziehung auch selbst wieder in Rollen als Bezug verwendet werden.
+
+Wird Kompatibilität mit INTERLIS 1 angestrebt, sollen nur Beziehungen mit zwei Rollen definiert werden, wobei die maximale Anzahl der Kardinalität einer Rolle nicht grösser als 1 sein darf.
+
+Normalerweise müssen die konkreten Beziehungen zwischen Objekten mittels einer Anwendung explizit erstellt und dann durch das Bearbeitungssystem als Instanz festgehalten werden. Eine Beziehung kann aber auch aus einer Sicht abgeleitet werden, ohne dass sie instanziiert wird (`DERIVED FROM`). Eine solche Beziehung kann eine Erweiterung einer abstrakten Beziehung sein. Sie kann nicht selbst abstrakt sein. Wird sie erweitert, muss die Erweiterung auf der gleichen Sicht oder einer Erweiterung davon aufbauen. Allen Rollen und Attributen müssen entsprechend Objektpfade oder Attributpfade der Sicht zugewiesen sein. Dabei muss ein Objektpfad (vgl. <<_ausdrücke>>) angegeben werden, der letztlich eine der Rolle entsprechende Klasse oder Assoziation bezeichnet. Die Kardinalität muss mit der Leistung der Sicht übereinstimmen. Dies kann aber nur zur Laufzeit geprüft werden.
+
+Ein typischer Anwendungsfall dürfte die Herleitung einer Beziehung aus den geometrischen Verhältnissen sein: In einer Sicht (Verbindung), auf die in der Assoziation Bezug genommen wird, werden z.B. Gebäude auf Grund der Geometrie mit den Liegenschaften, auf denen sie stehen,
+in Beziehung gebracht (vgl. <<_sichten>>).
+
+=== Stärke der Beziehung
+In Anlehnung an UML werden verschiedene Beziehungsstärken unterschieden. Für ihre Erklärung wird vor allem beschrieben, welchen Einfluss die Beziehungsstärke beim Kopieren und Löschen von Objekten hat. Für INTERLIS 2 ist jedoch nur das Löschen von Objekten (als Folge der inkrementellen Nachlieferung) von Bedeutung. Darüber hinaus gibt es noch andere Überlegungen, die die Beziehungsstärke beeinflussen. Insbesondere ist es den Bearbeitungssystemen überlassen, feinere Beziehungsstärken oder gar andere Kriterien für das Verhalten bei bestimmten Operationen vorzusehen.
+
+* Assoziation: Die beteiligten Objekte sind lose miteinander verbunden. Wird ein beteiligtes Objekt kopiert, ist die Kopie mit denselben Objekten verbunden wie das Original. Wird ein beteiligtes Objekt gelöscht, wird die Beziehung ebenfalls gelöscht, das verbundene Objekt bleibt aber bestehen. Syntaktisch wird bei allen Rollen `'--'` angegeben.
+
+* Aggregation: Es besteht eine schwache Beziehung zwischen einem Ganzen und seinen Teilen. Aggregationen sind nur in Beziehungen mit zwei Rollen erlaubt. Syntaktisch muss die Rolle, die zum Ganzen führt, mit einem Rhombus `'-<>'` angegeben sein. Die Rolle, die zum Teil führt, wird mit `'--'` definiert. Eine Objektklasse kann in verschiedenen Aggregationen in der Teile-Rolle auftreten. Einem bestimmten Teile-Objekt können dann auch verschiedene Ganze-Objekte zugeordnet sein. Anders als bei Assoziationen werden als Folge der Erstellung einer Kopie des Ganzen auch entsprechende Kopien der Teile erstellt. Da im Rahmen von INTERLIS 2 das Kopieren von Objekten nicht von Bedeutung ist, behandelt INTERLIS 2 Aggregationen wie Assoziationen.
+
+* Komposition: Es besteht eine starke Beziehung zwischen dem Ganzen und seinen Teilen. Eine Objektklasse darf in mehr als einer Komposition in der Teile-Rolle auftreten. Einem bestimmten Teile-Objekt darf aber höchstens ein Ganzes zugeordnet sein. Bei der Löschung des Ganzen werden auch seine Teile gelöscht. Bei der Rolle, die zum Ganzen führt, wird ein gefüllter Rhombus '-<#>' angegeben.
+
+Assoziationen dürfen zu Aggregationen, diese zu Kompositionen erweitert werden, nicht aber umgekehrt.
+
+=== Kardinalität
+Die Kardinalität definiert die minimale und die maximale Anzahl erlaubter Objekte; steht nur ein Wert, ist das Minimum gleich dem Maximum. Steht als Maximum ein Stern anstatt einer Zahl, gibt es keine obere Schranke für die Anzahl der Unterobjekte. Die Kardinalitätsangabe `{\*}` ist äquivalent mit `{0..*}`. Falls die Kardinalitätsangabe weggelassen wird, gilt normalerweise `{0..*}`. Bei Kompositionsrollen ist nur `{0..1}` oder `\{1\}` zugelassen (ein Teil kann nur zu einem Ganzen gehören). Fehlt die Angabe gilt `{0..1}`.
+
+Die Kardinalität darf in Erweiterungen nur eingeschränkt, nicht jedoch erweitert werden. Wird also zunächst eine Kardinalität von `{2..4}` angegeben, darf eine Erweiterung nicht `{2..5}`, `\{7\}` oder `{*}` deklarieren. Das Weglassen der Kardinalitätsangabe wird bei erweiterten Attributen als Übernehmen des ererbten Wertes verstanden.
+
+Je nach Verwendung hat die Kardinalität folgende Bedeutung:
+
+* Bei Unterstrukturen: Anzahl der zulässigen Elemente.
+
+* Bei Rollen von Beziehungen: Anzahl der einer Rolle entsprechenden Objekte, die einer beliebigen Kombination von Objekten, die den anderen Rollen entsprechen, über die Beziehung zugeordnet sein dürfen.
+
+* Bei der Beziehung als Ganzes: Anzahl der Beziehungsinstanzen für eine beliebige Kombination von Objekten gemäss allen Rollen der Beziehung.
+
+=== Geordnete Beziehungen
+Will man erreichen, dass die Beziehung aus der Sicht einer bestimmten Bezugsklasse in einer bestimmten Ordnung geführt wird, muss dies bei der Rolle als Eigenschaft (`ORDERED`) verlangt werden. Diese Ordnung wird beim Etablieren der Beziehung definiert und muss bei Transfers erhalten bleiben.
+
+=== Beziehungszugänge
+Als Beziehungszugang (AssociationAccess) wird die Möglichkeit bezeichnet, aus der Sicht eines Objektes gemäss einer Beziehung zu den Beziehungsinstanzen und weiter zu den Bezugsobjekten zu navigieren. Beziehungszugänge müssen nicht definiert werden, sondern entstehen mit der Definition einer Beziehung für alle über Rollen zugeordneten Klassen, die im gleichen Thema wie die Beziehung definiert wurden. Ist eine an einer Beziehung beteiligte Klasse in einem anderen Thema definiert (themenübergreifende Beziehung) oder soll es zulässig sein, dass ein der Rolle entsprechendes Bezugsobjekt in einem anderen Behälter als die Beziehungsinstanz liegen darf, muss dies bei der Rolle speziell angemerkt werden (`EXTERNAL`, vgl. <<_beschreibung_von_beziehungen>> und <<_referenzattribute>>). Die Klasse erhält dann keine Beziehungszugänge. Diese Eigenschaft wird in der Basisdefinition einer Beziehung festgelegt und kann in einer Erweiterung nicht mehr verändert werden. Bezieht sich eine Rolle auf eine vom geerbten Thema geerbte Klasse, sind Beziehungszugänge aus dieser Klasse nur möglich, wenn diese Klasse im aktuellen Thema mit gleichem Namen erweitert wurde (`EXTENDED`). Durch diese Einschränkungen wird vermieden, dass eine Klasse nachträglich (d.h. ausserhalb des Rahmens, in dem sie definiert wurde) nochmals eine Änderung erfährt. 
+
+Beziehungszugänge werden an die Subklassen vererbt, sofern dies nicht durch Verdeckungsforderung bei einer Rolle einer erweiternden Beziehung (`HIDING`) ausgeschlossen wird.
+
+Beziehungszugänge sind für Pfadbeschreibungen von Bedeutung (vgl. <<_ausdrücke>>).

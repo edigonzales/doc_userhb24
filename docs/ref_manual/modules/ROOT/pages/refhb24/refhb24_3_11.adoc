@@ -1,0 +1,17 @@
+=== Laufzeitparameter
+Nebst den eigentlichen Daten und den Metadaten können auch einzelne Datenelemente definiert werden, bei denen erwartet wird, dass sie von einem Bearbeitungs-, Auswerte- oder Darstellungssystem zur Laufzeit bereitgestellt werden. Sie heissen Laufzeitparameter.
+
+++++
+<a href="#3_11_C1">&#x203B</a>
+<div id="2_11_C1"></div>
+++++
+[#3_11_C1]
+.Syntaxregel:
+----
+RunTimeParameterDef = 'PARAMETER'
+                        { RunTimeParameter-Name ':' AttrTypeDef ';' }.
+----
+
+Gebietseinteilungen (Schlüsselwort AREA) sind für Laufzeitparameter nicht zugelassen.
+
+Typische Laufzeitparameter sind zum Beispiel der Darstellungsmassstab und das aktuelle Datum.

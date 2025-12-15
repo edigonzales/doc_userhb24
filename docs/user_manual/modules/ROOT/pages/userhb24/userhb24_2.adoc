@@ -1,8 +1,8 @@
-= Überblick am Beispiel Ilistal
+== Überblick am Beispiel Ilistal
 
-== Aufbruchstimmung im Ilistal
+=== Aufbruchstimmung im Ilistal
 
-=== Der Startschuss
+==== Der Startschuss
 
 Die Ferienregion Ilistal hat sich entschlossen, ihre Webpage auf Vordermann zu bringen. Das vielfältige Transportangebot soll interaktiv mittels eines grafischen Dialogs abrufbar sein. Die Präsentation im Gemeindehaus war beeindruckend: Schöne Bilder, trendige Abkürzungen wie HTML, XML, GIS, SVG! Sogleich kamen natürlich weitere Wünsche auf. Im Bauamt entschloss man sich kürzlich, die Adressen nach der neuen Norm zu erfassen. Das könnte man doch nutzen! Der Direktor der Ilishornbahnen erinnert sich, dass der nationale Bergbahnenverband einen Dienst einrichten möchte, über den das landesweite Bergbahnangebot verfügbar ist. Dabei sollen auch die Fahrpreise und insbesondere die verschiedenen
 
