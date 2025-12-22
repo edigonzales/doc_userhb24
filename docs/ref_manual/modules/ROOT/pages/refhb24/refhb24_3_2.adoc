@@ -1,12 +1,12 @@
-== Grundsymbole der Sprache
+=== Grundsymbole der Sprache
 Die Beschreibungssprache weist die folgenden Symbol-Klassen auf: Namen, Zeichenketten, Zahlen, Erläuterungen, Sonderzeichen, reservierte Wörter und Kommentare.
 
-=== Zeichenvorrat, Zwischenräume und Zeilenenden
+==== Zeichenvorrat, Zwischenräume und Zeilenenden
 Die eigentliche Sprache verwendet nur die druckbaren US-ASCII-Zeichen (32 bis 126). Welche Zeichen nebst dem Leerzeichen als Zwischenräume gelten, ist durch die konkrete Compiler-Implementation festzulegen. Diese legt auch fest, welche Zeichen oder Zeichenkombinationen als Zeilenende gelten. Wie die Zeichen gespeichert werden (Zeichensatz) ist Sache der Implementation des Compilers. Sie kann insbesondere je nach Plattform unterschiedlich sein.
 
 Im Rahmen von Kommentaren dürfen auch weitere Zeichen (z.B. Umlaute und Akzente) vorkommen.
 
-=== Namen
+==== Namen
 Ein Name ist definiert als eine Folge von maximal 255 Buchstaben, Ziffern und Unterstrichen, wobei das erste Zeichen ein Buchstabe sein muss. Gross- und Kleinbuchstaben werden dabei unterschieden. Namen, die mit reservierten Wörtern der Sprache (vgl. <<_sonderzeichen_und_reservierte_wörter>>) zusammenfallen, sind unzulässig.
 
 ++++
@@ -24,7 +24,7 @@ HexDigit = ( Digit | 'A' | .. | 'F' | 'a' | .. | 'f' ).
 
 Näheres zur Eindeutigkeit und zum Gültigkeitsbereich von Namen ist im <<_namensräume>> beschrieben.
 
-=== Zeichenketten
+==== Zeichenketten
 Zeichenketten (Strings) kommen im Zusammenhang mit Konstanten vor. Sie beginnen und enden mit einem Anführungszeichen und dürfen sich nicht über mehrere Zeilen erstrecken. `\"` steht für ein Anführungszeichen und `\\` für einen «Backslash» innerhalb des Strings.
 
 Eine Sequenz von `\u`, unmittelbar gefolgt von exakt vier Hexadezimalziffern, steht für ein beliebiges Unicode-Zeichen. Zeichen ab U+10000 sind wie in der UTF-16-Codierung mit zwei Surrogatcodes zu bezeichnen (siehe https://www.unicode.org).
@@ -43,7 +43,7 @@ String = '"' { <any character except '\' or '"'>
              } '"'.
 ----
 
-=== Zahlen
+==== Zahlen
 Zahlen kommen in verschiedener Weise vor: Positive ganze Zahlen inklusive 0 (PosNumber), ganze Zahlen (Number), Dezimalzahlen (Dec) und strukturierte Zahlen. Bei Dezimalzahlen kann die Skalierung als Zehnerpotenz angegeben werden (z.B. 1E2 ist 100, 1E-1 ist 0.1). Strukturierte Zahlen machen nur im Zusammenhang mit entsprechenden Einheiten und Wertebereichen (z.B. Uhrzeit) einen Sinn. Wesentlich ist der Wert der Zahl, nicht deren Darstellung. So ist etwa 007 dieselbe Zahl wie 7.
 
 ++++
@@ -71,7 +71,7 @@ Float:         0.1e7   -0.123456E+4   0.987e-100
 ----
 ====
 
-=== Eigenschaftsmengen
+==== Eigenschaftsmengen
 Für verschiedene Zwecke müssen einem Beschreibungsgegenstand Eigenschaften zugeordnet werden. Dies kann mit einer generellen Syntax erfolgen:
 
 ++++
@@ -110,7 +110,7 @@ Erläuterungen werden dort verlangt, wo ein Sachverhalt näher beschrieben werde
 Explanation = '//' any character except // '//'.
 ----
 
-=== Sonderzeichen und reservierte Wörter
+==== Sonderzeichen und reservierte Wörter
 Sonderzeichen und reservierte Wörter sind in den Syntaxregeln der Sprache (nicht aber bei einer Datenbeschreibung) immer zwischen Apostrophen geschrieben, z.B. `','` oder `'MODEL'`. Die reservierten Wörter werden grundsätzlich mit Grossbuchstaben geschrieben. Konflikte zwischen Namen und reservierten Wörtern sind vermeidbar, wenn Namen nicht ausschliesslich aus Grossbuchstaben bestehen.
 Es werden folgende reservierten Wörter verwendet (einige davon wurden in INTERLIS 1 bzw. 2.3 benutzt und bleiben aus Gründen der Kompatibilität reserviert; sie sind nicht fett und kursiv dargestellt):
 
@@ -163,10 +163,10 @@ Es werden folgende reservierten Wörter verwendet (einige davon wurden in INTERL
 |*WHERE* | *WITH* | *WITHOUT* | *XMLNS*
 |===
 
-=== Kommentare
+==== Kommentare
 Es werden zwei Kommentarformen angeboten:
 
-==== Zeilenkommentar
+===== Zeilenkommentar
 Ein Zeilenkommentar wird mit zwei Ausrufezeichen eröffnet, die unmittelbar aufeinander folgen. Der Zeilenkommentar wird durch das Zeilenende abgeschlossen.
 
 ++++
@@ -179,7 +179,7 @@ Ein Zeilenkommentar wird mit zwei Ausrufezeichen eröffnet, die unmittelbar aufe
 !! Line comment; goes until end of line
 ----
 
-==== Blockkommentar
+===== Blockkommentar
 Der Blockkommentar wird durch einen Schrägstrich und einen Stern eingeleitet; abgeschlossen wird er durch einen Stern und einen Schrägstrich. Er darf sich über mehrere Zeilen hinweg erstrecken und seinerseits Zeilenkommentare enthalten. Geschachtelte Blockkommentare sind zugelassen.
 
 ++++

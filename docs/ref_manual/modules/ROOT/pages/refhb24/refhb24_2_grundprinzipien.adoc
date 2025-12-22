@@ -1,4 +1,4 @@
-= Grundprinzipien
+== Grundprinzipien
 
 include::refhb24_2_1.adoc[]
 
@@ -19,3 +19,5 @@ include::refhb24_2_8.adoc[]
 include::refhb24_2_9.adoc[]
 
 include::refhb24_2_10.adoc[]
+
+

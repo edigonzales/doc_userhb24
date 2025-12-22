@@ -1,5 +1,3 @@
-= Referenzhandbuch
-
 ****
 Das vorliegende Dokument ist eine Kopie des Standards https://ech.ch/de/ech/ech-0031/2.1.0[eCH-0031 INTERLIS 2-Referenzhanduch Version 2.1.0 (2024)]. Die Bereitstellung als Website erlaubt es, aus anderen Webapplikationen (Forum, GitHub usw.) direkt auf ein Kapitel zu verweisen, wenn daraus zitiert wird. Ein umständliches Nachschlagen in einem zusätzlichen PDF-Dokument entfällt.
 

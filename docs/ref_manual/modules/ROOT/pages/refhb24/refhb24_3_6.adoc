@@ -1,6 +1,6 @@
-== Attribute
+=== Attribute
 
-=== Allgemeine Aussagen zu Attributen
+==== Allgemeine Aussagen zu Attributen
 Jedes Attribut wird durch seinen Namen und seinen Typ definiert. In runden Klammern (Regel Properties) können die Vererbungseigenschaften definiert werden. Ist ein Attribut eine Erweiterung eines geerbten Attributes, muss dies mit `EXTENDED` ausdrücklich angemerkt werden. Ist der Wertebereich eines Attributs abstrakt, muss das Attribut als `ABSTRACT` deklariert werden. Ein numerisches Attribut (vgl. <<_numerische_datentypen>>) kann als eine Unterteilung (Schlüsselwort `SUBDIVISION`) des ebenfalls numerischen Vorgängerattributes definiert sein (z.B. Minuten als Unterteilung von Stunden). Dieses Vorgängerattribut muss ganzzahlig und der Wertebereich der Unterteilung muss positiv sein. Ist die Unterteilung kontinuierlich (Schlüsselwort `CONTINUOUS`), muss die Differenz der Wertebereichsgrenzen mit dem Faktor zwischen der Einheit des Attributs und demjenigen des Vorgängerattributs übereinstimmen. Ist zu einer Unterteilung ein Referenzsystem definiert, muss dieses zum Wertesystem eines direkten oder indirekten Vorgängerattributes passen. Ein INTERLIS-Compiler oder ein Laufzeitsystem muss dies jedoch nicht überprüfen.
 
 ++++
@@ -62,15 +62,15 @@ RestrictedStructureRef = ( StructureRef | 'ANYSTRUCTURE' )
 
 Im Rahmen von Erweiterungen ist es zulässig, nur `MANDATORY` anzugeben. Es gilt dann der bereits definierte Attributtyp. Es wird aber verlangt, dass der Wert immer definiert ist.
 
-=== Attribute mit Wertebereichen als Typ
+==== Attribute mit Wertebereichen als Typ
 Als Typ eines Attributs kommen direkte Typendefinitionen (Regel Type) und die Verwendung bereits definierter Wertebereiche (Regel DomainRef) in Frage. Die verschiedenen Möglichkeiten sind im <<_wertebereiche_und_konstanten>> aufgeführt.
 
-=== Referenzattribute
+==== Referenzattribute
 Mit einem Referenzattribut kann der Verweis zu einem anderen Objekt geschaffen werden. Zusammenhänge zwischen eigenständigen Objekten sind mittels eigentlichen Beziehungen (vgl. <<_eigentliche_beziehungen>>) zu definieren.
 
 Die Klassen, deren Objekte für den Bezug in Frage kommen, dürfen konkrete oder abstrakte Objekt- oder Beziehungsklassen, jedoch keine Strukturen sein (da diese keine eigenständigen Objekte sind). Dabei kommen alle konkreten Klassen in Frage, die der aufgeführten primären bzw. einer der aufgeführten einschränkenden (`RESTRICTION TO`) Klassen entsprechen (Klasse selbst oder Unterklasse davon). Auf jeder Restriktionsstufe (Erstdefinition oder in Erweiterungsschritten) müssen jeweils alle noch zulässigen Klassen aufgeführt werden. Jede als Einschränkung definierte Klasse muss Unterklasse einer bisher zulässigen Klasse sein. Eine so in Frage kommende Klasse ist allerdings nur zulässig, wenn sie zum selben Thema wie das Referenzattribut oder zu einem Thema gehört, von denen das referenzierende Thema abhängig (`DEPENDS ON`) ist. Soll die Referenz auf ein Objekt eines anderen Behälters des gleichen oder eines anderen (`DEPENDS ON` vorausgesetzt) Themas verweisen dürfen, muss die Eigenschaft `EXTERNAL` angegeben werden. In Erweiterungen kann diese Eigenschaft weggelassen und damit ausgeschlossen, nicht aber zugefügt werden. Es muss mindestens eine zulässige konkrete Unterklasse geben, wenn das Referenzattribut nicht als abstrakt deklariert ist.
 
-=== Strukturattribute
+==== Strukturattribute
 Die Werte von Strukturattributen bestehen aus einem oder mehreren Strukturelementen (Instanzen von Strukturen; vgl. <<_klassen_und_strukturen>>). Strukturelemente haben keine OID, existieren nur im Zusammenhang mit ihrem Hauptobjekt und sind auch nur über dieses auffindbar. Die zulässige Anzahl der Strukturelemente ergibt sich aus der angegebenen Kardinalität bzw. dem vorhandenen oder abwesenden Schlüsselwort `MANDATORY`. Mit LIST kann man erreichen, dass die Strukturelemente in einer bestimmten Reihenfolge geführt werden. Diese Reihenfolge muss beim Transfer erhalten bleiben. Mit `BAG` sind die Strukturelemente ungeordnet.
 
 Strukturattribute dürfen mit konkreten oder abstrakten Typen (Strukturen, Wertebereiche, Referenzattribute; aber keine Klassen) definiert werden.

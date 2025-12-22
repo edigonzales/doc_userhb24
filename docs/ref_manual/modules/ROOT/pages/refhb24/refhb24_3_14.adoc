@@ -1,0 +1,184 @@
+=== Funktionen
+Eine Funktion wird mittels ihrem Namen, den formalen Parametern sowie einer kurzen Funktionsbeschreibung als Erläuterung definiert. Die Namen der Parameter haben nur dokumentarischen Wert.
+
+Als formale Parameter und Funktionsresultat kommen in Frage:
+
+* Die für Attribute zulässigen Typen, insbesondere auch Strukturen. Als Argumente (d.h. aktuelle Parameter) kommen entsprechende Ausdrücke (Regel Expression) in Frage.
+
+* Wird dabei eine Struktur angegeben, kommen als Argumente primär Strukturelemente in Frage. Es können aber auch Objektpfade angegeben werden, die zu Objekten führen, die eine Erweiterung der Struktur ist. Insbesondere können bei `ANYSTRUCTURE` beliebige Objektpfade angegeben werden.
+
+* Wird `OBJECT OF` angegeben, kommen als Argumente die mittels eines Objektpfads erreichbaren Objekte in Frage, die der Definition entsprechen. Insbesondere können bei `OBJECT OF ANYCLASS` beliebige Objektpfade angegeben werden. Ähnlich wie bei den Bezügen zu anderen Objekten (vgl. <<_referenzattribute>>) können die zulässige Basisklasse und allfällige Einschränkungen definiert und in Erweiterungen spezialisiert werden.
+
+* Wird `OBJECTS OF` angegeben, kommen als Argumente Mengen von Objekten einer Klasse in Frage. Alle Objekte der Menge müssen die beim formalen Argument gemachten Anforderungen bereits auf Grund der Modellbeschreibung erfüllen (die beim formalen Argument gemachte Anforderung wirkt also nicht als nachträglicher Filter).
+
+* Wird `ENUMVAL` angegeben, kommen als Argumente Attribute und Konstanten in Frage, die ein Blatt einer beliebigen Aufzählung (vgl. <<_aufzählungen>>) bezeichnen.
+
+* Wird `ENUMTREEVAL` angegeben, kommen als Argumente Attribute und Konstante in Frage, die einen Knoten oder ein Blatt einer beliebigen Aufzählung bezeichnen.
+
+++++
+<a href="#3_14_C1">&#x203B</a>
+<div id="2_14_C1"></div>
+++++
+[#3_14_C1]
+.Syntaxregeln:
+----
+FunctionDef = 'FUNCTION' Function-Name
+                '(' [ Argument-Name ':' ArgumentType
+                { ';' Argument-Name ':' ArgumentType } ] ')'
+                ':' ArgumentType [ Explanation ] ';'.
+
+ArgumentType = ( AttrTypeDef
+               | ( 'OBJECT' | 'OBJECTS' )
+                     'OF' ( RestrictedClassOrAssRef | ViewRef )
+               | 'ENUMVAL'
+               | 'ENUMTREEVAL' ).
+----
+
+Es sind folgende Standardfunktionen definiert:
+
+* {empty}
++
+----
+FUNCTION myClass (Object: ANYSTRUCTURE): STRUCTURE;
+----
++
+liefert die Klasse des Objektes.
+
+* {empty}
++
+----
+FUNCTION isSubClass (potSubClass: STRUCTURE; potSuperClass: STRUCTURE): BOOLEAN;
+----
++
+liefert true, wenn die Klasse des ersten Argumentes der Klasse oder einer Unterklasse des zweiten Argumentes entspricht.
+
+* {empty}
++
+----
+FUNCTION isOfClass (Object: ANYSTRUCTURE; Class: STRUCTURE): BOOLEAN;
+----
++
+liefert true, wenn das Objekt des ersten Argumentes zur Klasse oder zu einer Unterklasse des zweiten Argumentes gehört.
+
+* {empty}
++
+----
+FUNCTION elementCount (bag: BAG OF ANYSTRUCTURE): NUMERIC;
+----
++
+liefert die Anzahl Elemente, die der Bag (oder die Liste) enthält.
+
+* {empty}
++
+----
+FUNCTION objectCount (Objects: OBJECTS OF ANYCLASS): NUMERIC;
+----
++
+liefert die Anzahl Objekte, welche die gegebene Objektmenge enthält.
+
+* {empty}
++
+----
+FUNCTION len (TextVal: TEXT): NUMERIC;
+FUNCTION lenM (TextVal: MTEXT): NUMERIC;
+----
++
+liefert die Länge des Textes als Anzahl Zeichen.
+
+* {empty}
++
+----
+FUNCTION trim (TextVal: TEXT): TEXT;
+FUNCTION trimM (TextVal: MTEXT): MTEXT;
+----
++
+liefert den um Leerzeichen am Anfang und Ende befreiten Text.
+
+* {empty}
++
+----
+FUNCTION isEnumSubVal (SubVal: ENUMTREEVAL; NodeVal: ENUMTREEVAL): BOOLEAN;
+----
++
+liefert true, wenn SubVal ein Unterelement, also ein Unterknoten oder ein Blatt, des Knotens NodeVal ist.
+
+* {empty}
++
+----
+FUNCTION inEnumRange (Enum: ENUMVAL;
+                      MinVal: ENUMTREEVAL;
+                      MaxVal: ENUMTREEVAL): BOOLEAN;
+----
++
+liefert true, wenn die Aufzählung zu der Enum gehört, geordnet ist und im Bereich von MinVal und MaxVal liegt. Unterelemente von MinVal oder MaxVal gelten als dazu gehörig.
+
+* {empty}
++
+----
+FUNCTION convertUnit (from: NUMERIC): NUMERIC;
+----
++
+rechnet den numerischen Wert des Parameters "from" in den numerischen Rückgabewert um und berücksichtigt dabei die Einheiten, die mit dem Parameter und mit der Verwendung des Resultatwertes (typischerweise mit dem Attribut, dem das Resultat zugewiesen wird) verbunden sind. Diese Funktion darf nur angewendet werden, wenn die Argumente von "from" und vom Rückgabeparameter verträglich sind, d.h. wenn ihre Einheiten von einer gemeinsamen Einheit abgeleitet werden.
+
+* {empty}
++
+----
+FUNCTION length (geom: POLYLINE): NUMERIC;
+FUNCTION multilength (geom: MULTIPOLYLINE): NUMERIC;
+----
++
+berechnet die Länge der Linie gemäss Parameter "geom".
+
+* {empty}
++
+----
+FUNCTION surface (geom: SURFACE): NUMERIC;
+FUNCTION multisurface (geom: MULTISURFACE): NUMERIC;
+----
++
+berechnet den Inhalt der Fläche gemäss Parameter "geom" (`SURFACE` oder `AREA`).
+
+* {empty}
++
+----
+FUNCTION areAreas (Objects: OBJECTS OF ANYCLASS;
+                   SurfaceBag: ATTRIBUTE OF @ Objects
+                                         RESTRICTION (BAG OF ANYSTRUCTURE);
+                   SurfaceAttr: ATTRIBUTE OF @ SurfaceBag
+                                          RESTRICTION (SURFACE)): BOOLEAN;
+----
++
+prüft, ob die Flächen gemäss Objektmenge (erster Parameter) und Attribut (dritter Parameter) eine Gebietseinteilung bilden. Ist das Flächenattribut direkt Teil der Objektklasse, soll für SurfaceBag `UNDEFINED` angegeben werden, ansonsten das Strukturattribut, welche das Flächenattribut enthält.
+
+* {empty}
++
+----
+FUNCTION areAreas2 (Objects: OBJECTS OF ANYCLASS;
+                    SurfaceBag: TEXT;
+                    SurfaceAttr: TEXT): BOOLEAN;
+----
++
+prüft, ob die Flächen gemäss Objektmenge (erster Parameter) und Attribut (dritter Parameter) eine Gebietseinteilung bilden. Ist das Flächenattribut direkt Teil der Objektklasse, soll für Surface-Bag `UNDEFINED` angegeben werden, ansonsten der Pfad zum Strukturattribut mit der Struktur, welche das Flächenattribut enthält. Der Attribut-Pfad soll dabei als TEXT-Konstante, aber in INTERLIS-Syntax, angegeben werden.
++
+.Beispiel:
+====
+----
+SET CONSTRAINT areAreas2 (ALL,"Geometry->Surfaces","Surface");
+----
+====
+
+* {empty}
++
+----
+FUNCTION areAreasWithoutGaps (Objects: OBJECTS OF ANYCLASS;
+                              SurfaceBag: ATTRIBUTE OF @ Objects
+                                         RESTRICTION (BAG OF ANYSTRUCTURE);
+                              SurfaceAttr: ATTRIBUTE OF @ SurfaceBag
+                                          RESTRICTION (SURFACE)): BOOLEAN;
+
+FUNCTION areAreasWithoutGaps2 (Objects: OBJECTS OF ANYCLASS;
+                               SurfaceBag: TEXT;
+                               SurfaceAttr: TEXT): BOOLEAN;
+----
++
+prüft, ob die Gebietseinteilung lückenlos ist, d.h. ob jeder Fläche der Gebietseinteilung (ausser der Restfläche) ein Objekt zugeordnet ist. Parameter wie bei areAreas bzw. areAreas2.
