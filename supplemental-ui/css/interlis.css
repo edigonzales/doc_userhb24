@@ -3,6 +3,7 @@
   font-weight: 500;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 /* Top navbar background and text */
 .navbar {
@@ -38,6 +39,12 @@
   .navbar .brand-link:hover .site-title {
     text-decoration: none;
     opacity: 0.8;
+  }
+
+  .doc pre,
+  .doc code,
+  .doc tt {
+    font-family: "JetBrains Mono", Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace !important;
   }
 
   .doc pre {
