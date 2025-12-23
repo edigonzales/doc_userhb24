@@ -1,0 +1,19 @@
+== Umgang mit Rundung von numerischen Werten und Koordinaten
+
+In INTERLIS wird von numerischen Werten, von Punkten, Linien und Flächen / Flächennetzen gesprochen. Dabei kann definiert werden, welche Stellenzahl die Werte aufweisen sollen. Da INTERLIS nicht in die Systeme hinein regulieren will, ist es den Systemen überlassen, wie sie die Werte (Zahlen, Koordinaten) intern speichern. Die Speicherung muss nur in der Lage sein, Werte gemäss der Wertebereichdefinition festzuhalten.
+
+Numerische Werte weisen in digitaler Form eine endliche Genauigkeit auf, die von der Form der Speicherung abhängt. Für 2D-Koordinaten kann man sich bildlich ein kariertes Papier („Hüslipapier“) vorstellen: Speicherbare Koordinaten können nur auf den Kreuzungspunkten der Karo-Linien liegen.
+
+Betrachtet man nun eine gespeicherte Gerade, deren Anfangs- und Endpunkte auf Kreuzungspunkten unterschiedlicher Karo-Linien liegen, und teilt diese an einer Zwischen-Stelle auf, ergibt sich (ausser in Ausnahmefällen) geometrisch ein Punkt, der im Innern eines Karos liegt. Um ihn zu speichern, wird zwangsläufig auf den nächstliegenden Kreuzungspunkt gerundet. Eine berechnete Koordinate liegt also (ausser in Ausnahmefällen) nicht exakt an der Stelle des geometrischen Ortes, für den sie berechnet wurde. Dies führt insbesondere bei Berechnungen, welche die Koordinaten nutzen, zwangsläufig zu Differenzen.
+
+Typische Folgen der Rundung sind etwa:
+
+* Punkte können zu einem Punkt zusammenfallen
+
+* Kreisbogen-Overlaps ausserhalb der Toleranz
+
+* Verlangte Schnittfreiheit von Linien nicht mehr erfüllt
+
+* Abgeleitete Attribute (insbesondere Längen, Flächenmasse) stimmen nicht mehr mit der geometrischen Auswertung überein
+
+Mit einer höheren Speichergenauigkeit können solche Probleme auch nicht behoben werden. Es sinkt nur die Wahrscheinlichkeit, dass solche Differenzen als störend betrachtet werden. Numerische Werte werden darum im INTERLIS2-Transfer gemäss der Wertebereichsdefinition im Daten-Modell dargestellt. Konsistenzbedingungen müssen mit den gerundeten Werten (auf- oder abgerundet) eingehalten sein. Funktional abgeleitete Attribute müssen (sofern nicht transient) dem auf- oder abgerundeten Funktionswert entsprechen. Prüfprogramme müssen also bei ihrer Prüfung auf- und abgerundete Werte als in Ordnung taxieren.

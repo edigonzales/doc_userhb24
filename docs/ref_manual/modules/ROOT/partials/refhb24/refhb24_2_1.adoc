@@ -1,0 +1,20 @@
+== Übersicht
+INTERLIS dient der Zusammenarbeit von Informationssystemen, insbesondere von geografischen Informationssystemen oder Landinformationssystemen. Wie der Name sagt, steht INTERLIS zwischen (*INTER*) **L**and-**I**nfomations-**S**ystemen. Zentral hierfür ist, dass alle beteiligten Systeme eine klare Vorstellung von jenen Konzepten besitzen, die für die Zusammenarbeit relevant sind.
+
+[#fig1]
+.Abbildung {chap}-{counter:figctr}: Datentransfer zwischen verschiedenen Datenbanken über gemeinsames Datenmodell (Datenschema) beschrieben mit gemeinsamer Datenbeschreibungssprache.
+image::refhb24/refhb24_fig1.png[]
+
+INTERLIS umfasst aus diesem Grund eine konzeptionelle Beschreibungssprache. Mit dieser Sprache kann der Ausschnitt der Realwelt beschrieben werden, der für eine bestimmte Anwendung von Interesse ist. Eine solche Beschreibung heisst (konzeptionelles) Anwendungsmodell oder Anwendungsschema, bzw. kurz Modell oder Schema. Mit wenigen Konzepten mit genau definierter Bedeutung werden Klassen von Objekten mit ihren Eigenschaften und ihren Beziehungen beschrieben (modelliert). Zudem erlaubt die Beschreibungssprache von INTERLIS, Klassen von abgeleiteten Objekten einzuführen, die als Sichten auf andere Klassen von Objekten definiert werden. Sowohl echte als auch abgeleitete Klassen von Objekten können als Grundlage von Darstellungsbeschreibungen dienen, wobei INTERLIS eine strikte Trennung von Darstellungsbeschreibung und Beschreibung der zu Grunde liegenden Datenstruktur (Objektmodell) sicherstellt.
+
+INTERLIS ist nicht auf eine bestimmte Anwendung ausgerichtet. Beim Entwurf, der sich an allgemeinen objekt-orientierten Prinzipien orientiert, wurde jedoch darauf geachtet, dass jene Konzepte besonders gut unterstützt werden, die für geografische Informationssysteme wichtig sind. So sind Koordinaten, Linien und Flächen als Datentypen Grundkonstrukte von INTERLIS, und es stehen Sprachelemente zur Beschreibung von Messgenauigkeiten und Einheiten zur Verfügung. Dennoch können durchaus auch nicht-geografische Anwendungen mit INTERLIS bearbeitet werden.
+
+Aspekte, die für ein Anwendungsgebiet grundlegend sind, können in einem Basismodell beschrieben werden. Dieses Basismodell wird anschliessend z.B. gemäss den spezifischen Bedürfnissen eines Landes, in weiteren Stufen gemäss denen einer bestimmten Gegend (wie Kanton, Region oder Gemeinde) spezialisiert (siehe <<fig2,Abbildung {chap}-2>>). INTERLIS 2 bietet als Mittel zur Spezialisierung die objekt-orientierten Konzepte der Vererbung und des Polymorphismus an. So ist sichergestellt, dass bereits erfolgte Definitionen nicht wiederholt werden müssen oder gar irrtümlicherweise in Frage gestellt werden können.
+
+Das Hauptziel von INTERLIS ist die Interoperabilität von Daten. Daten, die in einem System gemäss einem konkreten INTERLIS-Modell erfasst wurden, sollen ohne Probleme in ein anderes System transferiert werden können. Da INTERLIS nicht unnötig in die Systeme hinein regeln will, können numerische Daten (inkl. Koordinaten und Linien) in Systemen, in den Transferdaten und in den Prüfprogrammen durchaus unterschiedlich gerundet sein. Damit dies nicht zu Problemen führt, wird der Rundungsproblematik speziell Rechnung getragen (vgl. <<_umgang_mit_rundung_von_numerischen_werten_und_koordinaten>>).
+
+[#fig2]
+.Abbildung {chap}-{counter:figctr}: Spezialisierung der Modellierung eines Konzepts von Stufe Bund über kantonale (länderspezifische) bis lokale Stufe.
+image::refhb24/refhb24_fig2.png[]
+
+Grössere Anwendungen müssen nicht in einer einzigen Beschreibung definiert werden. Sie können vielmehr in mehrere Beschreibungseinheiten (Modelle, Schemas) aufgeteilt werden. Eine Beschreibungseinheit kann mehrere Themen umfassen. Im Interesse der Lesbarkeit der Modelle ist es auch möglich, Modelle als reine Übersetzungen von anderen Modellen zu definieren.

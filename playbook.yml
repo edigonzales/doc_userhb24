@@ -23,6 +23,7 @@ asciidoc:
     page-pagination: ''
     kroki-fetch-diagram: true    
     lang: de
+    section-refsig: 'Kapitel'
     table-caption: Tabelle@
     example-caption: Beispiel@
     figure-caption: Abbildung@

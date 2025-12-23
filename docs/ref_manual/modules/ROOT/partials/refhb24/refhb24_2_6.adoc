@@ -1,0 +1,12 @@
+== Grafik-Konzept
+Darstellungsbeschreibungen bauen auf Klassen oder Sichten auf und deklarieren in so genannten _Grafikdefinitionen_ (siehe <<fig5,Abbildung {chap}-5>>) und Anhang M Glossar) welche Grafiksignaturen (z.B. Punktsymbol, Linie, Flächenfüllung oder Textanschrift) den Objekten der Sicht zugeordnet werden sollen, damit ein Grafikumsetzer darstellbare Grafikobjekte erzeugen kann. Die Grafiksignaturen sind in einem eigenen Signaturenmodell definiert, wo auch die Signatur-Eigenschaften beschrieben sind.
+
+[#fig5]
+.Abbildung {chap}-{counter:figctr}: Grafikdefinitionen, die einerseits auf Daten und Sichten und andererseits auf Signaturen aufbauen, um daraus eine Grafik zu erzeugen (abstrahierte Darstellung).
+image::refhb24/refhb24_fig5.png[]
+
+Der Verweis auf die gefragten Grafiksignaturen erfolgt mittels Namen (siehe Signaturobjektnamen in <<fig5,Abbildung {chap}-5>>). Die Grafiksignaturen selbst (auch Signaturobjekte genannt) sind als Meta-Objekte (Daten) in entsprechenden Behältern enthalten. Einen Behälter mit solchen Signaturobjekten nennt man oft auch Signaturenbibliothek.
+
+Im Signaturenmodell wird für jede Signaturart in der entsprechenden Signaturklassen-Definition festgelegt, welche Parameter (z.B. Lage und Orientierung einer Signatur) für die Darstellung nötig sind. Damit wird die Schnittstelle zum Grafiksubsystem (der Grafik-Umsetzer-Software) der jeweiligen Systeme nicht durch INTERLIS selbst, sondern durch die Signaturenmodelle festgelegt. In diesem Rahmen können zudem globale Laufzeit-Parameter deklariert werden (z.B. der Darstellungsmassstab), die zur Laufzeit dem Grafiksubsystem bekannt sind und den Entscheid, mit welchen Signaturen die Darstellung erfolgen soll, beeinflussen können.
+
+Eine Darstellungsbeschreibung muss die Umsetzung in Signaturen nicht abschliessend regeln. Sie kann vielmehr durch eine andere Darstellungsbeschreibung geerbt werden. Darin können Parameter, die in Basisdefinitionen offen gelassen worden sind, ergänzt werden oder es können bereits erfolgte Darstellungsanweisungen ersetzt werden.

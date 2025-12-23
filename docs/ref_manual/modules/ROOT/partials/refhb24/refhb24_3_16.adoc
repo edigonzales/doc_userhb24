@@ -1,0 +1,216 @@
+== Darstellungsbeschreibungen
+Eine Darstellungsbeschreibung besteht aus Grafikdefinitionen, die immer auf einer Sicht oder einer Klasse basieren (Schlüsselwort `BASED ON`). Mit einer Grafikdefinition wird konzeptionell versucht, jedem Objekt dieser Sicht oder Klasse – sofern es nicht mit einer Selektion (Schlüsselwort `WHERE`), die sich auf die Sicht oder Klasse bezieht, noch ausgefiltert wurde – durch eine oder mehrere Zeichnungsregeln (Regel DrawingRule) je eine Grafiksignatur zuzuordnen (Punktsymbol, Linie, Flächenfüllung, Textanschrift) und damit ein oder mehrere Grafikobjekte zu erzeugen, welche die entsprechende Darstellung auslösen (siehe xref:refhb24/refhb24_2_grundprinzipien#fig5[]). Dazu muss jede Zeichnungsregel eine Grafiksignatur (mit Metaobjekt-Namen) auswählen und Argumente festlegen für die dazugehörigen Parameter.
+
+In runden Klammern (Regel Properties) können die Vererbungseigenschaften definiert werden. Ist eine Grafikdefinition abstrakt, entstehen aus ihr keine Grafikobjekte. Die Erweiterung einer Grafikdefinition muss auf der gleichen Klasse basieren wie die Basisgrafikdefinition (`BASED ON` fehlt) oder auf einer ihrer Erweiterungen.
+
+Die Zeichnungsregel wird mit einem Namen identifiziert, der innerhalb der Darstellungsbeschreibung eindeutig ist, damit sie in Erweiterungen aufgegriffen und verfeinert werden kann (Anmerkung: verfeinert im Sinne der Spezialisierung aber auch zusätzlicher Parameterwerte). Existieren zu einer Zeichnungsregel Erweiterungen (in erweiternden Darstellungsbeschreibungen), erzeugen diese keine neuen Grafikobjekte, sondern beeinflussen nur die Signaturparameter des durch die Basisdefinition vorgegebenen Grafikobjektes. Es ist zulässig zu einer Grafikdefinition mehrere Erweiterungen zu definieren. Sie werden alle (in der Reihenfolge ihrer Definition) ausgewertet. Dies kann insbesondere genutzt werden, um für verschiedene Aspekte (z.B. die verschiedenen Zeichnungsregeln) verschiedene Erweiterungsstapel vorzusehen. Anschliessend werden die verschiedenen Signaturparameter bestimmt. Die Definition kann dabei in mehreren Schritten erfolgen. Für jeden Parameter gilt derjenige Wert, der als letztes definiert wurde. Dabei wird zuerst die primäre Definition ausgewertet, dann allfällige Erweiterungen. Parameter-Zuweisungen können zudem noch an eine Bedingung (Regel CondSignParamAssignment) geknüpft werden, d.h. die Zuweisung erfolgt nur, wenn die Bedingung erfüllt ist. Wird die Selektionsbedingung nicht erfüllt, fallen auch allfällige Untererweiterungen ausser Betracht. Innerhalb von Zuweisungsregeln (Syntaxregel CondSignParamAssignment) gilt für Attribut- und Rollennamen der Namensraum der Basisklasse oder -Sicht und für Metaobjekt-, Funktions- und Laufzeitparameternamen der Namensraum der Grafikdefinition.
+
+Sobald Zeichnungsregeln konkret sind, muss definiert sein, zu welcher Klasse die zuzuordnenden Grafiksignaturen gehören. In Erweiterungen von Zeichnungsregeln kann diese Klasse von Grafiksignaturen durch eine Klasse ersetzt werden, welche eine Erweiterung der bisherigen ist. "Verantwortliche" Klasse von Grafiksignaturen ist zunächst diejenige, zu der die zugeordnete Grafiksignatur-Objekt (ein Metaobjekt) gehört. Den in der "verantwortlichen" Klasse eingeführten Parameter müssen die konkreten Werte zugewiesen werden. Entsprechen die angegebenen Parameter einer erweiterten Klasse von Grafiksignaturen, wird diese zur "verantwortlichen" Klasse, sofern die Klasse der Grafiksignatur der Zeichnungsregel mit ihr übereinstimmt oder eine Erweiterung von ihr ist.
+
+In den erwähnten Bedingungen dürfen Objekt-Attribute (s. AttributePath in Regel SignParamAssignment) auch mit Laufzeit-Parametern verglichen werden (vgl. <<_laufzeitparameter>>). Laufzeitparameter, die für die Grafik relevant sind (z.B. der Massstab der gewünschten Grafik), werden typischerweise in Symbologiemodellen definiert, da sie wie die Parameter der Signaturen die von einem System erwarteten Grafikfähigkeiten beschreiben. Für einen Parameter einer Grafiksignatur, der ein Metaobjekt verlangt, muss eine Metaobjekt-Referenz angegeben werden (vgl. <<_umgang_mit_metaobjekten>>).
+
+Der Wert eines gewöhnlichen Parameters einer Grafiksignatur wird als Konstante oder als Verweis auf ein Objekt-Attribut angegeben (s. Factor in Regel SignParamAssignment). Dabei wird immer auf das Attribut eines Objektes aus der Basis-Klasse oder Basis-Sicht verwiesen, welches mit Hilfe von `BASED ON` spezifiziert wurde.
+
+Da die Darstellung häufig von Attributen abhängt, die mittels Aufzählungen definiert sind, wird dafür ein spezielles Konstrukt angeboten: Der Aufzählbereich. Ein Aufzählbereich ist entweder ein einzelner Knoten des Aufzähltyp-Baums oder ein Intervall von Knoten definiert durch zwei Knoten der gleichen Stufe. Intervalldefinitionen sind allerdings nur zulässig, wenn es sich um einen geordneten Aufzähltyp handelt. Wenn der Attributwert in einem der angegebenen Aufzählbereiche liegt, wird der entsprechende Parameter-Wert gesetzt. Die konkreten Signaturen ergeben sich aus dem Signaturenmodell. Dort werden die Signaturklassen samt den für ihre Anwendung nötigen Laufzeitparametern (Schlüsselwort `PARAMETER`) definiert. Es ist zulässig, dass numerische Datentypen nur abstrakt definiert sind.
+
+++++
+<a href="#3_16_C1">&#x203B</a>
+<div id="2_16_C1"></div>
+++++
+[#3_16_C1]
+.Syntaxregeln:
+----
+GraphicDef = 'GRAPHIC' Graphic-Name Properties<ABSTRACT,FINAL>
+               [ 'EXTENDS' GraphicRef ]
+               [ 'BASED' 'ON' ViewableRef ] '='
+               { Selection }
+               { DrawingRule }
+             'END' Graphic-Name ';'.
+
+GraphicRef = [ Model-Name '.' [ Topic-Name '.' ] ] Graphic-Name.
+
+DrawingRule = DrawingRule-Name Properties<ABSTRACT,EXTENDED,FINAL>
+                [ 'OF' Sign-ClassRef ]
+                    ':' CondSignParamAssignment
+                        { ',' CondSignParamAssignment } ';'.
+
+CondSignParamAssignment = [ 'WHERE' Logical-Expression ]
+                          '(' SignParamAssignment
+                              { ';' SignParamAssignment } ')'.
+
+SignParamAssignment = SignParameter-Name
+                        ':=' ( '{' MetaObjectRef '}'
+                             | Factor
+                             | 'ACCORDING' Enum-AttributePath
+                                 '(' EnumAssignment
+                                     { ',' EnumAssignment } ')' ).
+
+EnumAssignment = ( '{' MetaObjectRef '}' | Constant )
+                   'WHEN' 'IN' EnumRange.
+
+EnumRange = EnumerationConst [ '..' EnumerationConst ].
+----
+
+Für die Verwendung in Signaturenmodellen ist die Klasse SIGN durch INTERLIS vordefiniert:
+
+----
+CLASS SIGN (ABSTRACT) EXTENDS METAOBJECT =
+  PARAMETER
+    Sign: METAOBJECT;
+END SIGN;
+----
+
+Für konkrete Signaturenklassen ist diese Basis-Klasse zu erweitern. Dabei werden einerseits die konkreten Daten, andererseits die Parameter definiert.
+
+Das folgende Beispiel skizziert, wie aus einer Punktklasse mit Koordinaten, Zeichenkette und einer Aufzählung als Attribute die entsprechenden Grafiken (Punktsymbole und Textanschriften) definiert werden.
+
+====
+Das Signaturenmodell sei wie folgt definiert:
+----
+SYMBOLOGY MODEL SimpleSignsSymbology (en) AT "http://www.interlis.ch/"
+  VERSION "2005-06-16" =
+
+  DOMAIN
+    S_COORD2 (ABSTRACT) = COORD NUMERIC, NUMERIC;
+
+
+  TOPIC SignsTopic =
+
+    CLASS Symbol EXTENDS INTERLIS.SIGN =
+      PARAMETER
+        Pos: MANDATORY S_COORD2;
+    END Symbol;
+
+    CLASS Textlabel EXTENDS INTERLIS.SIGN =
+      PARAMETER
+        Pos: MANDATORY S_COORD2;
+        Text: MANDATORY TEXT;
+    END Textlabel;
+
+  END SignsTopic;
+
+END SimpleSignsSymbology.
+----
+Zu diesem Signaturenmodell seien konkrete (Signaturen-)Objekte erfasst und unter dem Signaturenbibliotheks-Namen (d.h. Behälter-Namen) SimpleSignsBasket abgelegt worden. Die erfassten Signaturobjekte (Klasse Symbol) heissen Punktsignatur, Quadratsignatur und Kreissignatur, die Schriftarten (Klasse Textlabel) Schrift1 und Schrift2.
+----
+MODEL DatenModell (de) AT "http://www.interlis.ch/"
+  VERSION "2005-06-16" =
+
+  DOMAIN
+    LKoord = COORD
+      0.000 .. 200.000 [m],
+      0.000 .. 200.000 [m],
+      ROTATION 2 -> 1;
+
+  TOPIC PunktThema =
+
+    DOMAIN
+      Punktart = (Stein
+                   (gross,
+                    klein),
+                  Bolzen,
+                  Rohr,
+                  Kreuz,
+                  unvermarkt) ORDERED;
+
+    CLASS Punkt =
+      Lage: LKoord;      !! LKoord sei ein Koordinaten-Wertebereich
+      Art: Punktart;
+      PunktName: TEXT*12;
+    END Punkt;
+
+  END PunktThema;
+
+END DatenModell.
+
+
+MODEL SimpleGrafik (de) AT "http://www.interlis.ch/"
+  VERSION "2005-06-16" =
+
+  IMPORTS DatenModell;
+  IMPORTS SimpleSignsSymbology;
+
+  SIGN BASKET SimpleSignsBasket ~ SimpleSignsSymbology.SignsTopic;
+
+  TOPIC PunktGrafikenThema =
+    DEPENDS ON DatenModell.PunktThema;
+
+    GRAPHIC SimplePunktGrafik BASED ON DatenModell.PunktThema.Punkt =
+
+      Symbol OF SimpleSignsSymbology.SignsTopic.Symbol: (
+        Sign := {Punktsignatur};
+        Pos := Lage
+      );
+
+    END SimplePunktGrafik;
+
+  END PunktGrafikenThema;
+
+END SimpleGrafik.
+----
+Mit dieser Grafik (basierend auf dem Symbologiemodell SimpleSignsSymbology und auf der Darstellungsbeschreibung SimpleGrafik) werden für alle Punkte aus Klasse Punkt einfache Punktsignaturen (dots) gezeichnet.
+
+Nun kann man sich auch vorstellen, dass jemand eine verbesserte Grafik wünscht. Die Verbesserung kann dabei in verschiedener Hinsicht erfolgen, zum Beispiel:
+
+* Es soll zusätzliche Signaturen geben (Punktsignaturen Kreuzsignatur, Dreiecksignatur). Dafür braucht es eine zusätzliche Signaturenbibliothek mit dem Namen SimpleSignsPlusBasket. Da sie die Bibliothek SimpleSignsBasket erweitert, werden die Signaturobjekte (bzw. Metaobjekte) in beiden Bibliotheken gesucht. Würde man die Bibliothek SimpleSignsBasket direkt erweitern (`EXTENDED`) würde für alle im Modell GrafikPlus erzeugten Grafiken -- inklusive derjenigen, die vom Modell SimpleGrafik geerbt wurden -- die Signaturen zuerst in der erweiterten Bibliothek, dann in der Basisbibliothek (SimpleSignsBasket) gesucht.
+
+* Die Signaturen sollen skalierbar sein, damit z.B. grosse und kleine Quadrate mit der gleichen Punktsignatur erstellt werden können. Dafür braucht es ein erweitertes Signaturenmodell, in dem der Skalierungsmassstab der Signaturen als Parameter definiert ist. Da die Signaturklassen keine zusätzlichen Attribute aufweisen, müssen nicht notwendigerweise entsprechende Bibliotheken existieren.
+
+* Je nach Punktart sollen verschiedene Punktsignaturen gezeichnet werden: Steine als grosse bzw. kleine Quadrate, Bolzen als Kreise und Kreuze und Rohre mit der Kreuzsignatur. Die eigentliche Punktsignatur kann direkt aus der Punktart abgeleitet werden. Der Skalierungsfaktor für kleine Quadrate zur Darstellung von kleinen Steinen, wird mit einer zusätzlichen Zuweisung erreicht. Unvermarkte Punkte werden weiterhin als einfache Punktsignaturen gezeichnet. Darum braucht es für diesen Fall keine neue Zuweisung.
+
+----
+SYMBOLOGY MODEL ScalableSignsSymbology (en) AT "http://www.interlis.ch/"
+  VERSION "2005-06-16" =
+
+  IMPORTS SimpleSignsSymbology;
+
+  TOPIC ScalableSignsTopic EXTENDS SimpleSignsSymbology.SignsTopic =
+
+    CLASS Symbol (EXTENDED) =
+      PARAMETER
+        ScaleFactor: 0.1 .. 10.0;  !! Default 1.0
+    END Symbol;
+
+  END ScalableSignsTopic;
+
+END ScalableSignsSymbology.
+
+
+MODEL GrafikPlus (de) AT "http://www.interlis.ch/"
+  VERSION "2005-06-16" =
+
+  IMPORTS SimpleGrafik;
+  IMPORTS SimpleSignsSymbology;
+  IMPORTS ScalableSignsSymbology;
+
+  SIGN BASKET SimpleSignsPlusBasket EXTENDS
+    SimpleGrafik.SimpleSignsBasket ~ ScalableSignsSymbology.ScalableSignsTopic;
+
+  TOPIC PunktGrafikenPlusTop EXTENDS SimpleGrafik.PunktGrafikenThema =
+
+    GRAPHIC PunktGrafikPlus EXTENDS SimplePunktGrafik =
+
+      Symbol (EXTENDED) OF ScalableSignsSymbology.ScalableSignsTopic.Symbol: (
+        Sign := ACCORDING Art (
+          {Quadratsignatur} WHEN IN #Stein,
+          {Kreissignatur} WHEN IN #Bolzen,
+          {Kreuzsignatur} WHEN IN #Rohr .. #Kreuz
+        )
+      ),
+      WHERE Art == #Stein.klein (
+          ScaleFactor := 0.5
+      );
+
+      Text OF SimpleSignsSymbology.Signs.Textlabel: (
+        Sign := {Schrift1};
+        Pos := Lage;
+        Text := PunktName
+      );
+
+    END PunktGrafikPlus;
+
+  END PunktGrafikenPlusTop;
+
+END GrafikPlus.
+----
+====

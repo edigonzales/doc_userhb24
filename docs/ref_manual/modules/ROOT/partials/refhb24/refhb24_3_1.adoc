@@ -1,0 +1,73 @@
+== Verwendete Syntax
+Zur Festlegung des konzeptionellen Datenmodells (Datenschemas) und der Transferparameter eines Datentransfers wird in den folgenden Kapiteln eine formale Sprache definiert. Diese Sprache ist selbst formal definiert. Syntaxregeln beschreiben dabei die zulässige Reihenfolge von Symbolen.
+
+Die Beschreibung folgt damit der Art und Weise, die bei der Beschreibung moderner Programmiersprachen üblich ist. Hier wird deshalb nur eine knappe, für das Verständnis nötige Darstellung angegeben. Für Einzelheiten wird auf die Literatur verwiesen. Eine kurze Einführung befindet sich z.B. in «Programmieren in Modula-2» von Niklaus Wirth.
+
+Eine Formel wird im Sinne der erweiterten Backus-Naur-Notation (EBNF) wie folgt aufgebaut:
+
+----
+Formel-Name = Formel-Ausdruck.
+----
+
+Der Formel-Ausdruck ist eine Kombination von:
+-	fixen Wörtern (inkl. Spezialzeichen) der Sprache. Sie werden in Apostrophe eingeschlossen, z.B. `'BEGIN'`.
+-	Referenzen von anderen Formeln durch Angabe des Formelnamens.
+
+Als Kombination kommen in Frage:
+
+.Aneinanderreihung
+----
+a b c         zuerst a, dann b, dann c.
+----
+
+.Gruppierung
+----
+( a )         runde Klammern gruppieren Formel-Ausdrücke.
+----
+
+.Auswahl
+----
+a | b | c     a, b oder c.
+----
+
+.Option
+----
+[ a ]         a oder nichts (leer).
+----
+
+.Fakultative Wiederholung
+----
+{ a }         beliebige Folgen von a oder nichts (leer).
+----
+
+.Obligatorische Wiederholung (als Zusatz zur EBNF)
+----
+(* a *)       beliebige Folge von a, aber mindestens eins.
+----
+
+.Beispiele von Formel-Ausdrücken:
+====
+----
+(a|b)(c|d)    ac, ad, bc oder bd
+a[b]c         abc oder ac
+a{ba}         a, aba, ababa, abababa, ...
+{a|b}c        c, ac, bc, aac, abc, bbc, bac, ...
+a(*b*)        ab, abb, abbb, abbbb, ...
+(*ab|[c]d*)   ab, d, cd, abd, dab, cdab, ababddd, cdababcddcd, ...
+----
+====
+
+Häufig möchte man eine syntaktisch gleiche Formel in verschiedenen Zusammenhängen, für verschiedene Zwecke verwenden. Um diesen Zusammenhang auch ausdrücken zu können, müsste man eine zusätzliche Formel schreiben:
+
+----
+Example = 'CLASS' Classname '=' Classdef.
+Classname = Name.
+----
+
+Damit dieser Umweg vermieden werden kann, wird folgende abgekürzte Schreibweise angewendet:
+
+----
+Example = 'CLASS' Class-Name '=' Classdef.
+----
+
+Die Formel Class-Name wird nicht definiert. Syntaktisch kommt direkt die Regel "Name" zur Anwendung (vgl. <<_namen>>). Von der Bedeutung her ist der Name jedoch ein Klassenname. "Class" wird damit quasi zu einem Kommentar.

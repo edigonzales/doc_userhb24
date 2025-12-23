@@ -1,4 +1,4 @@
-=== Wertebereiche und Konstanten
+== Wertebereiche und Konstanten
 Mit der Vorstellung eines Wertebereichs sind verschiedene Aspekte verbunden. Primär muss ein Datentyp festgelegt werden. Die INTERLIS-Datentypen sind unabhängig von der Implementation. Es wird deshalb z.B. nicht von Integer oder Real, sondern einfach von numerischen Datentypen gesprochen (vgl. <<_numerische_datentypen>>).
 
 Werden numerische Attribute (inkl. Koordinaten, Linien), die nicht TRANSIENT (vgl. unten) sind, insbesondere im Rahmen von Ausdrücken verwendet, sind die Werte (unabhängig von der Speicherung im jeweiligen System) immer gemäss Wertebereichsdefinition zu runden. Damit das Rundungsverfahren nicht vorgeschrieben werden muss (z.B. kaufmännisch [0.5 immer aufrunden]), gelten Werte von funktional berechneten Attributen, die nicht TRANSIENT (vgl. unten) sind, als korrekt, wenn sie auf- oder abgerundet sind.
@@ -71,7 +71,7 @@ Constant = ( 'UNDEFINED'
 
 Die typenspezifischen Konstanten sind bei den einzelnen Datentypen definiert.
 
-==== Zeichenketten
+=== Zeichenketten
 Eine Zeichenkette ist eine Folge von Zeichen mit einer maximalen Länge. Der Zeichenvorrat muss klar definiert sein (vgl. Anhang D Zeichentabelle).
 
 Im Datentyp `MTEXT` sind die Zeichen «Carriage Return» (Wagenrücklauf) (#xD), «Line Feed» (Zeilenvorschub) (#xA) und «Tabulatorzeichen» (#x9), im Gegensatz zum Wertebereich des Datentyps `TEXT`, enthalten.
@@ -107,7 +107,7 @@ TextType = ( 'MTEXT' [ '*' MaxLength-PosNumber ]
 TextConst = String.
 ----
 
-==== Aufzählungen
+=== Aufzählungen
 Mit einer Aufzählung werden die für diesen Typ zulässigen Werte festgelegt. Die Aufzählung ist jedoch nicht einfach linear, sondern im Sinne eines Baumes strukturiert. Die Blätter des Baumes (nicht aber die Knoten) bilden die Menge der zulässigen Werte.
 
 .Beispiel:
@@ -122,7 +122,8 @@ ergibt die folgenden - mittels Konstanten beschriebenen - zulässigen Werte:
 ----
 #rot.dunkelrot #rot.orange #rot.karmin #gelb #gruen.hellgruen #gruen.dunkelgruen
 ----
-.Beispiel einer Aufzählung
+[#fig8]
+.Abbildung {chap}-{counter:figctr}: Beispiel einer Aufzählung
 image::refhb24/refhb24_fig8.png[]
 ====
 
@@ -199,12 +200,13 @@ und für FarbePlusPlus:
 Durch die Angabe von `FINAL` bei den Grünstufen von FarbePlus ist es in FarbePlusPlus nicht zulässig weitere Grünstufen zu definieren. Mit der Angabe von `FINAL` für die Unterteilung von Rot in FarbePlusPlus wird verhindert, dass in möglichen Erweiterungen von FarbePlusPlus noch weitere Rotvarianten angefügt werden können.
 ====
 
-==== Textausrichtungen
+=== Textausrichtungen
 Für die Aufbereitung von Plänen und Karten müssen die Positionen von Texten festgehalten werden. Dabei muss festgelegt werden, welcher Stelle des Textes die Position entspricht. Mit dem horizontalen Alignment wird festgelegt, ob die Position auf dem linken oder rechten Rand des Textes oder in der Textmitte liegt. Das vertikale Alignment legt die Position in Richtung der Texthöhe fest.
 
 Der Abstand Cap-Base entspricht der Höhe der Grossbuchstaben. Unterlängen befinden sich im Bereich von Base-Bottom.
 
-.Textausrichtung horizontal (`HALIGNMENT`) und vertikal (`VALIGNMENT`).
+[#fig9]
+.Abbildung {chap}-{counter:figctr}: Textausrichtung horizontal (`HALIGNMENT`) und vertikal (`VALIGNMENT`).
 image::refhb24/refhb24_fig9.png[]
 
 Horizontales und vertikales Alignment können als folgende vordefinierte Aufzählung verstanden werden:
@@ -225,7 +227,7 @@ DOMAIN
 AlignmentType = ( 'HALIGNMENT' | 'VALIGNMENT' ).
 ----
 
-==== Boolean
+=== Boolean
 Der Typ Boolean weist die Werte false und true auf. Er kann als folgende vordefinierte Aufzählung verstanden werden:
 
 ----
@@ -243,7 +245,7 @@ DOMAIN
 BooleanType = 'BOOLEAN'.
 ----
 
-==== Numerische Datentypen
+=== Numerische Datentypen
 Die wichtigste Angabe bei numerischen Datentypen ist der Minimal- und der Maximal-Wert inklusive Stellenzahl (Nachkommastellen) sowie der Skalierungsfaktor. Zusätzlich kann angegeben werden, dass der Typ zirkulär ist (Schlüsselwort `CIRCULAR`), d.h. dass der in der letzten signifikanten Stelle um 1 erhöhte Maximalwert und der Minimalwert sachlich die gleiche Bedeutung haben (z.B. bei Winkeln 0 .. 359 Grad). Ist das Attribut als eine kontinuierliche Unterteilung des Vorgängerattributs definiert (vgl. <<_allgemeine_aussagen_zu_attributen>>), muss der Typ als zirkulär definiert sein. Fehlt die Angabe des Minimal- und Maximal-Wertes (Schlüsselwort `NUMERIC`), gilt der Wertebereich als abstrakt.
 
 ----
@@ -320,7 +322,7 @@ DecConst = ( Dec | 'PI' | 'LNBASE' ).
 NumericConst = DecConst [ '[' UnitRef ']' ].
 ----
 
-==== Formatierte Wertebereiche
+=== Formatierte Wertebereiche
 Formatierte Wertebereiche basieren auf Strukturen und verwenden deren numerische oder formatierte Attribute in einem Format. Dieses Format dient einerseits dem Datenaustausch (vgl. 3.3.11.5 Codierung von formatierten Wertebereichen), andererseits der Definition von unterer und oberer Grenze des Wertebereichs.
 
 ++++
@@ -353,7 +355,7 @@ Im Rahmen einer Erweiterung kann auf eine Erweiterung der ursprünglichen Strukt
 
 In der Formatdefinition können einerseits konstante Strings, die nicht mit einer Ziffer beginnen (am Anfang, am Ende und zwischen den einzelnen Attributreferenzen) und andererseits direkte oder indirekte Attributreferenzen (über Strukturattribute) enthalten sein. Die Attributreferenz muss entweder ein numerisches Attribut oder ein Strukturattribut bezeichnen. Im Falle eines numerischen Attributes können Vorkommastellen festgelegt werden. Als Folge ergeben sich nötigenfalls führende Nullen. Die Nachkommastellen ergeben sich aus dem numerischen Wertebereich. Bei Strukturattributen muss definiert werden, gemäss welchem formatierten Wertebereich es formatiert werden soll. Die Struktur muss mit der Basisstruktur des Wertebereichs übereinstimmen oder eine Erweiterung davon sein.
 
-==== Datum und Zeit
+=== Datum und Zeit
 Wo Datums- oder Zeitangaben nicht nur aus einem einzigen Wert (z.B. Jahr, Sekunde) bestehen, werden üblicherweise formatierte Wertebereiche verwendet.
 
 ++++
@@ -425,7 +427,7 @@ END Projekt;
 ----
 ====
 
-==== Koordinaten
+=== Koordinaten
 Koordinaten können ein-, zwei- oder dreidimensional definiert werden und sind entsprechend eine Einzelzahl, ein Zahlenpaar oder ein Zahlentripel. Es ist zulässig, dass die zweite oder dritte Dimension erst in einer Erweiterung beigefügt wird. Für jede Dimension muss der numerische Wertebereich sowie allenfalls eine Masseinheit und ein Koordinatensystem (inkl. Achsnummern) angegeben werden. Es gelten die gleichen Regeln wie bei den numerischen Datentypen. Es können nur konkrete Masseinheiten angegeben werden. Wird kein Referenzsystem angegeben und sind die Masseinheiten entweder nicht oder als Längeneinheit definiert, darf ein Programmsystem, das das Modell implementiert, davon ausgehen, dass es sich um kartesische Koordinaten handelt.
 
 Wird eine Rotationsangabe gemacht (Schlüsselwort `ROTATION`) kann im Rahmen von Richtungsdefinitionen (vgl. <<_numerische_datentypen>>) auf ein solches Koordinaten-Referenzsystem verwiesen werden. Die Rotationsdefinition legt fest, welche Achse des Koordinaten-Wertebereichs der Nullrichtung und welche der Richtung eines positiven, rechten Winkels entsprechen. Sie darf auch in einer konkreten Koordinatendefinition fehlen und dann allenfalls in einer Erweiterung beigefügt werden.
@@ -516,7 +518,7 @@ CONTEXT default =
   MyModel.Coord2 = Coord2Special;
 ----
 
-==== Wertebereiche von Objektidentifikationen
+=== Wertebereiche von Objektidentifikationen
 Identifizierbare Objekte werden immer mit einer Objektidentifikation versehen. Damit für die Systeme klar ist, welcher Speicherplatz dafür vorgesehen werden muss und wie die Objektidentifikationen erzeugt werden müssen, können entsprechende Wertebereiche definiert und diese den Themen bzw. Klassen (vgl. <<_themen>> und <<_klassen_und_strukturen>>) zugeordnet werden. Für die Verwaltung von Objektidentifikationen, insbesondere auch von Behältern, macht es aber Sinn, gewöhnliche Attribute mit solchen Wertebereichen zu führen.
 
 ++++
@@ -546,7 +548,7 @@ Es ist nicht möglich, eine OID-Definition zu erweitern, ausser dass ein `NOOID`
 
 Wird `ANYOID` für abstrakte Themen bzw. Klassen angewendet, wird verlangt, dass eine Objektidentifikation erwartet wird, die genaue Definition aber noch offen ist. Sonst kann `ANYOID` nur als Wertebereich von Attributen verwendet werden. Zum Attributwert gehört dann nicht nur die eigentliche `OID`, sondern auch der konkrete OID-Wertebereich. OID-Werte von textlichen OID-Wertebereichen müssen die XML-ID Regel in <<_einleitung_3>> erfüllen: erstes Zeichen muss ein Buchstabe, eine Ziffer oder ein Unterstrich sein, dann folgen Buchstaben, Ziffern, Punkte, Minuszeichen, Unterstriche; keine Doppelpunkte (!).
 
-==== Gefässe
+=== Gefässe
 Durch Einsatz dieses Datentyps können Attribute modelliert werden, deren Inhalt nicht spezifiziert werden kann. Die Variante `XML` beschreibt ein Attribut mit XML-Inhalt und die Variante `BINARY` einen binären Inhalt. Dieser Typ kann in Erweiterungen nicht verfeinert werden.
 
 ++++
@@ -559,7 +561,7 @@ Durch Einsatz dieses Datentyps können Attribute modelliert werden, deren Inhalt
 BlackboxType = 'BLACKBOX' ( 'XML' | 'BINARY' ).
 ----
 
-==== Wertebereiche von Klassen und Attributpfaden
+=== Wertebereiche von Klassen und Attributpfaden
 Es kann Sinn machen, dass Datenobjekte Verweise auf bestimmte Klassen und Attribute enthalten.
 
 ++++
@@ -591,43 +593,43 @@ Mit der Angabe von `STRUCTURE` wird eine beliebige Struktur oder Klasse, mit `CL
 
 Mit der Angabe von `ATTRIBUTE` wird ein Attributpfadtyp zugelassen. Es kann verlangt werden, dass es zu einer Klasse (keine Subklasse!) gemäss einer anderen Definition gehört (`OF`). Dabei kann entweder auf ein ClassType-Attribut oder im Falle einer Definition einer Funktion (vgl. <<_funktionen>>) auf ein anderes Argument verwiesen werden. Die möglichen Attributtypen können zudem eingeschränkt werden (`RESTRICTION`). Als Konstante kommen die Namen von Attributen der Klassen, Strukturen, Assoziationen und Sichten in Frage. Der entsprechende Klassenname kann explizit angegeben werden oder ergibt sich aus dem Kontext bzw. aus dem Verweis auf ein anderes Attribut oder ein anderes Argument (`OF`).
 
-==== Linienzüge
-===== Geometrie des Linienzugs
-Anschaulich ist ein Kurvenstück ein 1-dimensionales Gebilde, das keine Risse, keine Ecken und keine Doppelpunkte jeglicher Art hat (siehe xref:fig10[xrefstyle=short] und xref:fig11[xrefstyle=short]). Kurvenstücke sind also glatt und eindeutig. Strecken, Kreisbogen, Parabel- und Klothoidenstücke sind Beispiele von Kurvenstücken. Jedes Kurvenstück hat zwei _Randpunkte_ (Anfangs- und Endpunkt), die nicht zusammenfallen dürfen. Die übrigen Punkte des Kurvenstückes heissen _innere Punkte_. Diese bilden das _Innere_ des Kurvenstückes.
+=== Linienzüge
+==== Geometrie des Linienzugs
+Anschaulich ist ein Kurvenstück ein 1-dimensionales Gebilde, das keine Risse, keine Ecken und keine Doppelpunkte jeglicher Art hat (siehe <<#fig10,Abbildung {chap}-3>> und <<#fig11,Abbildung {chap}-4>>). Kurvenstücke sind also glatt und eindeutig. Strecken, Kreisbogen, Parabel- und Klothoidenstücke sind Beispiele von Kurvenstücken. Jedes Kurvenstück hat zwei _Randpunkte_ (Anfangs- und Endpunkt), die nicht zusammenfallen dürfen. Die übrigen Punkte des Kurvenstückes heissen _innere Punkte_. Diese bilden das _Innere_ des Kurvenstückes.
 
 [sidebar]
 --
 Exakte Definition (mathematische Begriffe, die nicht weiter erklärt werden, deren Definition man aber in Lehrbüchern findet, werden "_kursiv und in Anführungszeichen_" geschrieben): _Kurvenstück_ heisst eine Teilmenge des "_3-dimensionalen_" "_Euklidischen Raumes_" (im folgenden kurz _Raum_ genannt), die "_Bildmenge_" einer "_glatten_" und "_injektiven_" "_Abbildung_" eines "_Intervalls_" (der "_Zahlengerade_") ist. Anfangs- und Endpunkt des Kurvenstücks sind die Bilder der Intervallenden. _Ebenes Kurvenstück_ heisst ein Kurvenstück, das in einer Ebene ("_2-dimensionaler_" "_Unterraum_" des Raumes) liegt.
 --
 
-.Beispiele von ebenen Kurvenstücken.
 [#fig10]
+.Abbildung {chap}-{counter:figctr}: Beispiele von ebenen Kurvenstücken.
 image::refhb24/refhb24_fig10.png[]
 
-.Beispiele von ebenen Mengen, die nicht Kurvenstücke sind (ein doppelter Kreis bedeutet "nicht glatt" und ein doppeltes Rechteck "nicht injektiv").
 [#fig11]
+.Abbildung {chap}-{counter:figctr}: Beispiele von ebenen Mengen, die nicht Kurvenstücke sind (ein doppelter Kreis bedeutet "nicht glatt" und ein doppeltes Rechteck "nicht injektiv").
 image::refhb24/refhb24_fig11.png[]
 
-Ein Linienzug ist eine endliche Folge von Kurvenstücken. Ausser beim ersten Kurvenstück stimmt der Anfangspunkt jeweils mit dem Endpunkt des Vorgänger-Kurvenstückes überein. Diese Punkte heissen Stützpunkte des Linienzuges. Anschaulich kann ein Linienzug mehrfach benützte Kurvenstücke, Kurvenstücke mit zusammenfallenden Stützpunkten, sich schneidende Kurvenstücke und im Innern von Kurvenstücken endende oder startende Kurvenstücke enthalten (siehe xref:fig12[xrefstyle=short] und xref:fig13[xrefstyle=short]). Ein einfacher Linienzug weist keinerlei Selbst-Schnittpunkte auf (siehe xref:fig14[xrefstyle=short]). Bei einem einfach geschlossenen Linienzug stimmt zudem der Anfangspunkt des ersten Kurvenstücks mit dem Endpunkt des letzten überein.
+Ein Linienzug ist eine endliche Folge von Kurvenstücken. Ausser beim ersten Kurvenstück stimmt der Anfangspunkt jeweils mit dem Endpunkt des Vorgänger-Kurvenstückes überein. Diese Punkte heissen Stützpunkte des Linienzuges. Anschaulich kann ein Linienzug mehrfach benützte Kurvenstücke, Kurvenstücke mit zusammenfallenden Stützpunkten, sich schneidende Kurvenstücke und im Innern von Kurvenstücken endende oder startende Kurvenstücke enthalten (siehe <<#fig12,Abbildung {chap}-5>> und <<#fig13,Abbildung {chap}-6>>). Ein einfacher Linienzug weist keinerlei Selbst-Schnittpunkte auf (siehe <<#fig14,Abbildung {chap}-7>>). Bei einem einfach geschlossenen Linienzug stimmt zudem der Anfangspunkt des ersten Kurvenstücks mit dem Endpunkt des letzten überein.
 
 [sidebar]
 --
 Exakte Definition (mathematische Begriffe, die nicht weiter erklärt werden, deren Definition man aber in Lehrbüchern findet, werden "_kursiv und in Anführungszeichen_" geschrieben): _Linienzug_ heisst eine Teilmenge des Raumes, die "_Bildmenge_" einer "stetigen" und "_stückweise glatten_" (aber nicht notwendigerweise "_injektiven_") "_Abbildung_" eines "_Intervalls_" ist (der so genannten _zugeordneten Abbildung_) und nur endlich viele "_nicht glatte Stellen_" aufweist. Eine "_nicht glatte Stelle_" heisst Ecke. Bei einem _geschlossenen Linienzug_ stimmen Anfangs- und Endpunkt überein. _Einfacher Linienzug_ heisst ein Linienzug, dessen zugeordnete Abbildung auch "_injektiv_" ist. _Einfach geschlossener Linienzug_ heisst ein Linienzug, dessen zugeordnete Abbildung auch "_injektiv_" ist, abgesehen von seinem Anfangs- und Endpunkt, die übereinstimmen.
 --
 
-.Beispiele von (ebenen) Linienzügen.
 [#fig12]
+.Abbildung {chap}-{counter:figctr}: Beispiele von (ebenen) Linienzügen.
 image::refhb24/refhb24_fig12.png[]
 
-.Beispiele von ebenen Mengen, die nicht Linienzüge sind (ein doppelter Kreis bedeutet hier "nicht stetig" und der Rhombus "nicht Bild eines Intervalls").
 [#fig13]
+.Abbildung {chap}-{counter:figctr}: Beispiele von ebenen Mengen, die nicht Linienzüge sind (ein doppelter Kreis bedeutet hier "nicht stetig" und der Rhombus "nicht Bild eines Intervalls").
 image::refhb24/refhb24_fig13.png[]
 
-.Beispiele von (ebenen) einfachen Linienzügen.
 [#fig14]
+.Abbildung {chap}-{counter:figctr}: Beispiele von (ebenen) einfachen Linienzügen.
 image::refhb24/refhb24_fig14.png[]
 
-===== Linienzug mit Strecken und Kreisbogen als vordefinierte Kurvenstücke
+==== Linienzug mit Strecken und Kreisbogen als vordefinierte Kurvenstücke
 INTERLIS 2 kennt gerichtete (`DIRECTED POLYLINE`), ungerichtete (`POLYLINE`) oder eine Menge von ungerichteten (`MULTIPOLYLINE`) Linienzügen. Bei einem einzelnen Linienzug (`[DIRECTED] POLYLINE`) sind aber beim Transfer eines Ausschnittes auch `MULTIPOLYLINE` zulässig (vgl. <<_codierung_von_themen>>). Bei einer Menge von Linienzügen (`MULTIPOLYLINE`) müssen die einzelnen Linienzüge nicht miteinander verbunden sein. Zudem werden Linienzüge im Rahmen von Einzelflächen und Gebietseinteilungen (vgl. <<_einzelflächen_und_gebietseinteilungen>>) verwendet.
 
 Zur Definition eines konkreten Linienzug-Wertebereichs gehört immer die Angabe der erlaubten Kurvenstück-Formen mittels Aufzählung, z.B. Strecken (Schlüsselwort `STRAIGHTS`), Kreisbogen (Schlüsselwort `ARCS`) oder weitere Möglichkeiten (vgl. <<_weitere_kurvenstück_formen>>), und die Angabe des Wertebereichs der Stützpunkte. In einem abstrakten Linienzug-Wertebereich dürfen diese Angaben fehlen. Für Wertebereichserweiterungen gelten folgende Regeln:
@@ -667,7 +669,8 @@ Bei Daten, die grafisch erfasst wurden, kann es Sinn machen, grössere Überlapp
 
 Weisen ein Kreisbogen und ein konkurrierendes Linienstück einen gemeinsamen Stützpunkt auf, dürfen sie sich in einem weiteren Punkt (kein Stützpunkt) schneiden, falls das von der Strecke abgeschnittene Kreissegment (bzw. das vom anderen Kreisbogen abgeschnittene Doppel-Kreissegment) eine Pfeilhöhe aufweist, die kleiner oder gleich der definierten Toleranz ist. Fehlt die Toleranzangabe, gilt der Wert gemäss den technischen Überlegungen (vgl. oben). Bei expliziter Angabe (auf WITHOUT OVERLAPS > folgende Dezimalzahl) muss sie mit derselben numerischen Stellenzahl wie diejenige der Stützpunktkoordinaten erfolgen und einen Wert grösser Null aufweisen.
 
-.a) Die Pfeilhöhe darf nicht grösser als die angegebene Toleranz sein; b), c) unzulässige Überschneidungen eines Linienzuges, da Strecke und Kreisbogen, die sich treffen, nicht von einem gemeinsamen Stützpunkt ausgehen.
+[#fig15]
+.Abbildung {chap}-{counter:figctr}: a) Die Pfeilhöhe darf nicht grösser als die angegebene Toleranz sein; b), c) unzulässige Überschneidungen eines Linienzuges, da Strecke und Kreisbogen, die sich treffen, nicht von einem gemeinsamen Stützpunkt ausgehen.
 image::refhb24/refhb24_fig15.png[]
 
 Konkurrierende Linienstücke ergeben sich wie folgt:
@@ -715,7 +718,7 @@ DOMAIN
   Line = POLYLINE WITH (STRAIGHTS, ARCS) VERTEX Coord2;
 ----
 
-===== Weitere Kurvenstück-Formen
+==== Weitere Kurvenstück-Formen
 Nebst Geradenstücken und Kreisbogen sind weitere Kurvenstück-Formen definierbar. Nebst dem Namen muss angegeben werden, gemäss welcher Struktur ein Kurvenstück beschrieben wird.
 
 ++++
@@ -731,65 +734,68 @@ LineFormTypeDef = 'LINE' 'FORM'
 
 Eine Linienstruktur muss immer eine Erweiterung der durch INTERLIS definierten Struktur LineSegment sein (vgl. <<_linienzug_mit_strecken_und_kreisbogen_als_vordefinierte_kurvenstücke>>).
 
-==== Einzelflächen und Gebietseinteilungen
-===== Geometrie von Flächen
-Für die Modellierung von Geodaten genügen meist ebene Flächen. INTERLIS unterstützt darüber hinaus ebene allgemeine Flächen. Anschaulich ist eine ebene allgemeine Fläche durch eine äussere und allenfalls eine oder mehrere innere Randlinien begrenzt (siehe xref:fig20[xrefstyle=short]). Die Randlinien selbst müssen aus einfachen Linienzügen bestehen, die aus geometrischer Sicht jeweils zu einfach geschlossenen Linienzügen zusammengefasst werden können. Sie müssen zudem so angeordnet sein, dass es von einem beliebigen Punkt im Innern der Fläche immer einen Weg zu einem beliebigen anderen Punkt im Innern der Fläche gibt, der weder eine Randlinie schneidet noch einen Stützpunkt einer Randlinie enthält (siehe xref:fig20[xrefstyle=short]). Soweit diese Bedingung nicht verletzt wird, dürfen sich Ränder in Stützpunkten berühren. In solchen Situationen kann man sich grundsätzlich verschiedene Möglichkeiten vorstellen, wie die Umrandung der Fläche als Ganzes in einzelne Linienzüge aufgeteilt wird (siehe xref:fig22[xrefstyle=short]). INTERLIS schliesst sich aber einer verbreiteten Regelung (z.B. OGC/ISO) an und verlangt, dass alle Punkte einer Randlinie (ausser Anfangs- /Endpunkt) disjunkt sein müssen. Die Varianten b und c von xref:fig22[xrefstyle=short] sind im Transfer darum nicht zugelassen.
+=== Einzelflächen und Gebietseinteilungen
+==== Geometrie von Flächen
+Für die Modellierung von Geodaten genügen meist ebene Flächen. INTERLIS unterstützt darüber hinaus ebene allgemeine Flächen. Anschaulich ist eine ebene allgemeine Fläche durch eine äussere und allenfalls eine oder mehrere innere Randlinien begrenzt (siehe <<#fig20,Abbildung {chap}-13>>). Die Randlinien selbst müssen aus einfachen Linienzügen bestehen, die aus geometrischer Sicht jeweils zu einfach geschlossenen Linienzügen zusammengefasst werden können. Sie müssen zudem so angeordnet sein, dass es von einem beliebigen Punkt im Innern der Fläche immer einen Weg zu einem beliebigen anderen Punkt im Innern der Fläche gibt, der weder eine Randlinie schneidet noch einen Stützpunkt einer Randlinie enthält (siehe <<#fig20,Abbildung {chap}-13>>). Soweit diese Bedingung nicht verletzt wird, dürfen sich Ränder in Stützpunkten berühren. In solchen Situationen kann man sich grundsätzlich verschiedene Möglichkeiten vorstellen, wie die Umrandung der Fläche als Ganzes in einzelne Linienzüge aufgeteilt wird (siehe <<#fig22,Abbildung {chap}-15>>). INTERLIS schliesst sich aber einer verbreiteten Regelung (z.B. OGC/ISO) an und verlangt, dass alle Punkte einer Randlinie (ausser Anfangs- /Endpunkt) disjunkt sein müssen. Die Varianten b und c von <<#fig22,Abbildung {chap}-15>> sind im Transfer darum nicht zugelassen.
 
 [sidebar]
 --
 Exakte Definitionen (mathematische Begriffe, die nicht weiter erklärt werden, deren Definition man aber in Lehrbüchern findet, werden "_kursiv und in Anführungszeichen_" geschrieben):
 
-_Flächenelement_ heisst eine Teilmenge des _Raumes_, die "_Bildmenge_" einer "_glatten_" und "_injektiven_" "_Abbildung_" eines "_ebenen_" "_regulären Vielecks_" ist (siehe xref:fig16[xrefstyle=short] und xref:fig17[xrefstyle=short]).
+_Flächenelement_ heisst eine Teilmenge des _Raumes_, die "_Bildmenge_" einer "_glatten_" und "_injektiven_" "_Abbildung_" eines "_ebenen_" "_regulären Vielecks_" ist (siehe <<#fig16,Abbildung {chap}-9>> und <<#fig17,Abbildung {chap}-10>>).
 
-_Fläche_ heisst die Vereinigung _F_ von endlich vielen Flächenelementen, die "_zusammenhängend_" ist und folgender Bedingung genügt: Zu jedem Punkt _P_ der Fläche gibt es eine "_Umgebung_", die sich in ein ebenes reguläres Vieleck _deformieren_ (d.h. "_homöomorph abbilden_") lässt. Wenn bei einer solchen Deformation der Punkt _P_ in den Rand des Vielecks übergeführt wird, heisst er _Randpunkt_ von _F_, andernfalls _innerer Punkt_ von _F_. Es gilt: Der "_Rand_" (d.h. die Menge aller Randpunkte) einer Fläche ist die Vereinigung von endlich vielen Kurvenstücken, die nur Endpunkte gemeinsam haben. Eine _ebene Fläche_ ist eine Fläche, die Teilmenge einer _Ebene_ ist. Es gilt: Der Rand einer "_einfach zusammenhängenden_" ebenen Fläche (anschaulich: einer Fläche ohne Löcher) ist ein einfach geschlossener Linienzug und heisst _äusserer Rand_. Der Rand einer "_n-fach zusammenhängenden_" ebenen Fläche (anschaulich: einer Fläche mit _n-1_ Löchern) besteht aus dem entsprechenden äusseren Rand und aus _n-1_ weiteren einfach geschlossenen Linienzügen (den so genannten _inneren Rändern_). Der äussere Rand und alle inneren Ränder haben keine Punkte gemeinsam. Ein durch einen inneren Rand ausgespartes Flächenstück heisst _Enklave_ (siehe xref:fig18[xrefstyle=short], xref:fig19[xrefstyle=short] und xref:fig20[xrefstyle=short]).
-Eine _allgemeine Fläche_ ist eine Fläche mit zusätzlich endlich vielen _singulären Punkten_ aber mit "_zusammenhängendem_" _Inneren_ (Menge der inneren Punkte). Ein _singulärer Punkt_ kann zusammen mit einer "_Umgebung_" in eine ebene _Propellermenge_ deformiert werden, er selbst ins _Zentrum_. _Propellermenge_ heisst die Vereinigung endlich vieler Dreiecksflächen, die genau einen Punkt gemeinsam haben, das _Zentrum_. _Ebene allgemeine Fläche_ heisst eine allgemeine Fläche, die Teilmenge einer _Ebene_ ist (siehe xref:fig21[xrefstyle=short]). Es gilt: Der Rand einer ebenen allgemeinen Fläche kann auf verschiedene Art zusammengesetzt werden aus endlich vielen geschlossenen Linienzügen, die höchstens endlich viele Punkte gemeinsam haben und je höchstens endlich viele Doppelpunkte aufweisen (siehe xref:fig22[xrefstyle=short]).
+_Fläche_ heisst die Vereinigung _F_ von endlich vielen Flächenelementen, die "_zusammenhängend_" ist und folgender Bedingung genügt: Zu jedem Punkt _P_ der Fläche gibt es eine "_Umgebung_", die sich in ein ebenes reguläres Vieleck _deformieren_ (d.h. "_homöomorph abbilden_") lässt. Wenn bei einer solchen Deformation der Punkt _P_ in den Rand des Vielecks übergeführt wird, heisst er _Randpunkt_ von _F_, andernfalls _innerer Punkt_ von _F_. Es gilt: Der "_Rand_" (d.h. die Menge aller Randpunkte) einer Fläche ist die Vereinigung von endlich vielen Kurvenstücken, die nur Endpunkte gemeinsam haben. Eine _ebene Fläche_ ist eine Fläche, die Teilmenge einer _Ebene_ ist. Es gilt: Der Rand einer "_einfach zusammenhängenden_" ebenen Fläche (anschaulich: einer Fläche ohne Löcher) ist ein einfach geschlossener Linienzug und heisst _äusserer Rand_. Der Rand einer "_n-fach zusammenhängenden_" ebenen Fläche (anschaulich: einer Fläche mit _n-1_ Löchern) besteht aus dem entsprechenden äusseren Rand und aus _n-1_ weiteren einfach geschlossenen Linienzügen (den so genannten _inneren Rändern_). Der äussere Rand und alle inneren Ränder haben keine Punkte gemeinsam. Ein durch einen inneren Rand ausgespartes Flächenstück heisst _Enklave_ (siehe <<#fig18,Abbildung {chap}-11>>, <<#fig19,Abbildung {chap}-19>> und <<#fig20,Abbildung {chap}-20>>.
+Eine _allgemeine Fläche_ ist eine Fläche mit zusätzlich endlich vielen _singulären Punkten_ aber mit "_zusammenhängendem_" _Inneren_ (Menge der inneren Punkte). Ein _singulärer Punkt_ kann zusammen mit einer "_Umgebung_" in eine ebene _Propellermenge_ deformiert werden, er selbst ins _Zentrum_. _Propellermenge_ heisst die Vereinigung endlich vieler Dreiecksflächen, die genau einen Punkt gemeinsam haben, das _Zentrum_. _Ebene allgemeine Fläche_ heisst eine allgemeine Fläche, die Teilmenge einer _Ebene_ ist (siehe <<#fig21,Abbildung {chap}-14>>). Es gilt: Der Rand einer ebenen allgemeinen Fläche kann auf verschiedene Art zusammengesetzt werden aus endlich vielen geschlossenen Linienzügen, die höchstens endlich viele Punkte gemeinsam haben und je höchstens endlich viele Doppelpunkte aufweisen (siehe <<#fig22,Abbildung {chap}-15>>).
 --
 
-.Beispiele von Flächenelementen.
 [#fig16]
+.Abbildung {chap}-{counter:figctr}: Beispiele von Flächenelementen.
 image::refhb24/refhb24_fig16.png[]
 
-.Beispiele von Punktmengen im Raum, die nicht Flächenelemente sind (ein doppelter Kreis bedeutet hier "nicht glatt").
 [#fig17]
+.Abbildung {chap}-{counter:figctr}: Beispiele von Punktmengen im Raum, die nicht Flächenelemente sind (ein doppelter Kreis bedeutet hier "nicht glatt").
 image::refhb24/refhb24_fig17.png[]
 
-.Beispiele von Flächen im Raum.
 [#fig18]
+.Abbildung {chap}-{counter:figctr}: Beispiele von Flächen im Raum.
 image::refhb24/refhb24_fig18.png[]
 
-.Beispiele ebener Punktmengen, die nicht Flächen sind (ein doppelter Kreis bedeutet "singulärer Punkt").
 [#fig19]
+.Abbildung {chap}-{counter:figctr}: Beispiele ebener Punktmengen, die nicht Flächen sind (ein doppelter Kreis bedeutet "singulärer Punkt").
 image::refhb24/refhb24_fig19.png[]
 
-.Ebene Fläche mit Rändern und Enklaven.
 [#fig20]
+.Abbildung {chap}-{counter:figctr}: Ebene Fläche mit Rändern und Enklaven.
 image::refhb24/refhb24_fig20.png[]
 
-.a) Beispiele von allgemeinen ebenen Flächen; b) Beispiele von ebenen Mengen, die nicht allgemeine Flächen sind, weil ihr Inneres nicht zusammenhängend ist. Diese ebenen Mengen können aber in allgemeine Flächen unterteilt werden ("---" zeigt die Unterteilung in Flächenelemente und "===" die Unterteilung in allgemeine Flächen).
 [#fig21]
+.Abbildung {chap}-{counter:figctr}: a) Beispiele von allgemeinen ebenen Flächen; b) Beispiele von ebenen Mengen, die nicht allgemeine Flächen sind, weil ihr Inneres nicht zusammenhängend ist. Diese ebenen Mengen können aber in allgemeine Flächen unterteilt werden ("---" zeigt die Unterteilung in Flächenelemente und "===" die Unterteilung in allgemeine Flächen).
 image::refhb24/refhb24_fig21.png[]
 
-.Verschiedene mögliche Aufteilungen des Randes einer allgemeinen Fläche. Variante a): gültig; Variante b): ungültig; Variante c): ungültig.
 [#fig22]
+.Abbildung {chap}-{counter:figctr}: Verschiedene mögliche Aufteilungen des Randes einer allgemeinen Fläche. Variante a): gültig; Variante b): ungültig; Variante c): ungültig.
 image::refhb24/refhb24_fig22.png[]
 
 Mit der Definition von (allgemeinen) Einzelflächen bzw. (allgemeinen) Flächen einer Gebietseinteilung wird auch festgelegt, oberhalb welcher Toleranz sich die Kurvenstücke des Randes nicht überlappen dürfen (ohne Angabe von `WITHOUT OVERLAPS` gilt die implizite bzw. die geerbte Toleranz). Das Überlappungs- bzw. Schnittverbot gilt bei Einzelflächen nicht nur zwischen den Kurvenstücken eines einzelnen Linienzuges sondern zwischen allen Kurvenstücken aller Linienzüge des Flächenrandes. Für Flächen einer Gebietseinteilung gilt es sogar für alle an der Gebietseinteilung beteiligten Linienzüge. Zudem sind Linienzüge, die nicht zum Rand einer (allgemeinen) Fläche gehören, gemäss Definition der (allgemeinen) Fläche ausgeschlossen.
 
 Linienzüge, die nicht zu einem Rand gehören, sind nicht erlaubt.
 
-.Nicht erlaubte Linien von Flächen.
+[#fig23]
+.Abbildung {chap}-{counter:figctr}: Nicht erlaubte Linien von Flächen.
 image::refhb24/refhb24_fig23.png[]
 
-===== Einzelflächen
-.Einzelflächen (`SURFACE`).
+==== Einzelflächen
+[#fig24]
+.Abbildung {chap}-{counter:figctr}: Abbildung {chap}-{counter:figctr}: Einzelflächen (`SURFACE`).
 image::refhb24/refhb24_fig24.png[]
 
-Für (allgemeine) Flächen, die sich ganz oder teilweise überlappen dürfen, d.h. die nicht nur Randpunkte gemeinsam haben dürfen, steht der geometrische Attributtyp `SURFACE` zur Verfügung (siehe xref:fig24[xrefstyle=short]). Dieser Typ wird Einzelflächen genannt. Eine Einzelfläche hat einen äusseren und allenfalls mehrere inneren Ränder (um die Enklaven). Jeder Rand besteht aus mindestens einem Linienzug.
+Für (allgemeine) Flächen, die sich ganz oder teilweise überlappen dürfen, d.h. die nicht nur Randpunkte gemeinsam haben dürfen, steht der geometrische Attributtyp `SURFACE` zur Verfügung (siehe <<#fig24,Abbildung {chap}-17>>). Dieser Typ wird Einzelflächen genannt. Eine Einzelfläche hat einen äusseren und allenfalls mehrere inneren Ränder (um die Enklaven). Jeder Rand besteht aus mindestens einem Linienzug.
 
 Mit dem Attributtyp `MULTISURFACE` kann auch eine Menge von Einzelflächen als ein einzelner Wert definiert werden. Die einzelnen Flächen eines MULTISURFACE-Wertes dürfen keine gemeinsamen Kanten haben und dürfen sich abgesehen von Overlaps nicht überlappen.
 
-===== Flächen einer Gebietseinteilung
-.Gebietseinteilung (`AREA`).
+==== Flächen einer Gebietseinteilung
+[#fig25]
+.Abbildung {chap}-{counter:figctr}: Gebietseinteilung (`AREA`).
 image::refhb24/refhb24_fig25.png[]
 
 _Gebietseinteilung (Flächennetz)_ heisst eine endliche Menge von (allgemeinen) Flächen und Restflächen, welche die Ebene überlappungsfrei überdecken.
@@ -804,7 +810,7 @@ Für Gebietsobjekte ergibt sich damit auch die gleiche implizite Struktur wie f�
 
 Damit die Linienzüge einer Gebietseinteilung auch als einzelne Objekte angesprochen werden können (und zwar als ein Objekt, auch wenn der Linienzug zwei Gebietsobjekte begrenzt), steht die `AREA INSPECTION` zur Verfügung (vgl. <<_sichten>>). Mit dem Attributtyp `MULTIAREA` kann auch eine Menge von einzelnen `AREA`-Objekten als ein einzelner Wert definiert werden. Die einzelnen Flächen eines `MULTIAREA`-Wertes dürfen keine gemeinsamen Kanten haben und dürfen sich abgesehen von Overlaps nicht überlappen.
 
-===== Erweiterbarkeit
+==== Erweiterbarkeit
 Einzelflächen können zu Gebietseinteilungen erweitert werden. Die Erweiterung eines Linienzuges zu einer Fläche ist unzulässig, da bei einer Fläche mit mehreren Linienzügen gerechnet werden muss, während mit der Definition eines Linienzuges nur einer erwartet wird.
 
 Unabhängige Flächen und Flächen einer Gebietseinteilung können in zweierlei Hinsicht erweitert werden:

@@ -1,0 +1,205 @@
+== Sichten
+Sichten (Views) sind Klassen und Strukturen, deren Objekte nicht originär sondern virtuell sind, da sie aus Objekten anderer Sichten oder Klassen bzw. Strukturen abgeleitet werden. Sichten werden unter anderem dazu verwendet, die Grundlagen für Grafiken und spezielle Konsistenzbedingungen zu formulieren. Eine weitere Anwendung ist die Weitergabe der Daten an Empfängersysteme in einer abgeleiteten, in der Regel vereinfachten Form.
+
+Sichten werden nur transferiert, wenn sie in einem `VIEW TOPIC` definiert sind. In diesem Fall erfolgt ihre Übertragung wie der vollständige Transfer (Schlüsselwort `FULL`) von normalen Klassen, so dass sich ein Datenempfänger (vgl. <<_sequentieller_transfer>>) nicht darum zu kümmern braucht, wie die (virtuellen) Objekte erzeugt wurden. Sichten können auch explizit vom Transfer ausgeschlossen werden (`TRANSIENT`), wenn sie nur lokale Bedeutung haben, d.h. wenn sie nur als Basis für andere Sichten dienen. Die inkrementelle Nachlieferung von Sichten ist ausgeschlossen, da Sichtobjekten keine Objektidentifikation zugeordnet wird.
+
+Sichten können abstrakt (`ABSTRACT`) oder konkret sein. Konkrete Sichten können auch auf abstrakten Grundlagen beruhen. Dabei können aber nur diejenigen Grundlagenattribute angesprochen werden, die konkret sind. Ist dies nicht der Fall, muss die Sicht selbst als abstrakt erklärt werden.
+
+Sichten können auch erweitert werden (`EXTENDED` oder `EXTENDS`). Dabei ist es allerdings nicht möglich das Bildungsgesetz zu verändern. Die Erweiterung dient dazu, Erweiterungen der Sichten, Klassen und Strukturen, auf der die Sicht aufbaut, so zur Kenntnis zu nehmen, dass weitere Selektionen, Attribute und Konsistenzbedingungen formuliert werden können.
+
+++++
+<a href="#3_15_C1">&#x203B</a>
+<div id="2_15_C1"></div>
+++++
+[#3_15_C1]
+.Syntaxregeln: 
+----
+<1>
+
+ViewDef = 'VIEW' View-Name
+            Properties<ABSTRACT,EXTENDED,FINAL,TRANSIENT>
+            [ FormationDef | 'EXTENDS' ViewRef ]
+                { BaseExtensionDef }
+                { Selection }
+            '='
+            [ ViewAttributes ]
+            { ConstraintDef }
+          'END' View-Name ';'.
+
+ViewRef = [ Model-Name '.' [ Topic-Name '.' ] ] View-Name.
+----
+<1> Im PDF-Dokument des Referenzhandbuchs (Version 2.1.0) ist an dieser Stelle die Regel ViewAttributes abgebildet. Diese befindet sich jedoch bereits weiter <<3_15_C6,hinten>> im Dokument und wird deshalb nicht erneut aufgeführt. Siehe dazu auch https://github.com/geostandards-ch/doc_refhb24/issues/13[dieses] Issue.
+
+[#ambiguous1-rev2]
+In den einfachen Fällen, wo sich ein Attribut aus der Basis ergibt, genügt es den Attributnamen und nötigen Ausdruck (mit Verwendung von Basisattributen) anzugeben.
+
+NOTE: Obiger Satz erscheint in leicht abgeänderter Form doppelt im Referenzhandbuch (Version 2.1.0). Die andere Stelle befindet sich <<ambiguous1-rev1,hier>>.
+
+Mit dem Bildungsgesetz (FormationDef) einer Sicht wird definiert, wie und aus welchen Grundlagen die virtuellen Objekte der Sicht gebildet werden.
+
+Die Sicht-Projektion (Schlüsselwort `PROJECTION OF`) ist die einfachste Sicht. Mit ihr wird die Basis-Klasse (Klasse, Struktur oder Sicht) in veränderten Form (z.B. Attribute nur teilweise und in veränderter Reihenfolge) gesehen.
+
+Mit der _Verbindung_ (Schlüsselwort `JOIN OF`) wird das kartesische Produkt (oder Kreuzprodukt) der Basis-Klassen (Klasse oder Sicht) gebildet, d.h. es gibt so viele Objekte der Verbindungs-Klasse wie es Kombinationen von Objekten der verschiedenen Basis-Klassen gibt. Es können auch so genannte «Outer-Joins», also Verbindungen von Objekten der ersten Basisklasse mit (an sich inexistenten) Leerobjekten der weiteren Basisklassen definiert werden (Angabe "`(OR NULL)`"). Solche Leerobjekte werden beigefügt, wenn zu einer bestimmten Kombination der vorangegangenen Objekte kein Objekt der gewünschten weiteren Klasse gefunden wird. Alle Attribute des Leerobjektes sind undefiniert. Die entsprechenden Sicht-Attribute dürfen darum nicht obligatorisch sein.
+
+Die _Vereinigung_ (Schlüsselwort `UNION OF`) ermöglicht die Verschmelzung verschiedener Basis-Klassen zu einer einzigen Klasse. Einem Attribut der Vereinigungs-Sicht werden typischerweise die Attribute der verschiedenen Basis-Klassen zugewiesen. Der Attributtyp der Basis-Klasse muss mit demjenigen der Vereinigungs-Sicht verträglich sein (gleicher Typ oder Erweiterung davon).
+
+Mit der _Zusammenfassung_ (Schlüsselwort `AGGREGATION OF`) werden alle oder diejenigen Instanzen einer Basismenge zu einer Instanz zusammengefasst, bei denen die verlangte Attributkombination identisch ist. Innerhalb der Aggregationssicht steht mittels dem impliziten Attribut `AGGREGATES` (vgl. <<_ausdrücke>>) der zugehörige Satz von Originalobjekten als `BAG` zur Verfügung. Dieses implizite Attribut gehört nicht zu den eigentlichen Attributen der Sicht und wird darum auch dann nicht transferiert, wenn ein Transfer verlangt ist. Es kann z.B. einem entsprechenden Attribut der Aggregationssicht zugewiesen oder als Argument einer Funktion übergeben werden.
+
+Mit der _Aufschlüsselung_ (Schlüsselwort `INSPECTION OF`) erhält man die Menge aller Strukturelemente (mit `BAG OF` oder `LIST OF` oder gemäss Linie, Einzelfläche oder Gebietseinteilung definierte), die zu einem (direkten oder indirekten) Unterstrukturattribut einer Objekt-Klasse gehören.
+
+Die normale Inspection auf ein Gebietseinteilungsattribut bzw. die Inspection eines Flächenattributs liefert die Ränder aller Gebiete bzw. Flächen dieser Klasse (Struktur SurfaceBoundary). Die Linienzüge jedes Randes (Struktur SurfaceEdge) werden dabei so gebildet, dass ihre Anzahl minimal ist. Aufeinanderfolgende Linienzüge werden also zu einem Linienzug zusammengefasst. Wird eine weitere Inspection auf das Attribut Lines gemacht, erhält man ebenfalls alle Linienzüge (Struktur SurfaceEdge). Auf diese Art kommen sie aber im Falle der Gebietseinteilung doppelt vor (einmal für jedes beteiligte Gebietsobjekt).
+
+Mit der Inspection einer Gebietseinteilung (Schlüsselwort `AREA INSPECTION OF`) erhält man die Linienzüge der Ränder der zur Gebietseinteilung gehörenden Gebiete genau einmal (als Struktur SurfaceEdge). Die beiden Gebiete, die von einem gemeinsamen Linienzug berandet werden, können mit `THISAREA` bzw. `THATAREA` angesprochen werden (vgl. <<_ausdrücke>>). Die Linienzüge (Struktur SurfaceEdge) werden wie bei der normalen Inspection möglichst zusammengefasst geliefert.
+
+----
+STRUCTURE SurfaceEdge =
+  Geometry: DIRECTED POLYLINE;
+END SurfaceEdge;
+
+STRUCTURE SurfaceBoundary =
+  Lines: LIST OF SurfaceEdge;
+END SurfaceBoundary;
+----
+
+Die Inspection eines Linienattributes (`POLYLINE`) liefert in folgender Struktur alle Kurvenstücke (LineSegments), aus denen die Linienzugsobjekte dieser Klasse zusammengesetzt sind:
+
+----
+STRUCTURE LineGeometry =
+  Segments: LIST OF LineSegment;
+MANDATORY CONSTRAINT isOfClass (Segments[FIRST],INTERLIS.StartSegment);
+END LineGeometry;
+----
+
+Dies heisst, dass das erste Kurvenstück ein so genanntes StartSegment der Länge 0 darstellt und alle übrigen, als so genannte LineSegments, entweder Strecken, Kreisbogen oder Kurvenstücke eines anderen Typs sind, gemäss der in der Struktur festgelegten Definition.
+
+Mit INTERLIS wird nur eine konzeptionelle Beschreibung der Sicht gemacht. Es wird ausdrücklich nichts unternommen, um eine effiziente Realisierung der Sichten zu unterstützen. Sichten generieren gehört deshalb auch zu einer speziellen Erfüllungsstufe.
+
+++++
+<a href="#3_15_C2">&#x203B</a>
+<div id="2_15_C2"></div>
+++++
+[#3_15_C2]
+.Syntaxregeln:
+----
+FormationDef = ( Projection
+               | Join
+               | Union
+               | Aggregation
+               | Inspection ) ';'.
+
+Projection = 'PROJECTION' 'OF' RenamedViewableRef.
+
+Join = 'JOIN' 'OF' RenamedViewableRef
+         (* ',' RenamedViewableRef
+              [ '(' 'OR' 'NULL' ')' ] *).
+
+Union = 'UNION' 'OF' RenamedViewableRef
+          (* ',' RenamedViewableRef *).
+
+Aggregation = 'AGGREGATION' 'OF' RenamedViewableRef
+                ( 'ALL' | 'EQUAL' '(' UniqueEl ')' ).
+
+Inspection = [ 'AREA' ] 'INSPECTION' 'OF' RenamedViewableRef
+                 '->' StructureOrLineAttribute-Name
+                      { '->' StructureOrLineAttribute-Name }.
+----
+
+Alle in einer Sicht verwendeten Basissichten erhalten innerhalb der verwendenden Sicht einen Namen, unter dem sie angesprochen werden können. Dieser Name entspricht dem Namen der Basissicht, sofern keine Umbenennung mittels eines expliziten (lokalen) Base-Namens definiert wird. Eine solche Umbenennung ist insbesondere nötig, wenn Verbindungen definiert werden, bei denen mehrmals die gleiche Basisklasse angesprochen wird.
+
+++++
+<a href="#3_15_C3">&#x203B</a>
+<div id="2_15_C3"></div>
+++++
+[#3_15_C3]
+.Syntaxregeln:
+----
+RenamedViewableRef = [ Base-Name '~' ] ViewableRef.
+
+ViewableRef = [ Model-Name '.' [ Topic-Name '.' ] ]
+              ( Structure-Name
+              | Class-Name
+              | Association-Name
+              | View-Name ).
+----
+
+Will man in einer Sicht bzw. einer Sichterweiterung Erweiterungen von Basisklassen berücksichtigen und damit zusätzliche Attribute, Selektionen oder Konsistenzbedingungen formulieren, muss eine entsprechende Erweiterungsdefinition (BaseExtensionDef) aufgeführt werden. Sie geht von einer bereits definierten Basissicht aus und beschreibt die Erweiterungen (müssen Erweiterungen der bisherigen Basissicht sein) selbst wieder als Basissichten. Wird eine solche Sichterweiterung innerhalb von Ausdrücken verwendet, liefert sie den Wert "UNDEFINED", wenn das zum virtuellen Objekt gehörige Basisobjekt nicht zu dieser Sichterweiterung passt.
+
+++++
+<a href="#3_15_C4">&#x203B</a>
+<div id="2_15_C4"></div>
+++++
+[#3_15_C4]
+.Syntaxregel:
+----
+BaseExtensionDef = 'BASE' Base-Name 'EXTENDED' 'BY'
+                     RenamedViewableRef { ',' RenamedViewableRef }.
+----
+
+Die durch das Bildungsgesetz definierte Menge der Sichtobjekte kann mittels Bedingungen (Schlüsselwort `WHERE`) zusätzlich eingeschränkt werden.
+
+++++
+<a href="#3_15_C5">&#x203B</a>
+<div id="2_15_C5"></div>
+++++
+[#3_15_C5]
+.Syntaxregel:
+----
+Selection = 'WHERE' Logical-Expression ';'.
+----
+
+Was die Attribute (und damit die Empfängersicht) und die Konsistenzbedingungen betrifft, sind Sichten grundsätzlich gleich aufgebaut, wie Klassen und Strukturen. Im Sinne einer Schreiberleichterung wird zusätzlich die Möglichkeit angeboten, alle Attribute und Rollen einer Sichtbasis in der gleichen Reihenfolge zu übernehmen (`ALL OF`). Dies ist bei Vereinigungen und bei AREA-Inspektionen unsinnig und darum auch unzulässig.
+
+++++
+<a href="#3_15_C6">&#x203B</a>
+<div id="2_15_C6"></div>
+++++
+[#3_15_C6]
+.Syntaxregel:
+----
+ViewAttributes = [ 'ATTRIBUTE' ]
+                     { 'ALL' 'OF' Base-Name ';'
+                     | AttributeDef
+                     | Attribute-Name
+                         Properties <ABSTRACT,EXTENDED,FINAL,TRANSIENT>
+                           ':=' Expression ';' }.
+----
+
+[#ambiguous1-rev1]
+In den einfachen Fällen, wo ein Attribut einer Basissicht übernommen wird, genügt es den Attributnamen und die Zuordnung des Basisattributes anzugeben. Solche Definitionen sind immer final, können also nicht mehr erweitert werden.
+
+NOTE: Obiger Satz erscheint in leicht abgeänderter Form doppelt im Referenzhandbuch (Version 2.1.0). Die andere Stelle befindet sich <<ambiguous1-rev2,hier>>.
+
+Bei Vereinigungen muss für jedes Attribut vollständig angegeben werden, aus welchen Attributen der Basis-Klassen es abgeleitet wird. Ein Attribut muss sich aber nicht auf alle Basis-Klassen beziehen, sofern der Attributtyp undefinierte Werte zulässt. Für die fehlenden Basis-Objekte gilt es als undefiniert.
+
+Das folgende Beispiel zeigt, wie eine Sicht beschrieben werden kann, die ermöglicht, mit Hilfe des Konstrukts `DERIVED FROM` eine eigentliche Beziehung zu definieren (vgl. <<_eigentliche_beziehungen>>).
+
+====
+----
+DOMAIN
+  CHSurface = ... ;
+
+FUNCTION Intersect (Surface1: CHSurface;
+                    Surface2: CHSurface): BOOLEAN;
+
+CLASS A =
+  a1: CHSurface;
+END A;
+
+CLASS B =
+  b1: CHSurface;
+END B;
+
+VIEW ABIntersection
+  JOIN OF A,B;
+  WHERE Intersect (A.a1,B.b1);
+  =
+END ABIntersection;
+
+ASSOCIATION IntersectedAB
+  DERIVED FROM ABIntersection =
+  ARole –- A := ABIntersection -> A;
+  BRole –- B := ABIntersection -> B;
+END IntersectedAB;
+----
+====
+

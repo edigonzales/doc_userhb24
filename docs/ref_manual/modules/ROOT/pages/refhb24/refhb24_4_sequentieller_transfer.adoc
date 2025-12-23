@@ -1,0 +1,9 @@
+== Sequentieller Transfer
+
+include::refhb24_4_1.adoc[]
+
+include::refhb24_4_2.adoc[]
+
+include::refhb24_4_3.adoc[]
+
+include::refhb24_4_4.adoc[]
