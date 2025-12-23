@@ -1,8 +1,0 @@
-== Vererbung
-Verschiedene Konstrukte von INTERLIS können im Sinne der objekt-orientierten Denkweise erweitert werden: Eine erste Definition schafft die Grundlage, die dann in mehreren Schritten spezialisiert werden kann.
-
-Themen, Klassen, Sichten, Grafikdefinitionen, Einheiten und Wertebereiche können die entsprechenden Grundkonstrukte erweitern (Schlüsselwort `EXTENDS` bzw. `EXTENDED`) und erben damit alle ihre Eigenschaften. Ein zuvor definiertes Konstrukt kann in bestimmten Fällen durch Angabe von `EXTENDED` unter Beibehaltung des Namens erweitert werden.
-
-Mit `FINAL` wird das Erweitern einer Definition verhindert. Verschiedene Konstrukte können in einer noch unvollständigen Form (Schlüsselwort `ABSTRACT`) definiert werden; sie werden später in einer Erweiterung zu einer konkreten Definition ergänzt.
-
-Um die in einem bestimmten Kontext zulässigen Schlüsselwörter anzugeben, wird jeweils die generelle Property-Schreibweise verwendet (vgl. <<_eigenschaftsmengen>>).

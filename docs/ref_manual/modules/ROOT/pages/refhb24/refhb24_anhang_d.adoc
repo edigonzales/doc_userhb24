@@ -1,0 +1,188 @@
+[unnumbered]
+= Anhang D (normativ) – Zeichentabelle
+
+Mit der hier aufgeführten Tabelle werden alle Zeichen genannt, die eine Software verarbeiten können muss (wie z.B. speichern, suchen, sortieren, ausdrucken), sofern beim Modell keine explizite Angabe erfolgt (vgl. Kapitel 3.5 Modelle, Themen, Klassen). Kommen im Transfer Zeichen vor, die nicht im beim Modell definierten Zeichensatz vorkommen, werden diese durch die Software  stillschweigend (oder mit Hinweis; aber ohne Fehlermeldung) durch ein Ersatzzeichen ersetzt.
+
+Für einige Zeichen stehen in XML mehrere Codierungsformen zur Verfügung. In diesem Fall sind die gängigen Codierungsformen des Zeichens angegeben. Bei mehreren Codierungsmöglichkeiten pro Zeichen kann ein INTERLIS 2 Schreibprogramm eine der möglichen Codierungsformen frei auswählen. Ein INTERLIS 2-Leseprogramm muss alle Zeichen und alle möglichen Codierungsformen eines Zeichens erkennen.
+
+Die Tabelle gilt nur für XML-Content (d.h. XML-String, XML-NormalizedString bzw. XML-Value). XML-Tags werden ausschliesslich als ASCII-codierte Zeichen gemäss Syntax aus Kapitel xref:refhb24/refhb24_root.adoc#_sequentieller_transfer[Sequentieller Transfer] übertragen.
+
+Tabulator (TAB, #x9), Wagenrücklauf (CR, #xD) und Zeilenvorschub (LF, #xA) sind die einzigen zugelassenen Steuerzeichen. Sie dürfen allerdings nur im Rahmen der Codierung von MTEXT (vgl. xref:refhb24/refhb24_root.adoc#_zeichenketten_2[Zeichenketten] und xref:refhb24/refhb24_root.adoc#_codierung_von_zeichenketten[Codierung von Zeichenketten]) vorkommen. 
+
+.In INTERLIS 2 standardmässig zu unterstützende UCS/Unicode-Zeichen und deren Codierung.
+[cols="1,1,2,2,2,2,1",options="header"]
+|===
+|UCS Hex |UCS Dez |UTF-8 Codierung (Octet Hex) |XML Char Ref Dez |XML Char Ref Hex |XML Entity Ref |Darstellung
+
+|0020 |32 |20 | | | |[space]
+|0021 |33 |21 | | | |!
+|0022 |34 |22 |&#34; |&#x22; |&quot; |"
+|0023 |35 |23 | | | |#
+|0024 |36 |24 | | | |$
+|0025 |37 |25 | | | |%
+|0026 |38 |26 |&#38; |&#x26; |&amp; |&
+|0027 |39 |27 |&#39; |&#x27; |&apos; |'
+|0028 |40 |28 | | | |(
+|0029 |41 |29 | | | |)
+|002A |42 |2A | | | |*
+|002B |43 |2B | | | |+
+|002C |44 |2C | | | |,
+|002D |45 |2D | | | |-
+|002E |46 |2E | | | |.
+|002F |47 |2F | | | |/
+|0030 |48 |30 | | | |0
+|0031 |49 |31 | | | |1
+|0032 |50 |32 | | | |2
+|0033 |51 |33 | | | |3
+|0034 |52 |34 | | | |4
+|0035 |53 |35 | | | |5
+|0036 |54 |36 | | | |6
+|0037 |55 |37 | | | |7
+|0038 |56 |38 | | | |8
+|0039 |57 |39 | | | |9
+|003A |58 |3A | | | |:
+|003B |59 |3B | | | |;
+|003C |60 |3C |&#60; |&#x3c; |&lt; |<
+|003D |61 |3D | | | |=
+|003E |62 |3E |&#62; |&#x3e; |&gt; |>
+|003F |63 |3F | | | |?
+|0040 |64 |40 | | | |@
+|0041 |65 |41 | | | |A
+|0042 |66 |42 | | | |B
+|0043 |67 |43 | | | |C
+|0044 |68 |44 | | | |D
+|0045 |69 |45 | | | |E
+|0046 |70 |46 | | | |F
+|0047 |71 |47 | | | |G
+|0048 |72 |48 | | | |H
+|0049 |73 |49 | | | |I
+|004A |74 |4A | | | |J
+|004B |75 |4B | | | |K
+|004C |76 |4C | | | |L
+|004D |77 |4D | | | |M
+|004E |78 |4E | | | |N
+|004F |79 |4F | | | |O
+|0050 |80 |50 | | | |P
+|0051 |81 |51 | | | |Q
+|0052 |82 |52 | | | |R
+|0053 |83 |53 | | | |S
+|0054 |84 |54 | | | |T
+|0055 |85 |55 | | | |U
+|0056 |86 |56 | | | |V
+|0057 |87 |57 | | | |W
+|0058 |88 |58 | | | |X
+|0059 |89 |59 | | | |Y
+|005A |90 |5A | | | |Z
+|005B |91 |5B | | | |[
+|005C |92 |5C | | | |\{backslash}
+|005D |93 |5D | | | |]
+|005E |94 |5E | | | |^
+|005F |95 |5F | | | |_
+|0060 |96 |60 | | | |`
+|0061 |97 |61 | | | |a
+|0062 |98 |62 | | | |b
+|0063 |99 |63 | | | |c
+|0064 |100 |64 | | | |d
+|0065 |101 |65 | | | |e
+|0066 |102 |66 | | | |f
+|0067 |103 |67 | | | |g
+|0068 |104 |68 | | | |h
+|0069 |105 |69 | | | |i
+|006A |106 |6A | | | |j
+|006B |107 |6B | | | |k
+|006C |108 |6C | | | |l
+|006D |109 |6D | | | |m
+|006E |110 |6E | | | |n
+|006F |111 |6F | | | |o
+|0070 |112 |70 | | | |p
+|0071 |113 |71 | | | |q
+|0072 |114 |72 | | | |r
+|0073 |115 |73 | | | |s
+|0074 |116 |74 | | | |t
+|0075 |117 |75 | | | |u
+|0076 |118 |76 | | | |v
+|0077 |119 |77 | | | |w
+|0078 |120 |78 | | | |x
+|0079 |121 |79 | | | |y
+|007A |122 |7A | | | |z
+|007B |123 |7B | | | |{
+|007C |124 |7C | | | |\{vbar}
+|007D |125 |7D | | | |}
+|007E |126 |7E | | | |~
+
+|00A3 |163 |C2 A3 |&#163; |&#xa3; | |£
+|00A7 |167 |C2 A7 |&#167; |&#xa7; | |§
+|00AB |171 |C2 AB |&#171; |&#xab; | |«
+|00BB |187 |C2 BB |&#187; |&#xbb; | |»
+|00C0 |192 |C3 80 |&#192; |&#xc0; | |À
+|00C1 |193 |C3 81 |&#193; |&#xc1; | |Á
+|00C2 |194 |C3 82 |&#194; |&#xc2; | |Â
+|00C3 |195 |C3 83 |&#195; |&#xc3; | |Ã
+|00C4 |196 |C3 84 |&#196; |&#xc4; | |Ä
+|00C5 |197 |C3 85 |&#197; |&#xc5; | |Å
+|00C6 |198 |C3 86 |&#198; |&#xc6; | |Æ
+|00C7 |199 |C3 87 |&#199; |&#xc7; | |Ç
+|00C8 |200 |C3 88 |&#200; |&#xc8; | |È
+|00C9 |201 |C3 89 |&#201; |&#xc9; | |É
+|00CA |202 |C3 8A |&#202; |&#xca; | |Ê
+|00CB |203 |C3 8B |&#203; |&#xcb; | |Ë
+|00CC |204 |C3 8C |&#204; |&#xcc; | |Ì
+|00CD |205 |C3 8D |&#205; |&#xcd; | |Í
+|00CE |206 |C3 8E |&#206; |&#xce; | |Î
+|00CF |207 |C3 8F |&#207; |&#xcf; | |Ï
+|00D0 |208 |C3 90 |&#208; |&#xd0; | |Ð
+|00D1 |209 |C3 91 |&#209; |&#xd1; | |Ñ
+|00D2 |210 |C3 92 |&#210; |&#xd2; | |Ò
+|00D3 |211 |C3 93 |&#211; |&#xd3; | |Ó
+|00D4 |212 |C3 94 |&#212; |&#xd4; | |Ô
+|00D5 |213 |C3 95 |&#213; |&#xd5; | |Õ
+|00D6 |214 |C3 96 |&#214; |&#xd6; | |Ö
+|00D8 |216 |C3 98 |&#216; |&#xd8; | |Ø
+|00D9 |217 |C3 99 |&#217; |&#xd9; | |Ù
+|00DA |218 |C3 9A |&#218; |&#xda; | |Ú
+|00DB |219 |C3 9B |&#219; |&#xdb; | |Û
+|00DC |220 |C3 9C |&#220; |&#xdc; | |Ü
+|00DD |221 |C3 9D |&#221; |&#xdd; | |Ý
+|00DE |222 |C3 9E |&#222; |&#xde; | |Þ
+|00DF |223 |C3 9F |&#223; |&#xdf; | |ß
+|00E0 |224 |C3 A0 |&#224; |&#xe0; | |à
+|00E1 |225 |C3 A1 |&#225; |&#xe1; | |á
+|00E2 |226 |C3 A2 |&#226; |&#xe2; | |â
+|00E3 |227 |C3 A3 |&#227; |&#xe3; | |ã
+|00E4 |228 |C3 A4 |&#228; |&#xe4; | |ä
+|00E5 |229 |C3 A5 |&#229; |&#xe5; | |å
+|00E6 |230 |C3 A6 |&#230; |&#xe6; | |æ
+|00E7 |231 |C3 A7 |&#231; |&#xe7; | |ç
+|00E8 |232 |C3 A8 |&#232; |&#xe8; | |è
+|00E9 |233 |C3 A9 |&#233; |&#xe9; | |é
+|00EA |234 |C3 AA |&#234; |&#xea; | |ê
+|00EB |235 |C3 AB |&#235; |&#xeb; | |ë
+|00EC |236 |C3 AC |&#236; |&#xec; | |ì
+|00ED |237 |C3 AD |&#237; |&#xed; | |í
+|00EE |238 |C3 AE |&#238; |&#xee; | |î
+|00EF |239 |C3 AF |&#239; |&#xef; | |ï
+|00F0 |240 |C3 B0 |&#240; |&#xf0; | |ð
+|00F1 |241 |C3 B1 |&#241; |&#xf1; | |ñ
+|00F2 |242 |C3 B2 |&#242; |&#xf2; | |ò
+|00F3 |243 |C3 B3 |&#243; |&#xf3; | |ó
+|00F4 |244 |C3 B4 |&#244; |&#xf4; | |ô
+|00F5 |245 |C3 B5 |&#245; |&#xf5; | |õ
+|00F6 |246 |C3 B6 |&#246; |&#xf6; | |ö
+|00F8 |248 |C3 B8 |&#248; |&#xf8; | |ø
+|00F9 |249 |C3 B9 |&#249; |&#xf9; | |ù
+|00FA |250 |C3 BA |&#250; |&#xfa; | |ú
+|00FB |251 |C3 BB |&#251; |&#xfb; | |û
+|00FC |252 |C3 BC |&#252; |&#xfc; | |ü
+|00FD |253 |C3 BD |&#253; |&#xfd; | |ý
+|00FE |254 |C3 BE |&#254; |&#xfe; | |þ
+|00FF |255 |C3 BF |&#255; |&#xff; | |ÿ
+|20AC |8364 |E2 82 AC |&#8364; |&#x20ac; | |€
+|===
+
+Bemerkungen:
+
+ - In den Kolonnen UCS/Hex bzw. UCS/Dezimal ist der UCS (bzw. Unicode) Code des Zeichens angegeben (hexadezimal bzw. dezimal).
+ - In der Kolonne UTF-8 Codierung ist die Codierung des Zeichens nach UTF-8 als 8bit Bytes (Octet) in hexadezimaler Schreibweise angegeben. Die Zeichen >= Hex 80 werden als Mehrbytefolgen codiert. Bemerkung: Die hexadezimale Schreibweise wird hier nur für die Erläuterung der Codierung benutzt. Auf dem Transfer werden nur die binär codierten Octete übertragen.
+ - In der Kolonnen XML Codierung Character Reference (Dez) bzw. Character Reference (Hex) ist die Codierung des Zeichens als XML Character Reference angegeben (dezimale bzw. hexadezimale Variante). Der Wert ist eine ASCII-Zeichenfolge und muss genau so im Transfer verwendet werden. Falls möglich, sollte ein Schreibprogramm die Character Reference Codierung für das Zeichen wählen. Die Character Reference Codierung hat den Vorteil, dass sie auf allen Plattformen (Unix, PC, etc.) bzw. mit einfachen ASCII-Editoren angezeigt bzw. editiert werden kann. Bemerkung: Bei der hexadezimalen Codierungsvariante können die Buchstaben a-f in Gross- oder Kleinschrift angegeben werden (das x in der hexadezimalen Variante muss jedoch immer klein sein).
+ - Die XML Codierung (Entity Reference) ist nur für wenige Spezialzeichen erlaubt. Der Wert ist eine ASCII-Zeichenfolge, welche genau so im Transfer verwendet werden muss. Bemerkung: XML-Entities wie `&uuml;` (für Zeichen ü) sind in einer INTERLIS 2-Transferdatei nicht erlaubt, weil von einer INTERLIS 2-Transferdatei kein DTD referenziert wird (die benutzbaren Entities wie z.B.: `&amp;` sind durch die XML 1.0 Spezifikation vordefiniert). 
+ - In der Kolonne Darstellung ist die Darstellung des Zeichens in einem UCS- bzw. Unicode kompatiblen Editor angegeben.

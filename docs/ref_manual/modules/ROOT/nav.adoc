@@ -3,4 +3,5 @@
 * xref:refhb24/refhb24_root.adoc#_grundprinzipien[Grundprinzipien]
 * xref:refhb24/refhb24_root.adoc#_beschreibungssprache[Beschreibungssprache]
 * xref:refhb24/refhb24_root.adoc#_sequentieller_transfer[Sequentieller Transfer]
-
+* xref:refhb24/refhb24_anhang_a.adoc[Anhang A - Das interne INTERLIS-Datenmodell]
+* xref:refhb24/refhb24_anhang_d.adoc[Anhang D - Zeichentabelle]
