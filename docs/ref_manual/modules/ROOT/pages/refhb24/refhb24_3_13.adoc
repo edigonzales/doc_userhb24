@@ -1,0 +1,149 @@
+=== Ausdrücke
+Ausdrücke (Expression) werden z.B. als Argument von Funktionen oder in Konsistenz- und Selektionsbedingungen verwendet. Bei einem logischen Ausdruck (Logical-Expression) muss der Ergebnistyp Boolean sein. Ausdrücke beziehen sich auf ein Kontextobjekt, d.h. das Objekt, für das man die Bedingung formuliert. Ausgehend von diesem kann ein Attribut, ein Strukturelement, eine Funktion, etc. angesprochen werden. Solche Gegenstände sowie Vergleichsgrössen wie Konstanten und Laufzeitparameter fliessen als Faktoren in Prädikate ein. Prädikate können mittels Operatoren zu einem Ausdruck verknüpft werden.
+
+++++
+<a href="#3_13_C1">&#x203B</a>
+<div id="2_13_C1"></div>
+++++
+[#3_13_C1]
+.Syntaxregeln:
+----
+Expression = Term.
+
+Term = Term0 [ '=>' Term0 ].
+
+Term0 = Term1 { ( 'OR' | '+' | '-' ) Term1 }.
+
+Term1 = Term2 { ( 'AND' | '*' | '/' ) Term2 }.
+
+Term2 = Predicate [ Relation Predicate ].
+
+Predicate = ( Factor
+            | [ 'NOT' ] '(' Logical-Expression ')'
+            | 'DEFINED' '(' Factor ')' ).
+
+Relation = ( '==' | '!=' | '<>' | '<=' | '>=' | '<' | '>' ).
+----
+
+Bemerkungen zur Bedeutung der Syntaxregeln:
+
+* Entsprechend der Syntaxregeln für die Terme bindet der Vergleich (Relation) am stärksten, dann `AND` bzw. `{asterisk}` und `/`, dann `OR` bzw. `{plus}` und `-`, dann die Implikation (`={gt}`). `AND` und `OR` können nur mit boolschen Prädikaten, `{plus}`, `-`, `{asterisk}` und `/` können nur mit numerischen Prädikaten verwendet werden.
+
+* Mit `NOT` und dem darauf in Klammer folgenden logischen Ausdruck wird die Verneinung dieses Ausdrucks verlangt.
+
+* Vergleich von Faktoren. Je nach Typ des Faktors sind einzelne Vergleiche ausgeschlossen:
+
+** Bei Zeichenkettentypen sind nur Gleichheit (`==`) und Ungleichheit (`!=`, `<>`) zulässig. Weitergehende Vergleiche sind mittels Funktionen zu realisieren. Dabei muss insbesondere genau definiert werden, wie regionale, sprachliche Besonderheiten wie Umlaute und Akzente behandelt werden.
+
+** Bei numerischen Datentypen und strukturierten Wertebereichen sind die Vergleiche im üblichen Sinn definiert. Grösser- und Kleiner-Vergleiche sind bei zirkulären Datentypen nicht zweckmässig.
+
+** Koordinaten können als Ganzes nur auf Gleichheit oder Ungleichheit geprüft werden. Die anderen Vergleiche stehen nur für die einzelnen Komponenten zur Verfügung (s. untenstehenden Kommentar zu Syntaxregel Factor).
+
+** Bei Aufzählungen sind Grösser- und Kleiner-Vergleiche nur zulässig, wenn die Aufzählung als geordnet definiert wurde. Mit Gleichheit ist exakte Gleichheit gemeint. Sind auch alle Unterelemente eines Knotens gemeint, ist die Funktion isEnumSubVal zu verwenden.
+
+** Bei Linien kann nur geprüft werden, ob sie undefiniert (`== UNDEFINED`) sind.
+
+** Ein Faktor kann auch ein Objekt bezeichnen. Dann kann auf Definiertheit und Gleichheit bzw. Ungleichheit geprüft werden.
+
+* Besteht ein Faktor nicht nur aus dem unmittelbaren Gegenstand sondern auch aus dem Pfad, der zu diesem führt, gilt der Gegenstand immer als undefiniert, wenn irgendein Attribut des Pfades nicht definiert ist. Die eingebaute Funktion `DEFINED (a.b)` ist damit gleichwertig mit `(a.b != UNDEFINED)`.
+
+* Ein Ausdruck wird von links nach rechts nur soweit ausgewertet bis dessen Resultatwert klar ist. Mit `OR` verbundene Folgeterme werden also nur ausgewertet, wenn der bisherige Wert falsch ist. Mit `AND` verbundene Folgeterme werden dementsprechend nur ausgewertet, wenn der bisherige Wert wahr ist.
+
+* Numerische Ausdrücke (inkl. Koordinaten) sollen immer mit voller numerischer Genauigkeit (gemäss Norm IEEE-754) berechnet werden. Erst die resultierenden Werte sollen allenfalls gerundet werden (vgl. <<_umgang_mit_rundung_von_numerischen_werten_und_koordinaten>>).
+
+Die Implikation (`={gt}`) ist nur dann false, wenn der erste Term true und der zweite Term false ist. `a ={gt} b` ist identisch mit folgender Formulierung: `NOT(a) OR b`. Das wird typischerweise verwendet, um bedingte Einschränkungen zu formulieren. Zum Beispiel: Die Geometrie ist nur bei einem bestimmten Status obligatorisch.
+
+.Beispiel:
+====
+----
+CLASS A =
+  Status: (gueltig, projektiert);
+  Geometrie: SURFACE ...;
+MANDATORY CONSTRAINT Status == #gueltig => DEFINED(Geometrie);
+END A;
+----
+====
+
+Faktoren können gemäss den folgenden Syntaxregeln gebildet werden:
+
+++++
+<a href="#3_13_C2">&#x203B</a>
+++++
+[#3_13_C2]
+.Syntaxregeln:
+----
+Factor = ( ObjectOrAttributePath
+         | ( Inspection | 'INSPECTION' Inspection-ViewableRef )
+             [ 'OF' ObjectOrAttributePath ]
+         | FunctionCall
+         | 'PARAMETER' [ Model-Name '.' ] RunTimeParameter-Name
+         | Constant ).
+
+ObjectOrAttributePath = PathEl { '->' PathEl }.
+
+AttributePath = ObjectOrAttributePath.
+
+PathEl = ( 'THIS'
+         | 'THISAREA' | 'THATAREA'
+         | 'PARENT'
+         | ReferenceAttribute-Name
+         | AssociationPath
+         | Role-Name [ '[' Association-Name ']' ]
+         | Base-Name
+         | AttributeRef ).
+
+AssociationPath = [ '\' ] AssociationAccess-Name.
+
+AttributeRef = ( Attribute-Name ( [ '[' ( 'FIRST'
+                                        | 'LAST'
+                                        | AxisListIndex-PosNumber ) ']' ] )
+               | 'AGGREGATES' ).
+
+FunctionCall = [ Model-Name '.' [ Topic-Name '.' ] ] Function-Name
+                   '(' [ Argument { ',' Argument } ] ')'.
+
+Argument = ( Expression
+           | 'ALL' [ '(' RestrictedClassOrAssRef | ViewableRef ')' ] ).
+----
+
+Faktoren können sich auf Objekte und ihre Attribute beziehen. Dabei können schrittweise ganze Objektpfade gebildet werden. Jedes Konstrukt eröffnet den Weg vom jeweils aktuellen Objekt zum nächsten. Das erste aktuelle Objekt ergibt sich aus dem Kontext, z.B. ein Objekt der Klasse, für die eine Konsistenzbedingung definiert wird.
+
+* `THIS`: Bezeichnet das so genannte Kontextobjekt, d.h. das aktuelle Objekt einer Klasse, einer Sicht oder einer Grafikdefinition, in dem ein Objektpfad verlangt wird. `THIS` ist z.B. beim Aufruf einer Funktion als Argument anzugeben, die `ANYCLASS` oder `ANYSTRUCTURE` als Parameter hat.
+
+* `THISAREA` und `THATAREA`: Bezeichnen die beiden Gebietsobjekte, auf dessen gemeinsamen Rand sich das aktuelle Linienzugsobjekt befindet. Der Einsatz von `THISAREA` und `THATAREA` ist nur möglich im Rahmen der Inspektion einer Gebietseinteilung (vgl. <<_sichten>>).
+
+* `PARENT`: Bezeichnet das Ober-Strukturelement oder Ober-Objekt des aktuellen Strukturelementes oder Objektes. Die Sicht muss dazu eine gewöhnliche Inspektion (keine Gebietsinspektion) sein (vgl. <<_sichten>>).
+
+* Referenzattribut-Angabe: Bezeichnet das Objekt, das vom aktuellen Objekt bzw. von der aktuellen Struktur aus über das gegebene Referenzattribut zugeordnet ist.
+
+* Rollenangabe: Die Rollenangabe ist gültig, wenn nur eine einzige entsprechende Rolle existiert. Die Rollenangabe kann dabei sowohl eine Ausgangsrolle (gemäss der das aktuelle Objekt mit der Beziehungsinstanz verbunden ist) wie eine Zielrolle (gemäss der die Beziehungsinstanz mit dem Bezugsobjekt verbunden ist) ansprechen. Ist die Rollenangabe durch den Beziehungsnamen ergänzt, kann sie nur Ausgangsrollen ansprechen. Je nach Stellung des Pfadelementes im Pfad werden die Rollen unterschiedlich gesucht. Ist die Rollenangabe das erste Pfadelement eines Pfades, wird die Rolle in allen Beziehungszugängen der Klasse gesucht, in deren Kontext der Pfad Anwendung findet. Ist die Rollenangabe ein Folgelement des Pfades, wird die Rolle in allen Assoziationen gesucht, die im Thema verfügbar sind, in dem die Klasse definiert ist, in deren Kontext der Pfad Anwendung findet. Dabei kommen nur diejenigen Assoziationen in Frage, die über Rollen mit der Klasse des Vorgängerobjektes des Pfades in Bezug stehen.
+
+* Basis-Sicht-Angabe: Mit dem (lokalen) Namen der Basis-Sicht wird in der aktuellen Sicht bzw. in der aktuellen abgeleiteten Beziehung das entsprechende (virtuelle) Objekt der Basis-Sicht bezeichnet.
+
+Beim Bezug auf ein Attribut, meint man den Wert des Attributes des Kontextobjekts oder des durch den Pfad bezeichneten Objekts. Zusätzlich werden Pfade, die mit einem Attribut enden, als Attributpfade bezeichnet und auch unabhängig von Faktoren in verschiedenen Syntaxregeln verwendet.
+
+* Im Normalfall genügt die Angabe des Attributnamens.
+
+* Handelt es sich um ein Koordinatenattribut bezeichnet man durch Angabe der Nummer der Achse die entsprechende Komponente der Koordinate. Die erste Komponente hat den Index 1.
+
+* Das implizite Attribut `AGGREGATES` ist in Aggregationssichten (vgl. <<_sichten>>) definiert und bezeichnet den Satz (`BAG OF`) der aggregierten Basisobjekte.
+
+Bei geordneten Unterstrukturen (`LIST OF`) können einzelne Elemente angesprochen werden. Zulässige Indizes sind:
+
+* `FIRST`: das erste Element.
+
+* `LAST`: das letzte Element.
+
+* Index-Nummer: Der angegebene Index muss kleiner oder gleich der in der Kardinalität festgelegten maximalen Anzahl sein. Das erste Element hat den Index 1. Ist er kleiner oder gleich der in der Kardinalität festgelegten minimalen Anzahl, existiert immer ein entsprechendes Element; ist er grösser ist die Existenz des Elementes nicht gewährleistet. Der Faktor kann als Folge undefiniert werden.
+
+Ein Faktor kann auch eine Inspection sein (vgl. <<_sichten>>). Ist ihr ein Objektpfad vorangestellt, muss die damit gegebene Objektklasse mit derjenigen der Inspection übereinstimmen oder eine Erweiterung von dieser sein. Zur Menge der durch die Inspection gelieferten Strukturelemente gehören dann nur diejenigen, die zum Objekt gehören, das mit dem Objektpfad definiert ist.
+
+Faktoren können auch Funktionsaufrufe sein. Als ihre Argumente kommen in Frage:
+
+* Ausdrücke: Der Typ des Ergebnisses des Ausdrucks muss mit dem Argumenttyp kompatibel sein.
+
+* Wird mit dem Ausdruck eine Rollenangabe gemacht, bezeichnet der Ausdruck die Menge der über die Rolle verbundenen Zielobjekte. Beim formalen Parameter muss `OBJECT OF` oder `OBJECTS OF` (nur wenn auf Grund der Modellbeschreibung klar ist, dass nur ein Zielobjekt möglich ist) verlangt sein (vgl. <<_funktionen>>).
+
+* Alle Objekte (`ALL`) der Klasse in deren Kontext der Funktionsaufruf erfolgt oder alle Objekte der angegebenen Klasse. Beim formalen Parameter muss `OBJECTS OF` verlangt sein (vgl. <<_funktionen>>). Damit sind immer alle Objekte gemeint, die dieser Klasse oder ihren Erweiterungen entsprechen.
+
+Als Vergleichswerte kommen Funktionsaufrufe, Laufzeitparameter (vgl. <<_darstellungsbeschreibungen>>) und Konstanten in Frage.

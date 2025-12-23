@@ -1,0 +1,463 @@
+=== Herleitung des XML-Schema aus dem Datenmodell
+
+==== Einleitung
+Jede XML-Schema Datei (XSD) muss den Regeln gemäss \{2\} genügen. Ausserdem hat jede aus einem INTERLIS 2.4 Datenmodell abgeleitete XSD-Datei folgende Grundstruktur:
+
+++++
+<a href="#4_4_C1">&#x203B</a>
+++++
+[#4_4_C1]
+[subs="verbatim,quotes"]
+----
+*XSDDef* =
+  <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://www.interlis.ch/xtf/2.4/%ModelName%"
+    targetNamespace="http://www.interlis.ch/xtf/2.4/%ModelName%"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified"
+    xmlns:ili="http://www.interlis.ch/xtf/2.4/INTERLIS"
+    xmlns:geom="http://www.interlis.ch/geometry/1.0"
+    >
+
+    { *TypeDef* | *ClassTypeDef* | *ObjectDef* }
+    { *BasketDef* }
+
+  </xsd:schema>
+----
+
+Die XSD-Datei besteht aus einem Header mit Angaben zum Modell (ModelName). Danach folgen die Deklarationen für Typen (TypeDef) und Klassen (ClassTypeDef) und schliesslich die Basketdefinitionen (BasketDef). Jedes XML-Schema für ein Interlis Modell importiert die externen XML-Schemas "http://www.interlis.ch/xtf/2.4/INTERLIS" (INTERLIS 2.4 Basisdefinitionen, s.a. Anhang B) und "http://www.interlis.ch/geometry/1.0" (INTERLIS Geometrieschema, s.a. Anhang C).
+
+Das generierte XML-Schema kann beliebig viele Kommentare (`<!-- … -\->`) oder zusätzliche xsd:annotation-Elemente enthalten. Das generierte XML-Schema darf das INTERLIS-Modell exakter, d.h. mit zusätzlichen «facets», umsetzen.
+
+==== Typdeklarationen
+Alle Typen eines Modells (global oder auf Stufe Thema) werden wie folgt definiert:
+
+++++
+<a href="#4_4_C2">&#x203B</a>
+++++
+[#4_4_C2]
+[subs="verbatim,quotes"]
+----
+*TypeDef* = *SimpleTypeDef* | *ComplexTypeDef*
+
+*SimpleTypeDef* =
+  <xsd:simpleType name=" [ %TopicName%. ] %TypeName%Type">
+    *SimpleTypeRestriction*
+  </xsd:simpleType>
+
+*ComplexTypeDef* =
+  <xsd:complexType name=" [ %TopicName%. ] %TypeName%Type">
+    *ComplexTypeContent*
+  </xsd:complexType>
+----
+
+Für alle Typen muss am Ende des Namen "Type" angehängt werden (z.B. LKoordType für den INTERLIS Typ LKoord). Für Typdeklarationen auf Stufe Thema muss den Typnamen zusätzlich `%TopicName%` vorangestellt werden (z.B. Bodenbedeckung.BBArtType), falls der Typname bereits auf Stufe Modell verwendet wurde.
+
+==== Einfache Typen (SimpleTypeRestriction)
+
+===== Numerische Typen
+Numerische Typen ohne Skalierung (Längen, Flächen, Volumen, Winkel, Bereiche) werden wie folgt übersetzt:
+
+++++
+<a href="#4_4_C3">&#x203B</a>
+++++
+[#4_4_C3]
+[subs="verbatim,quotes"]
+----
+<xsd:restriction base="xsd:decimal">
+  [ <xsd:minInclusive value="%min-Dez%">
+  <xsd:maxInclusive value="%max-Dez%"> ]
+</xsd:restriction>
+----
+
+Die Einschränkung des Bereichs erfolgt nur, wenn der Typ im Modell als FINAL gekennzeichnet ist.
+
+Numerische Typen mit Dezimalpunkt und Skalierung (Längen, Flächen, Volumen, Winkel, Bereiche) werden wie folgt übersetzt:
+
+++++
+<a href="#4_4_C4">&#x203B</a>
+++++
+[#4_4_C4]
+[subs="verbatim,quotes"]
+----
+<xsd:restriction base="xsd:double">
+  [ <xsd:minInclusive value="%min-Dez%">
+  <xsd:maxInclusive value="%max-Dez%"> ]
+</xsd:restriction>
+----
+
+Die Einschränkung des Bereichs erfolgt nur, wenn der Typ im Modell als FINAL gekennzeichnet ist.
+
+Numerische Typen ohne Dezimalpunkt (Längen, Flächen, Volumen, Winkel, Bereiche), die im Modell als FINAL genkennzeichnet sind, werden wie folgt übersetzt:
+
+++++
+<a href="#4_4_C5">&#x203B</a>
+++++
+[#4_4_C5]
+[subs="verbatim,quotes"]
+----
+<xsd:restriction base="xsd:integer">
+  <xsd:minInclusive value="%min-Dez%">
+  <xsd:maxInclusive value="%max-Dez%">
+</xsd:restriction>
+----
+
+===== Text
+Der Typ TEXT*n wird wie folgt übersetzt:
+
+++++
+<a href="#4_4_C6">&#x203B</a>
+++++
+[#4_4_C6]
+[subs="verbatim,quotes"]
+----
+<xsd:restriction base="xsd:normalizedString">
+  <xsd:maxLength value="%N%">
+</xsd:restriction>
+----
+
+===== MText
+Der Typ MTEXT*n wird wie folgt übersetzt:
+
+++++
+<a href="#4_4_C7">&#x203B</a>
+++++
+[#4_4_C7]
+[subs="verbatim,quotes"]
+----
+<xsd:restriction base="xsd:string">
+  <xsd:maxLength value="%N%">
+</xsd:restriction>
+----
+
+===== OIDType, formatierte Wertebereiche, Klassentypen, Attributpfade
+OIDType, formatierte Wertebereiche, Klassentypen und Attributpfade werden wie folgt übersetzt:
+
+++++
+<a href="#4_4_C8">&#x203B</a>
+++++
+[#4_4_C8]
+[subs="verbatim,quotes"]
+----
+<xsd:restriction base="xsd:NCName"/>
+----
+
+===== XML-Gefässe
+Der Typ BLACKBOX XML wird wie folgt übersetzt:
+
+++++
+<a href="#4_4_C9">&#x203B</a>
+++++
+[#4_4_C9]
+[subs="verbatim,quotes"]
+----
+<xsd:restriction base="xsd:anyType"/>
+----
+
+===== Binäre Gefässe
+Der Typ BLACKBOX BINARY wird wie folgt übersetzt:
+
+++++
+<a href="#4_4_C10">&#x203B</a>
+++++
+[#4_4_C10]
+[subs="verbatim,quotes"]
+----
+<xsd:restriction base="xsd:base64Binary"/>
+----
+
+===== Datum
+Der Typ DATE wird wie folgt übersetzt:
+
+++++
+<a href="#4_4_C11">&#x203B</a>
+++++
+[#4_4_C11]
+[subs="verbatim,quotes"]
+----
+<xsd:restriction base="xsd:date"/>
+----
+
+===== Zeit
+Der Typ TIMEOFDAY wird wie folgt übersetzt:
+
+++++
+<a href="#4_4_C12">&#x203B</a>
+++++
+[#4_4_C12]
+[subs="verbatim,quotes"]
+----
+<xsd:restriction base="xsd:time"/>
+----
+
+===== Datum mit Zeit
+Der Typ DATETIME wird wie folgt übersetzt:
+
+++++
+<a href="#4_4_C13">&#x203B</a>
+++++
+[#4_4_C13]
+[subs="verbatim,quotes"]
+----
+<xsd:restriction base="xsd:dateTime"/>
+----
+
+===== Aufzählungen
+Aufzählungen inkl. Textausrichtungen werden wie folgt übersetzt:
+
+++++
+<a href="#4_4_C14">&#x203B</a>
+++++
+[#4_4_C14]
+[subs="verbatim,quotes"]
+----
+<xsd:restriction base="xsd:normalizedString">
+  { *EnumerationValue* }
+</xsd:restriction>
+
+*EnumerationValue* =
+  <xsd:enumeration value="%EnumerationValue%"/>
+----
+
+Die Auflistung der `%EnumerationValue%` erfolgt nur, wenn der Typ im Modell als FINAL gekennzeichnet ist. Für `%EnumerationValue%` müssen dann alle gültigen Werte des Aufzähltyps angegeben werden. Ist der Typ im Modell nicht FINAL, erfolgt keine Auflistung.
+
+==== Komplexe Typen (ComplexTypeContent)
+
+===== Koordinaten
+COORD2 bzw. COORD3 werden wie folgt übersetzt:
+
+++++
+<a href="#4_4_C15">&#x203B</a>
+++++
+[#4_4_C15]
+[subs="verbatim,quotes"]
+----
+<xsd:sequcence>
+  <xsd:element ref="geom:coord" minOccurs="1" maxOccurs="1"/> <1>
+</xsd:sequcence>
+----
+<1> Im PDF-Dokument des Referenzhandbuchs (Version 2.1.0) fehlt der abschliessende Schrägstrich. Siehe dazu auch https://github.com/geostandards-ch/doc_refhb24/issues/15[dieses] Issue. Zudem ist die Beschränkung `minOccurs="1" maxOccurs="1"` überflüssig, da dies die Default-Werte sind (siehe https://www.w3.org/TR/xmlschema-0/#OccurrenceConstraints[XML-Spezifikation]).
+
+===== Multi-Koordinaten
+MULTICOORD2 bzw. MULTICOORD3 werden wie folgt übersetzt:
+
+++++
+<a href="#4_4_C16">&#x203B</a>
+++++
+[#4_4_C16]
+[subs="verbatim,quotes"]
+----
+<xsd:sequcence>
+  <xsd:element ref="geom:multicoord" minOccurs="1" maxOccurs="1"/> <1>
+</xsd:sequcence>
+----
+<1> Im PDF-Dokument des Referenzhandbuchs (Version 2.1.0) fehlt der abschliessende Schrägstrich. Siehe dazu auch https://github.com/geostandards-ch/doc_refhb24/issues/15[dieses] Issue. Zudem ist die Beschränkung `minOccurs="1" maxOccurs="1"` überflüssig, da dies die Default-Werte sind (siehe https://www.w3.org/TR/xmlschema-0/#OccurrenceConstraints[XML-Spezifikation]).
+
+===== Polylinien
+Der Typ POLYLINE wird wie folgt übersetzt:
+
+++++
+<a href="#4_4_C17">&#x203B</a>
+++++
+[#4_4_C17]
+[subs="verbatim,quotes"]
+----
+<xsd:sequcence>
+  <xsd:element ref="geom:polyline" minOccurs="1" maxOccurs="1"/> <1>
+</xsd:sequcence>
+----
+<1> Im PDF-Dokument des Referenzhandbuchs (Version 2.1.0) fehlt der abschliessende Schrägstrich. Siehe dazu auch https://github.com/geostandards-ch/doc_refhb24/issues/15[dieses] Issue. Zudem ist die Beschränkung `minOccurs="1" maxOccurs="1"` überflüssig, da dies die Default-Werte sind (siehe https://www.w3.org/TR/xmlschema-0/#OccurrenceConstraints[XML-Spezifikation]).
+
+===== Multi-Polylinien
+Der Typ MULTIPOLYLINE wird wie folgt übersetzt:
+
+++++
+<a href="#4_4_C18">&#x203B</a>
+++++
+[#4_4_C18]
+[subs="verbatim,quotes"]
+----
+<xsd:sequcence>
+  <xsd:element ref="geom:multipolyline" minOccurs="1" maxOccurs="1"/> <1>
+</xsd:sequcence>
+----
+<1> Im PDF-Dokument des Referenzhandbuchs (Version 2.1.0) fehlt der abschliessende Schrägstrich. Siehe dazu auch https://github.com/geostandards-ch/doc_refhb24/issues/15[dieses] Issue. Zudem ist die Beschränkung `minOccurs="1" maxOccurs="1"` überflüssig, da dies die Default-Werte sind (siehe https://www.w3.org/TR/xmlschema-0/#OccurrenceConstraints[XML-Spezifikation]).
+
+===== Flächen
+Der Typ SURFACE wird wie folgt übersetzt:
+
+++++
+<a href="#4_4_C19">&#x203B</a>
+++++
+[#4_4_C19]
+[subs="verbatim,quotes"]
+----
+<xsd:sequcence>
+  <xsd:element ref="geom:surface" minOccurs="1" maxOccurs="1"/> <1>
+</xsd:sequcence>
+----
+<1> Im PDF-Dokument des Referenzhandbuchs (Version 2.1.0) fehlt der abschliessende Schrägstrich. Siehe dazu auch https://github.com/geostandards-ch/doc_refhb24/issues/15[dieses] Issue. Zudem ist die Beschränkung `minOccurs="1" maxOccurs="1"` überflüssig, da dies die Default-Werte sind (siehe https://www.w3.org/TR/xmlschema-0/#OccurrenceConstraints[XML-Spezifikation]).
+
+===== Multi-Flächen
+Der Typ MULTISURFACE wird wie folgt übersetzt:
+
+++++
+<a href="#4_4_C20">&#x203B</a>
+++++
+[#4_4_C20]
+[subs="verbatim,quotes"]
+----
+<xsd:sequcence>
+  <xsd:element ref="geom:multisurface" minOccurs="1" maxOccurs="1"/> <1>
+</xsd:sequcence>
+----
+<1> Im PDF-Dokument des Referenzhandbuchs (Version 2.1.0) fehlt der abschliessende Schrägstrich. Siehe dazu auch https://github.com/geostandards-ch/doc_refhb24/issues/15[dieses] Issue. Zudem ist die Beschränkung `minOccurs="1" maxOccurs="1"` überflüssig, da dies die Default-Werte sind (siehe https://www.w3.org/TR/xmlschema-0/#OccurrenceConstraints[XML-Spezifikation]).
+
+===== Rollen
+Rollen werden wie folgt übersetzt:
+
+++++
+<a href="#4_4_C21">&#x203B</a>
+++++
+[#4_4_C21]
+[subs="verbatim,quotes"]
+----
+<xsd:attribute ref="ili:ref" use="required"/>
+<xsd:attribute ref="ili:order_pos"/>
+----
+
+===== Referenzattribute
+Referenzattribute werden wie folgt übersetzt:
+
+++++
+<a href="#4_4_C22">&#x203B</a>
+++++
+[#4_4_C22]
+[subs="verbatim,quotes"]
+----
+<xsd:attribute ref="ili:ref" use="required"/>
+----
+
+==== Klassen, Strukturen und Beziehungen
+Klassen, Strukturen und eigenständige Beziehungen werden wie folgt übersetzt:
+
+++++
+<a href="#4_4_C23">&#x203B</a>
+++++
+[#4_4_C23]
+[subs="verbatim,quotes"]
+----
+*ClassTypeDef* = *RootClassTypeDef* | *ExtendedClassTypeDef*
+
+*RootClassTypeDef* =
+  <xsd:complexType name=" [ %TopicName%. ] %ClassName%Type">
+    <xsd:sequence>
+      <xsd:element ref="ili:extensions" minOccurs="0"/>
+      (* *AttributeDef* | *EmbeddedLinkDef* | *RoleDef* \*)
+    </xsd:sequence>
+    <xsd:anyAttribute processContents="lax"/>
+    [ <xsd:attribute ref="ili:tid"/> ]
+    [ <xsd:attribute ref="ili:operation"/> ]
+  </xsd:complexType>
+
+**ExtendedClassTypeDef** =
+  <xsd:complexType name=" [ %TopicName%. ] %ClassName%Type">
+    <xsd:complexContent>
+      <xsd:extension base=" [ %TopicName%. ] %ClassName%Type">
+        <xsd:sequence>
+          (* *AttributeDef* | *EmbeddedLinkDef* | *RoleDef* *)
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+**ObjectDef** =
+  <xsd:element name= [ %TopicName%. ] "%ClassName%" type="%ClassName%Type"
+   [ substitutionGroup=" [ %TopicName%. ] "%ClassName%" ] />
+----
+
+Bei Klassen ist die Angabe des XML-Attributs TID obligatorisch. In Strukturen dürfen die Attribute TID und OPERATION nicht vorkommen.
+
+++++
+<a href="#4_4_C24">&#x203B</a>
+++++
+[#4_4_C24]
+[subs="verbatim,quotes"]
+----
+*AttributeDef* =
+  *AttributeWithNamedTypeDef* | *AttributeWithLocalTypeDef*
+
+*AttributeWithNamedTypeDef* =
+  <xsd:element name="%Attribut-Name%"
+      minOccurs="%MinCard%" maxOccurs="%MaxCard%"
+      type="%NamedTypeRef%"/>
+
+*AttributeWithLocalTypeDef* =
+  <xsd:element name="%Attribut-Name%"
+      minOccurs="%MinCard%" maxOccurs="%MaxCard%">
+    *TypeDef*
+  </xsd:element>
+
+*EmbeddedLinkDef* =
+  <xsd:element name="%Role-Name%">
+    <xsd:complexType>
+      [ <xsd:sequence>
+          <xsd:element ref=" [ %TopicName%. ] %ClassName%" minOccurs="0"/>
+        </xsd:sequence> ]
+      <xsd:attribute ref="ili:ref" use="required"/>
+      [ <xsd:attribute ref="ili:order_pos" /> ]
+      <xsd:anyAttribute processContents="lax"/>
+    </xsd:complexType>
+  </xsd:element>
+
+*RoleDef* =
+  <xsd:element name="%Role-Name%">
+    <xsd:complexType>
+      <xsd:attribute ref="ili:ref" use="required"/>
+      [ <xsd:attribute ref="ili:order_pos" /> ]
+      <xsd:anyAttribute processContents="lax"/>
+    </xsd:complexType>
+  </xsd:element>
+----
+
+Für die Reihenfolge der Attribute, Rollen und EmbeddedLink innerhalb der Klasse gilt: Die Attribute/Referenzattribute und Rollen werden gemäss ihrer Definitionsreihenfolge in der Modelldatei codiert. Die EmbeddedLink werden innerhalb der gleichen Erweiterungsstufe alphabetisch aufsteigend sortiert. Die Rollen, Attribute und EmbeddedLink, die von einer Basisklasse geerbt werden, werden nicht wiederholt.
+
+Für Listen- und Bag-Attribute muss für `%MinCard%` die minimale bzw. für `%MaxCard%` die maximale Kardinalität eingegetragen werden.
+
+Für alle übrigen Attribute ist `%MaxCard%` gleich 1. Für MANDATORY Attribute beträgt `%MinCard%` ebenfalls 1, sonst 0.
+
+Eingebettete Beziehungen werden gemäss der Regel `EmbeddedLinkDef` definiert.
+
+TypeDef für Attribute mit lokaler Typdeklaration werden ohne XSD-Attribut `name` ausgegeben.
+
+==== BasketDef
+Pro Thema wird folgende Definition ausgegeben:
+
+++++
+<a href="#4_4_C25">&#x203B</a>
+++++
+[#4_4_C25]
+[subs="verbatim,quotes"]
+----
+*BasketDef* =
+  <xsd:element name="%Thema-Name%">
+    <xsd:complexType>
+      <xsd:choice minOccurs="0" maxOccurs="unbounded">
+        <xsd:element ref="ili:extensions"/>
+        { <xsd:element ref=" [ %TopicName%. ] %ClassName%"
+            minoccurs="0" maxOccurs="unbounded"/> }
+      </xsd:choice>
+      <xsd:attribute ref="ili:bid" use="required"/>
+      <xsd:attribute ref="ili:consistency"/>
+      [ <xsd:attribute ref="ili:domains"/> ]
+      [ <xsd:attribute ref="ili:kind"/>
+        <xsd:attribute ref="ili:startstate"/>
+        <xsd:attribute ref="ili:endstate"/> ]
+      <xsd:anyAttribute processContents="lax"/>
+    </xsd:complexType>
+  </xsd:element>
+----
+
+Für Elementdefinitionen der Klassen innerhalb der BasketDef gilt: Zuerst werden alle Klassen der Basistopics, dann alle Klassen des Erweiterungstopics codiert, etc. (Zwiebelprinzip). Wobei Klassen des Erweiterungstopics nur codiert werden, wenn die Basisklasse nicht als Teil des Basistopics bereits codiert wurde.
+
+Themen müssen in der XSD-Datei in der gleichen Reihenfolge wie im Datenmodell definiert werden.

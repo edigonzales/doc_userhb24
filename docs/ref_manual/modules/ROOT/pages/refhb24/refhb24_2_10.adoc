@@ -1,4 +1,4 @@
-== Weitere Gliederung des Referenzhandbuchs
+=== Weitere Gliederung des Referenzhandbuchs
 Im nächsten xref:_beschreibungssprache[xrefstyle=short] wird die Beschreibungssprache formal definiert. Im xref:_sequentieller_transfer[xrefstyle=short] wird der sequentielle Transfer von Geodaten spezifiziert. Dieses Kapitel enthält einen allgemeinen Teil, der für alle aktuellen und künftigen sequentiellen INTERLIS 2-Transferdienste gilt und einen speziellen Teil, der für den INTERLIS 2-Transferdienst mit XML gilt.
 
 Die Anhänge gliedern sich in vier _normative_ Anhänge A bis D, ergänzt durch einen _informativen_ Anhang E, in die _Standard-Erweiterungsvorschläge_ F bis L sowie ein Glossar (Anhang M) und einen Index (Anhang N).

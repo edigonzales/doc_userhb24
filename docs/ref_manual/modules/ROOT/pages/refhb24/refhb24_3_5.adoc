@@ -1,6 +1,6 @@
-== Modelle, Themen, Klassen
+=== Modelle, Themen, Klassen
 
-=== Modelle
+==== Modelle
 Als Modell wird eine in sich geschlossene, vollständige Definition bezeichnet. Je nach Art des Modells kann es verschiedene Konstrukte enthalten.
 
 Ein reines Typenmodell (`TYPE MODEL`) darf nur Masseinheiten, Wertebereiche, Funktionen und Linienformen deklarieren.
@@ -60,7 +60,7 @@ Bezieht sich ein INTERLIS-Konstrukt auf eine Definition, die in einem anderen Mo
 
 Mit der Sprache verbunden ist auch ein vordefiniertes Basis-Modell "INTERLIS" (vgl. Anhang A Das interne INTERLIS-Datenmodell). Dieses muss nicht importiert werden. Hingegen stehen auch dessen Elemente nur dann mit unqualifizierten Namen zur Verfügung, wenn das Modell mit `IMPORTS UNQUALIFIED INTERLIS` eingeführt wird.
 
-=== Themen
+==== Themen
 Ein Thema (Schlüsselwort `TOPIC`) enthält alle zur Beschreibung eines bestimmten sachlichen Teils der Realwelt nötigen Definitionen. Ein Thema kann auch Typen wie Masseinheiten, Wertebereiche oder Strukturen definieren oder diese vom umhüllenden Modell oder einem importierten Modell benützen. In runden Klammern können die Vererbungseigenschaften definiert werden. Enthält ein Thema abstrakte Definitionen, die nicht im selben Thema konkretisiert werden, muss das Thema als ABSTRACT deklariert werden. Abstrakte Definitionen müssen dann in konkreten Erweiterungen des Themas noch konkretisiert werden. Für einen Datentransfer braucht es ein konkretes Thema. Da sich eine Erweiterung eines Themas immer auf ein Thema mit einem anderen Namen bezieht, macht `EXTENDED` keinen Sinn und ist deshalb nicht zulässig.
 
 ++++
@@ -113,7 +113,7 @@ Ohne weitere Angaben ist ein Thema datenmässig unabhängig von anderen Themen. 
 
 Referenziert ein Thema direkt oder indirekt generische Festlegungen, die letztlich erst im Transfer festgelegt werden, müssen sie explizit aufgeführt werden (`DEFERRED GENERICS`). Aktuell besteht diese Möglichkeit nur für Koordinaten-Wertebereiche (vgl. <<_koordinaten>>).
 
-=== Klassen und Strukturen
+==== Klassen und Strukturen
 Eine Klassendefinition (Schlüsselwort CLASS) deklariert die Eigenschaften aller zugehörigen Objekte. Eine Klasse wird in einem Thema abschliessend definiert. Klassendefinitionen sind erweiterbar, wobei eine Erweiterung primär sämtliche Attribute ihrer Basis-Klasse erbt. Deren Wertebereiche dürfen eingeschränkt werden. Zudem dürfen weitere Attribute oder zusätzliche Konsistenzbedingungen definiert werden.
 
 Der Wertebereich der Objektidentifikationen aller Objekte dieser Klasse kann explizit festgelegt werden (`OID AS` oder `NO OID`). Fehlt die Definition, gilt diejenige des Themas, es sei denn, es werde explizit festgelegt, dass keine Objektidentifikationen gefragt sind (`NO OID`). Fehlt die Definition auch beim Thema, gilt implizit `NO OID`. `NO OID` bedeutet, dass die Objektidentifikation nicht stabil ist. Als Folge ist es weder möglich, Objekte dieser Klasse inkrementell nachzuliefern, noch Referenzen (Beziehungen, Beziehungsattribute) auf diese Klasse zu definieren. Eine bereits gemachte OID-Definition kann nicht erweitert werden, ausser dass ein geerbtes `NO OID` durch `ANY`, und ein geerbtes `ANY` durch eine konkrete Definition ersetzt werden kann. Ein geerbtes `ANY` kann jedoch nicht durch `NO OID` ersetzt werden. (vgl. <<_wertebereiche_von_objektidentifikationen>>).
@@ -164,7 +164,7 @@ ClassOrStructureRef = ( ClassRef | StructureRef ).
 
 Welche Namen qualifiziert werden müssen (durch Model-Name bzw. durch Model-Name.Topic-Name) ist am Schluss des folgenden Abschnitts (vgl. <<_namensräume>>) erklärt. Klassen und Strukturen, die nicht auf einer bereits definierten Klasse oder Struktur aufbauen, brauchen keinen EXTENDS-Teil.
 
-=== Namensräume
+==== Namensräume
 Als Namensraum bezeichnet man eine Menge von (eindeutigen) Namen. Jedes Modellierungselement (Datenmodell, Thema, Klassenelement) sowie die Metadaten-Behälter stellen jeweils einen eigenen Namensraum für ihre Namenskategorien (Typnamen, Bestandteilnamen, Metaobjektnamen) bereit.
 
 Modellierungselemente gibt es auf drei Hierarchiestufen:

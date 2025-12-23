@@ -1,4 +1,4 @@
-= Beschreibungssprache
+== Beschreibungssprache
 
 include::refhb24_3_1.adoc[]
 
@@ -15,3 +15,19 @@ include::refhb24_3_6.adoc[]
 include::refhb24_3_7.adoc[]
 
 include::refhb24_3_8.adoc[]
+
+include::refhb24_3_9.adoc[]
+
+include::refhb24_3_10.adoc[]
+
+include::refhb24_3_11.adoc[]
+
+include::refhb24_3_12.adoc[]
+
+include::refhb24_3_13.adoc[]
+
+include::refhb24_3_14.adoc[]
+
+include::refhb24_3_15.adoc[]
+
+include::refhb24_3_16.adoc[]

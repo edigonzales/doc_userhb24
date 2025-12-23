@@ -1,0 +1,125 @@
+=== Konsistenzbedingungen
+Konsistenzbedingungen dienen der Definition von Einschränkungen, welchen die Objekte genügen müssen.
+
+Konsistenzbedingungen können einen Namen haben, der innerhalb der Klasse bzw. des Wertebereichs, zu dem sie definiert werden, eindeutig sein muss.
+
+Bei der Prüfung von Konsistenzbedingungen (insbesondere der Einhaltung der Schnittfreiheit inkl. Overlaps) sollen (auch wenn die Daten in einem System mit höherer Genauigkeit gespeichert sind) gemäss Wertebereichdefinition gerundete Attribut-Werte verwendet werden (vgl. <<_umgang_mit_rundung_von_numerischen_werten_und_koordinaten>>).
+
+Konsistenzbedingungen, die sich auf ein einzelnes Objekt beziehen, werden durch einen logischen Ausdruck beschrieben, der sich auf die Attribute des Objektes bezieht (s. nächstes Kapitel). Solche Bedingungen dürfen keine Funktion verwenden, die auf einem Argument (typischerweise auf dem ersten) eine Menge von Objekten (`OBJECTS OF`) erwartet. Dabei können Konsistenzbedingungen definiert werden, die obligatorisch sind und somit für alle Objekte zwingend gelten (Schlüsselwort `MANDATORY`), und solche, die nur in der Regel gelten. Im letzteren Fall wird angegeben, welcher Prozentanteil der Instanzen der Klasse die Bedingung normalerweise erfüllen soll (Regel PlausibilityConstraint).
+
+Mit der Existenzbedingung (Regel ExistenceConstraint) kann gefordert werden, dass der Wert eines Attributes jedes Objektes der Bedingungs-Klasse in einem bestimmten Attribut einer Instanz anderer Klassen vorkommt. Das bedingt, dass das Bedingungsattribut mit dem anderen Attribut kompatibel ist und hat folgende Wirkung:
+
+* Ist der Wertebereich des Bedingungsattributes gleich dem Wertebereich des anderen Attributes oder einer Erweiterung davon, muss der Bedingungswert im verlangten Attribut einer anderen Instanz vorkommen.
+
+* Ist der Wertebereich des Attributes eine Struktur, werden alle darin enthaltenen Attribute verglichen.
+
+* Ist der Wertebereich des anderen Attributes eine Koordinate und der Wertebereich des Bedingungsattributes eine Linie, Einzelfläche oder Gebietseinteilung mit dem gleichen oder einem erweiterten Koordinatenbereich, müssen alle Koordinaten der Stützpunkte der Linie, Einzelfläche oder Gebietseinteilung im verlangten Attribut einer anderen Instanz vorkommen.
+
+Eindeutigkeitsforderungen werden mit dem Schlüsselwort `UNIQUE` eingeleitet (Regel UniquenessConstraint).
+
+Konzeptionell bedeutet "global", dass alle in beliebigen Behältern existierenden Objekte dieser Bedingung genügen müssen. Mit der Angabe (`BASKET`) gilt die Eindeutigkeitsbedingung nicht mehr global, sondern pro Basket.
+
+Bei Strukturen, Klassen und Assoziationen kann gefordert werden, dass eine bestimmte Kombination von Attributen von Unterstrukturen, die mit BAG OF oder LIST OF definiert sind, lokal (`LOCAL`), d.h. im Rahmen aller dem aktuellen Objekt oder Strukturelement zugeordneten Strukturelemente, eindeutig sein müssen.
+
+.Beispiel:
+====
+----
+CLASS A =
+  K: (A, B, C);
+  ID: TEXT*10;
+UNIQUE K, ID;
+END A;
+----
+====
+
+Ist an einer Eindeutigkeitsbedingung (`UNIQUE`) ein Attribut beteiligt, dessen Wert undefiniert ist, gilt die Eindeutigkeitsbedingung für das aktuelle Objekt als erfüllt. Strukturattribute sind als Attribut einer Eindeutigkeitsbedingung nicht zulässig.
+
+Ist eine Konsistenzbedingung (`MANDATORY CONSTRAINT`) nicht berechenbar (weil z.B. ein Attribut beteiligt ist, dessen Wert undefiniert ist, oder der Divisor 0 beträgt) so gilt die Konsistenzbedingung für das aktuelle Objekt als erfüllt.
+
+Mit Konsistenzbedingungen, die sich auf die Klasse beziehen (`SET CONSTRAINT`), können Bedingungen formuliert werden, die für die Gesamtmenge der Objekte der Klasse (bzw. der Teilmenge, welche die einschränkende WHERE-Bedingung erfüllt) gelten. Solche Bedingungen müssen mindestens eine Funktion verwenden, die auf einem Argument (typischerweise auf dem ersten) eine Menge von Objekten (OBJECTS OF) erwartet. Um die Gesamtmenge der Objekte der Klasse (bzw. der Teilmenge, welche die einschränkende WHERE-Bedingung erfüllt) diesem Argument zu übergeben, wird `ALL` (ohne Angabe der eigenen Klasse) angegeben. Da sich solche Konsistenzbedingungen nicht auf das einzelne Objekt beziehen, können nie die Werte von Attributen angesprochen werden. Als weitere Argumente und für Vergleiche kommen darum nur Konstanten, Laufzeitparameter, Klassentypen, und Attributtypen und weitere Funktionsaufrufe, die diese Einschränkung erfüllen, in Frage.
+
+.Beispiele:
+====
+----
+CLASS B =
+  Art: (a, b, c);
+  Geometrie: SURFACE ...;
+SET CONSTRAINT WHERE Art == #a :
+  areAreas(ALL, UNDEFINED, >> Geometrie);
+END B;
+
+STRUCTURE F =
+  Geometrie: SURFACE ...;
+END F;
+
+CLASS C =
+  Flaechen: BAG OF F;
+SET CONSTRAINT
+  areAreas(ALL, >> Flaechen, >> F->Geometrie);
+END;
+----
+Die Objekte der Klasse B, deren Art a ist, sollen wegen der Verwendung der Standardfunktion areAreas (vgl. <<_funktionen>>) ein Flächennetz bilden. Alle Flächen (gemäss Unterstruktur Flächen) der Objekte der Klasse C bilden eine Gebietseinteilung.
+====
+
+Weitergehende Konsistenzbedingungen müssen mittels Sichten (z.B. Sicht, die eine bestimmte Klasse mit sich selbst verbindet und damit beliebige Attributkombinationen mit allen anderen Objekten der Klasse vergleichbar machen) definiert werden. Solche Sichten müssen zwingend innerhalb des Datenmodells definiert werden.
+
+Konsistenzbedingungen, die sich auf eine Vielzahl von Objekten erstrecken (insbesondere Eindeutigkeitsbedingungen), sind nicht immer vollständig prüfbar, weil die Prüfung nur mit den lokal verfügbaren Behältern durchgeführt werden kann. Konzeptionell gelten sie aber (ausser bei Metamodellen) dennoch global (vgl. Anhang G Eindeutigkeit von Benutzerschlüsseln).
+
+++++
+<a href="#3_12_C1">&#x203B</a>
+<div id="2_12_C1"></div>
+++++
+[#3_12_C1]
+.Syntaxregeln:
+----
+ConstraintDef = ( MandatoryConstraint
+                | PlausibilityConstraint
+                | ExistenceConstraint
+                | UniquenessConstraint
+                | SetConstraint ).
+
+MandatoryConstraint = 'MANDATORY' 'CONSTRAINT' [ Constraint-Name ':' ]
+                         Logical-Expression ';'.
+
+PlausibilityConstraint = 'CONSTRAINT' [ Constraint-Name ':' ]
+                           ( '<=' | '>=' ) Percentage-Dec '%'
+                             Logical-Expression ';'.
+
+ExistenceConstraint = 'EXISTENCE' 'CONSTRAINT' [ Constraint-Name ':' ]
+                         AttributePath 'REQUIRED' 'IN'
+                           ViewableRef ':' AttributePath
+                             { 'OR' ViewableRef ':' AttributePath } ';'.
+
+UniquenessConstraint = 'UNIQUE' [ '(' 'BASKET' ')' ]
+                         [ Constraint-Name ':' ]
+                         [ 'WHERE' Logical-Expression ':' ]
+                           ( GlobalUniqueness | LocalUniqueness ) ';'.
+
+GlobalUniqueness = UniqueEl.
+
+UniqueEl = ObjectOrAttributePath { ',' ObjectOrAttributePath }.
+
+LocalUniqueness = '(' 'LOCAL' ')'
+                    StructureAttribute-Name
+                      { '->' StructureAttribute-Name } ':'
+                               Attribute-Name { ',' Attribute-Name }.
+
+SetConstraint = 'SET' 'CONSTRAINT' [ '(' 'BASKET' ')' ]
+                  [ Constraint-Name ':' ]
+                  [ 'WHERE' Logical-Expression ':' ]
+                    Logical-Expression ';'.
+----
+
+Konsistenzbedingungen für eine bestimmte Klasse oder Assoziation können auch erst nachträglich, aber innerhalb desselben TOPIC (typischerweise nach der Definition einer Assoziation), definiert werden.
+
+++++
+<a href="#3_12_C2">&#x203B</a>
+<div id="2_12_C2"></div>
+++++
+[#3_12_C2]
+.Syntaxregel:
+----
+ConstraintsDef = 'CONSTRAINTS' 'OF' ViewableRef '='
+                   { ConstraintDef }
+                 'END' ';'.
+----

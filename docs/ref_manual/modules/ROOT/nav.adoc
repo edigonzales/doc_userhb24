@@ -1,4 +1,6 @@
-** xref:refhb24/refhb24_index.adoc[Titelseite]
-** xref:refhb24/refhb24_1_einleitung.adoc[Einleitung]
-** xref:refhb24/refhb24_2_grundprinzipien.adoc[Grundprinzipien]
-** xref:refhb24/refhb24_3_beschreibungssprache.adoc[Beschreibungssprache]
+* xref:refhb24/refhb24_root.adoc[INTERLIS 2.4 Referenzhandbuch]
+* xref:refhb24/refhb24_root.adoc#_einleitung[Einleitung]
+* xref:refhb24/refhb24_root.adoc#_grundprinzipien[Grundprinzipien]
+* xref:refhb24/refhb24_root.adoc#_beschreibungssprache[Beschreibungssprache]
+* xref:refhb24/refhb24_root.adoc#_sequentieller_transfer[Sequentieller Transfer]
+

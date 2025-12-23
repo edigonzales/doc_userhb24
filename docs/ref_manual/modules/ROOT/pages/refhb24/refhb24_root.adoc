@@ -1,0 +1,11 @@
+= INTERLIS 2.4 Referenzhandbuch
+
+include::refhb24_0_vorwort.adoc[]
+
+include::refhb24_1_einleitung.adoc[]
+
+include::refhb24_2_grundprinzipien.adoc[]
+
+include::refhb24_3_beschreibungssprache.adoc[]
+
+include::refhb24_4_sequentieller_transfer.adoc[]

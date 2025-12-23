@@ -1,4 +1,4 @@
-== Hauptregel
+=== Hauptregel
 Jede Beschreibungseinheit beginnt mit der Angabe der Sprach-Version. Damit wird die Basis für spätere Sprachzusätze gelegt. Die in diesem Dokument beschriebene Version von INTERLIS ist *2.4*.
 
 Nachher folgen die Modellbeschreibungen.

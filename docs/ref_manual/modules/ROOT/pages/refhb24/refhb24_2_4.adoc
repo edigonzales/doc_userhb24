@@ -1,6 +1,6 @@
-== Objekt-Konzept
+=== Objekt-Konzept
 
-=== Objekte und Klassen
+==== Objekte und Klassen
 Ein Objekt (auch Objektinstanz oder einfach Instanz genannt) besteht aus den Daten eines Gegenstandes der realen Welt und ist eindeutig identifizierbar. Typischerweise besitzen zahlreiche Objekte gleichartige Eigenschaften und können daher zusammengefasst werden. Eine Menge von Objekten (Objektmenge) mit gleichartigen Eigenschaften wird als Klasse bezeichnet. Jeder Eigenschaft entspricht (mindestens) ein Attribut. INTERLIS 1 verwendete anstelle des Begriffs Klasse den Begriff Tabelle. Andere Begriffe für Klasse sind Entitätsmenge, Entitätstyp, Feature(typ).
 
 Mit der Beschreibung einer Klasse wird unter anderem auch festgehalten, welche Eigenschaften oder Merkmale die einzelnen Objekte tragen. Diese werden Attribute genannt. Die Attributwerte der einzelnen Objekte sind dabei nicht beliebig, sondern müssen bestimmten Bedingungen genügen, die zur Beschreibung eines Attributes gehören.
@@ -21,19 +21,19 @@ Abgesehen davon, dass alle Attributwerte ihrem jeweiligen Typ entsprechen müsse
 
 *	Kompliziertere Bedingungen, die sich auf Objektmengen beziehen und mittels Sichten formuliert werden.
 
-=== Klassenerweiterung
+==== Klassenerweiterung
 Klassen sind entweder eigenständig oder erweitern (spezialisieren, erben) eine Basisklasse. D.h. die Beschreibung einer Klasse ist entweder unabhängig oder enthält Erweiterungen von einer anderen, ererbten Beschreibung. Eine Klassenerweiterung (auch Unterklasse oder Subklasse genannt) kann einerseits zusätzliche Attribute und Konsistenzbedingungen haben, andererseits übernommene Bedingungen (Datentypen, Konsistenzbedingungen) verschärfen.
 
 Jedes einzelne Objekt gehört zu genau einer Klasse (man sagt auch: ist Objektinstanz oder Instanz einer Klasse). Es erfüllt aber immer auch sämtliche Bedingungen, welche die Basisklassen (d.h. die Oberklassen) stellen. Zu jeder Klasse gibt es eine Menge von Objekten, die Instanzen der Klasse oder einer ihrer Erweiterungen sind. Im Falle konkreter Klassen besteht eine normalerweise kleinere Untermenge von Instanzen, die exakt zu dieser Klasse gehören.
 
 Die Elemente von Unterstrukturen sind keine eigentlichen selbständigen Objekte, sondern Strukturelemente und gehören damit auch nicht zur Menge der Instanzen irgendeiner Klasse.
 
-=== Meta-Modelle und Meta-Objekte
+==== Meta-Modelle und Meta-Objekte
 Koordinaten- und Referenzsysteme sowie Grafiksignaturen stellen sich aus der Sicht der Anwendung als Modellelement (bzw. Schemaelement) dar, die in den Anwendungsdefinitionen verwendet werden können. Da aber verschiedene Koordinaten- und Referenzsysteme und vor allem verschiedene Grafiksignaturen auf die gleiche Art beschrieben werden können, macht es Sinn, ihre Eigenschaften ebenfalls innerhalb von Modellen mittels Klassen zu beschreiben. Jedem einzelnen System, bzw. jeder Grafiksignatur (z.B. ein Punktsymbol, eine Linienart) entspricht dann ein Objekt.
 
 Meta-Objekte müssen in einem Meta-Modell definiert sein (s. <<_allgemeine_aussagen_zu_metaobjekten>>). Die verwendbaren Objekte müssen explizit als Meta-Objekte gekennzeichnet sein (Erweiterungen der vordefinierten Klasse METAOBJECT) und können dann von der Anwendung über den Namen referenziert werden. Dafür ist es nötig, dass die Meta-Objekte dem Werkzeug, das die Anwendungsdefinition verarbeitet, mittels Behältern (vgl. <<_behälter_replikation_und_datentransfer>>) zur Verfügung stehen.
 
-=== Beziehungen zwischen Objekten
+==== Beziehungen zwischen Objekten
 INTERLIS 2 unterscheidet (im Gegensatz zu INTERLIS 1) zwei Arten von Beziehungen zwischen Objekten: eigentliche Beziehung und Referenzattribut.
 
 Als _eigentliche Beziehung_ wird eine Menge von Objektpaaren (bzw. im allgemeinen Fall von Objekt-n-Tupeln) bezeichnet. Das erste Objekt jedes Paares gehört zu einer ersten Klasse A, das zweite zu einer zweiten Klasse B. Dabei soll die Zuordnung von Objekten zu den Paaren vorgegeben sein, sie muss also nur beschrieben, d.h. modelliert werden. Wie weiter unten im <<_sichten_konzept>> gezeigt wird, ist es im Gegensatz dazu auch möglich, Zuordnungen algorithmisch z.B. aufgrund von Attributwerten zu berechnen.
@@ -54,7 +54,7 @@ Ohne die Unabhängigkeit der Themen zu verletzen, können mittels spezieller Ken
 
 Im Interesse einer klaren Ordnung können sich Beziehungen nur auf Klassen beziehen, die an der Stelle wo die Beziehungsklasse (bzw. das Referenzattribut) definiert wird, bereits bekannt sind.
 
-=== Behälter, Replikation und Datentransfer
+==== Behälter, Replikation und Datentransfer
 Als Behälter wird eine abgeschlossene Sammlung von Objekten bezeichnet, die zu einem Thema oder zu dessen Erweiterungen gehören. Abgeschlossen heisst, dass ein Behälter alle Objekte enthalten soll, die innerhalb des Themas zueinander in Beziehung stehen. Typischerweise wird ein Behälter alle Objekte einer bestimmten Gegend (z.B. einer Gemeinde, eines Kantons oder gar des ganzen Landes) enthalten. Ein Behälter kann insbesondere auch Daten verschiedener Erweiterungen (z.B. verschiedener Kantone mit eigenen Themenerweiterungen) enthalten. Dies bedingt allerdings, dass im Rahmen einer solchen Transfergemeinschaft, die Bezeichnungen der Modelle, Themen und Themenerweiterungen eindeutig sind.
 
 Im Rahmen von Konsistenzbedingungen wird häufig von «allen» Objekten einer Klasse gesprochen. Konzeptionell meint man damit auch grundsätzlich alle Objekte, die die gewünschte Eigenschaft haben und die es überhaupt, d.h. behälterübergreifend gibt. Es ist aber aus verschiedenen Gründen (Effizienz, Verfügbarkeit, Zugriffsberechtigung, etc.) offensichtlich, dass eine Überprüfung nur innerhalb der lokal zugänglichen Behälter möglich ist. Im Falle von Behältern mit Meta-Objekten gelten die Konsistenzbedingungen ausdrücklich nur innerhalb eines Behälters, da davon ausgegangen wird, dass die Meta-Daten beschreibenden Charakter haben und deshalb jeweils vollständig (quasi als Bibliothek) in einem Behälter zur Verfügung stehen müssen.

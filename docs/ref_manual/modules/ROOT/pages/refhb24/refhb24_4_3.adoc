@@ -1,0 +1,638 @@
+=== XML-Codierung
+
+==== Einleitung
+Im Gegensatz zu den Regeln in <<_allgemeine_regeln_für_den_sequentiellen_transfer>> gelten die Regeln unter XML-Codierung nur für gemäss XML-1.0 Standard formatierte Transferdateien \{1\}. Für die Formalisierung der Transferformat-Ableitungsregeln wird die in <<_verwendete_syntax>> eingeführte EBNF-Notation benutzt. Folgende Regeln werden hier bereits vordefiniert:
+
+++++
+<a href="#4_3_C1">&#x203B</a>
+++++
+[#4_3_C1]
+[subs="verbatim,quotes"]
+----
+*XML-Any* = beliebige XML-Elemente (wohlgeformtes XML).
+*XML-base64Binary* = beliebige in Base64 codierterte binäre Daten \{4\}.
+*XML-String* = beliebiger Text ohne Tags (inkl. carriage return
+             (Wagenrücklauf) (#xD), line feed (Zeilenvorschub) (#xA)
+             und Tabulatorzeichen (#x9)).
+*XML-NormalizedString* = beliebiger einzeiliger Text.
+*XML-NcName* = ( Letter | '\_' ) { Letter | Digit | '_' | '-' | '.' }.
+*XML-ID* = [ XML-NcName ':' ] ( Letter | Digit | '\_' )
+         { Letter | Digit | '_' | '-' | '.' }.
+----
+
+==== Zeichencodierung
+Als Zeichenvorrat für XML-String bzw. XML-NormalizedString stehen standardmässig nur die ASCII Zeichen von 32 bis 126 bzw. die Zeichen aus Anhang D Zeichentabelle zur Verfügung. Die Zeichen werden gemäss der Codierungsregel UTF-8 \{3\} oder als XML Character Reference codiert.
+
+Eine XML Entity Reference ist nur für wenige Spezialzeichen erlaubt. Der Wert ist eine ASCII-Zeichenfolge, welche genau so im Transfer verwendet werden muss. Bemerkung: XML-Entities wie \&uuml; (für Zeichen ü) sind in einer INTERLIS 2-Transferdatei nicht erlaubt, weil von einer INTERLIS 2-Transferdatei keine Dokumenttypdefinition (DTD) referenziert wird.
+
+Die benutzbaren XML Entities sind durch die XML 1.0 Spezifikation vordefiniert:
+
+* '&' muss durch die Zeichenfolge '\&amp;' ersetzt werden.
+
+* '<' muss durch die Zeichenfolge '\&lt;' ersetzt werden.
+
+* '>' muss durch die Zeichenfolge '\&gt;' ersetzt werden.
+
+* ''' muss durch die Zeichenfolge '\&apos;' ersetzt werden.
+
+* '"' muss durch die Zeichenfolge '\&quot;' ersetzt werden.
+
+Eine vollständige Zusammenfassung der Zeichencodierung mit allen möglichen Codierungsformen pro Zeichen ist in Anhang D _Zeichentabelle_ enthalten. Ein INTERLIS 2 Schreibprogramm kann bei mehreren Codierungsformen pro Zeichen eine geeignete Form frei auswählen. Ein INTERLIS 2-Leseprogramm muss alle Codierungsformen erkennen. Kommen im Transfer Zeichen vor, die nicht im beim Modell definierten Zeichensatz (vgl. <<_modelle_themen_klassen>>) vorkommen (oder gemäss Anhang D, wenn die Angabe des Zeichensatzes beim Modell fehlt), ist es der Software überlassen, wie sie damit umgeht (z.B. stillschweigend ignorieren oder mit Hinweis durch ein Ersatzzeichen ersetzen).
+
+Bemerkung: Mehrere Codierungsformen pro Zeichen und Zeichen ausserhalb des evtl. eingeschränkten Zeichensatzes werden zugelassen um maximale Kompatibilität mit bestehenden XML-Werkzeugen zu erreichen.
+
+==== Allgemeiner Aufbau der Transferdatei
+Eine INTERLIS-Transferdatei ist gemäss folgender EBNF-Hauptregel aufgebaut:
+
+++++
+<a href="#4_3_C2">&#x203B</a>
+++++
+[#4_3_C2]
+[subs="verbatim,quotes"]
+----
+*Transfer* =
+  <?xml version="1.0" encoding="UTF-8"?>
+  <%ili%:transfer
+    { *NameSpaceDef* }
+    xmlns:%ili%="http://www.interlis.ch/xtf/2.4/INTERLIS"
+    [ xmlns:%geom%="http://www.interlis.ch/geometry/1.0" ]
+    [ xmlns:%xsi%="http://www.w3.org/2001/XMLSchema-instance" ] >
+    *HeaderSection*
+    *DataSection*
+  </%ili%:transfer>.
+
+*NameSpaceDef* =
+  xmlns="%XMLNS%" | xmlns="http://www.interlis.ch/xtf/2.4/%ModelName%".
+----
+
+Die Regel HeaderSection erzeugt den Vorspann der Transferdatei und die Regel DataSection den Datenbereich.
+
+Eine durch die Transferregel erzeugte INTERLIS-Transferdatei ist immer auch eine wohlgeformte (well formed) XML 1.0-Transferdatei \{1\}. In einer INTERLIS-Transferdatei können daher auch beliebig viele Kommentarzeilen der Form
+
+ <!-- %Comment% -->
+
+an den in XML 1.0 dafür vorgesehenen Stellen vorkommen. Der Inhalt der Kommentarzeilen `%Comment%` darf von der Transfersoftware jedoch nicht interpretiert werden.
+
+Grundsätzlich ist ein INTERLIS 2 Schreibprogramm frei, welcher Prefix (`%ili%`, `%geom%`, `%ns%`) für welchen XML-Namespace verwendet wird, bzw. welcher XML-Namespace als default XML-Namespace verwendet wird. Mit `%ns%` ist der jeweilige XML-Namespace des INTERLIS-Modells gemeint, in dem das entsprechende Modellelement definiert wurde.
+
+Das XML-Schema für den Namespace "http://www.interlis.ch/xtf/2.4/INTERLIS" wird im Anhang B definiert und für "http://www.interlis.ch/geometry/1.0" im Anhang C. Alle anderen XML-Schemas ergeben sich aus den Regeln gemäss <<_herleitung_des_xml_schema_aus_dem_datenmodell>>.
+
+Die Daten werden als XML-Objekte übertragen. Die Tagnamen der XML-Objekte werden jeweils aus den Objektnamen im INTERLIS-Datenmodell abgeleitet. Für übersetzte Datenmodelle (TRANSLATION OF) bleiben die Tagnamen in der Ursprungs-Sprache, d.h. das Transferformat ändert sich nicht.
+
+Enthält das Modell eine explizite Namespace Definition (XMLNS; vgl. Regel ModelDef), wird diese übernommen. Andernfalls wird der Namespace aus "http://www.interlis.ch/xtf/2.4/" und dem ModelName gebildet.
+
+Hinweis: Um die Lesbarkeit zu erhöhen und die Verarbeitbarkeit mit diversen Texteditoren zu verbessern, wird empfohlen die XML-Daten formatiert in die Transferdatei zu schreiben.
+
+==== Vorspann
+Der Vorspann ist wie folgt aufgebaut:
+
+++++
+<a href="#4_3_C3">&#x203B</a>
+++++
+[#4_3_C3]
+[subs="verbatim,quotes"]
+----
+*HeaderSection* =
+  <%ili%:headersection>
+    <%ili%:models> (* *Model* \*) </%ili%:models>
+    [ <%ili%:sender>%Sender%</%ili%:sender> ]
+    [ <%ili%:comment>%Comment%</%ili%:comment> ]
+    </ili:headersection>.
+
+*Model* =
+  <%ili%:model>
+    %ModelName%
+  </%ili%:model>.
+----
+
+Unter `models` müssen die Hauptmodelle eingetragen werden zu welchen Objekte im Transfer vorkommen können.
+In `%Comment%` kann (optional) ein Kommentar angegeben werden, in dem der Transfer näher beschrieben wird.
+
+==== Datenbereich
+Der Datenbereich ist wie folgt aufgebaut:
+
+++++
+<a href="#4_3_C4">&#x203B</a>
+++++
+[#4_3_C4]
+[subs="verbatim,quotes"]
+----
+*DataSection* =
+  <%ili%:datasection>
+    { *Basket* }
+  </%ili%:datasection>.
+----
+
+==== Codierung von Themen
+Behälter sind Instanzen eines konkreten TOPIC bzw. VIEW TOPIC. Behälter werden wie folgt codiert:
+
+++++
+<a href="#4_3_C5">&#x203B</a>
+++++
+[#4_3_C5]
+[subs="verbatim,quotes"]
+----
+*Basket* =
+  <%ns%:%TopicName% %ili%:bid="%BasketId%"
+    [ %ili%:kind="%TransferKind%"
+    %ili%:startstate="%StartState%" %ili%:endstate="%EndState%" ] >
+    [ %ili%:domains="%Domain-Assignments%" ]
+    [ %ili%:consistency="%Consistency%" ]
+    { *Object* | *Link* | *DeleteObject* }
+  </%ns%:%TopicName%>.
+----
+
+Der Wert `%ns%:%TopicName%` muss für jedes konkrete Topic entsprechend substituiert werden (z.B. Fixpunkte). Die XML-Attribute des Behälters haben folgende Bedeutung:
+
+* `%BasketId%`. In `%BasketId%` muss die Behälteridentifikation eingetragen werden. Die Behälteridentifikation ist wie eine XML-ID formatiert und muss bei inkrementeller Nachlieferung zusätzlich eine OID sein.
+
+* `%TransferKind%`. Transferart (mögliche Werte: FULL, UPDATE, INITIAL). Falls das Attribut fehlt, wird FULL angenommen.
+
+* `%StartState%`. Anfangszustand des Behälters vor dem Transfer (nur bei inkrementeller Nachlieferung).
+
+* `%EndState%`. Endzustand des Behälters nach dem Transfer (nur bei inkrementeller Nachlieferung).
+
+* Werden in einem TOPIC direkt oder indirekt generische Wertebereichsdefinitionen (GENERIC) verwendet, muss in `%Domain-Assignments%` dem generischen Wertebereich ein konkreter Wertebereich zugeordnet werden. Werden mehrere generische Wertebereiche verwendet, müssen die einzelnen Zuordnungen durch Leerzeichen getrennt werden. Eine Zuordnung besteht aus den beiden voll qualifizierten Wertebereichsnamen (`%ModelName%[.%TopicName%].%GenericDomainName%=%ModelName%[.%TopicName%].%ConcreteDomainName%`).
+
+* Wird nur ein geographischer Ausschnitt aus einem Datenbestand übertragen, muss man das in `%Consistency%` mit dem Wert INCOMPLETE vermerken. Ohne Angabe gilt für `%Consistency%` der Wert COMPLETE (= vollständiger Datenbestand). In einem Datenbestand-Ausschnitt kann anstelle von POLYLINE auch MULTIPOLYLINE bzw. für SURFACE auch MULTISURFACE vorkommen.
+
+==== Codierung von Klassen und Beziehungen
+Die Objektinstanzen einer konkreten Klasse bzw. einer nicht eingebetteten Beziehung werden wie folgt codiert:
+
+++++
+<a href="#4_3_C6">&#x203B</a>
+++++
+[#4_3_C6]
+[subs="verbatim,quotes"]
+----
+*Object* =
+  <[ %ns%: ] [ %TopicName%. ] %ClassName%
+    %ili%:tid="%Tid%" [ %ili%:operation="%Operation%" ] >
+    [ { *Attribute* | *EmbeddedLink* } ]
+  </[ %ns%: ][ %TopicName%. ] ClassName%>.
+
+*Link* =
+  <[ %ns%: ] [ %TopicName%. ] %AssociationName%
+    [ %ili%:tid=”%Tid%” ] [ %ili%:operation="%Operation%" ] >
+    [ { *Role* | *Attribute* | *EmbeddedLink* } ]
+  </[ %ns%: ] [ %TopicName%. ] %AssociationName%>.
+
+*DeleteObject* =
+  <%ili%:delete [ %ili%:tid= "%Tid%" ] )
+    { <[ %ns%: ] %RoleName% %ili%:ref="%Tid%"/> }
+   </%ili%:delete>.
+----
+
+Der Wert `%ClassName%` muss für jede konkrete Klasse entsprechend substituiert werden (z.B. LFP). Jede Klasse – und damit jede Objektinstanz – erhält zusätzlich zu den im Modell definierten Attributen implizit eine Transferidentifikation (XML-Attribut `tid`). Die `%Tid%` muss wie eine XML-ID formatiert sein.
+
+`%TopicName%` muss nur für Klassen / Beziehungen angeben werden, für welche ein Namenskonflikt mit Klassen / Beziehungen / Strukturen aus anderen Topics des gleichen Modells besteht.
+
+Instanzen von Beziehungen (Link) haben nur eine Transferidentifikation, wenn diese im Rahmen der Definition mit dem Property OID gefordert wurde (vgl. <<_beschreibung_von_beziehungen>>).
+
+In der Transferart FULL müssen alle `%Tid%` innerhalb des gesamten Transfers eindeutig sein. In der Transferart INITIAL oder UPDATE müssen die `%Tid%` global eindeutige OID's sein. Zudem erhält jedes Objekt in den Transferarten INITIAL und UPDATE ein Attribut für die Nachlieferungsoperation (XML-Attribut `operation`). Das XML-Attribut `operation` kann die Werte INSERT, UPDATE oder DELETE annehmen. Ohne Angabe von `operation` wird der Wert INSERT angenommen.
+
+Mit `DeleteObject` kann bei inkrementeller Nachlieferung die Löschung eines bestimmten Objekts des Baskets über seine OID verlangt werden. Bei Beziehungen ohne OID wird die Instanz (Link) durch die Kombination der OIDs der bezeigten Objekte identifiziert. Bei `DeleteObject` müssen im Gegensatz zu `operation="DELETE"` keine weiteren Attribute des Objekts geliefert werden.
+
+Für die Reihenfolge der Rollen, Attribute, Referenzattribute und eingebetteten Beziehungen innerhalb der Klasse gilt: Zuerst werden alle Rollen der Basisklasse, dann alle Attribute/Referenzattribute der Basisklasse, dann alle eingebetteten Beziehungen der Basisklasse, dann alle Attribute/Referenzattribute der Erweiterung, dann alle eingebetteten Beziehungen der Erweiterung codiert, etc. (Zwiebelprinzip). Innerhalb der gleichen Erweiterungsstufe werden die Attribute/Referenzattribute und Rollen gemäss ihrer Definitionsreihenfolge in der Modelldatei codiert. Die eingebetteten Beziehungen werden innerhalb der gleichen Erweiterungsstufe alphabetisch aufsteigend sortiert.
+
+Parameter werden mit einer Ausnahme, wie sie im <<_codierung_von_grafikdefinitionen>> angegeben ist, nicht übertragen.
+
+==== Codierung von Sichten
+Zur Codierung von Sichten vgl. <<_transferierbare_objekte>>. Es wird das XML-Attribut `tid`, nicht aber `operation` übermittelt. Als Attribute des Sichtobjekts werden nur diejenigen Attribute übertragen, welche in der Sicht explizit unter ATTRIBUTE bzw. implizit mit ALL OF angegeben wurden.
+
+==== Codierung von Beziehungen
+Beziehungen werden auf zwei Arten codiert: eingebettet oder nicht eingebettet. Eine eingebettete Beziehung wird als Sub-Element von einer, an der Assoziation beteiligten, Klasse codiert. Die Instanz einer nicht eingebetteten Beziehung (Link) wird wie eine Instanz einer Klasse codiert.
+
+Beziehungen werden immer eingebettet, ausser
+
+* wenn sie mehr als zwei Rollen haben oder
+
+* wenn bei beiden (Basis-)Rollen die maximale Kardinalität grösser 1 ist oder
+
+* wenn für die Beziehung eine OID gefordert wird oder
+
+* bei gewissen themenübergreifenden Beziehungen (s. unten).
+
+Falls bei einer der beiden (Basis-)Rollen die maximale Kardinalität grösser 1 ist, wird bei der Ziel-Klasse dieser Rolle eingebettet. Wenn diese Ziel-Klasse in einem anderen Topic definiert ist als die (Basis-)Assoziation, kann nicht eingebettet werden.
+
+Falls bei beiden (Basis-)Rollen die maximale Kardinalität kleiner gleich 1 ist, wird bei der Ziel-Klasse der zweiten Rolle eingebettet. Wenn diese Ziel-Klasse in einem anderen Topic definiert ist als die (Basis-)Assoziation und die Ziel-Klasse der ersten Rolle im selben Topic definiert ist wie die (Basis-)Assoziation, wird bei der Ziel-Klasse der ersten Rolle eingebettet (d.h., wenn die Ziel-Klassen der beiden Rollen in einem anderen Topic definiert sind als die (Basis-)Assoziation, kann nicht eingebettet werden).
+
+===== Eingebettete Beziehungen
+Eingebettete Beziehungen werden wie ein Strukturattribut der Klasse, bei der die Beziehung eingebettet wird, übertragen.
+
+Die Unterstruktur hat folgenden Aufbau:
+
+++++
+<a href="#4_3_C7">&#x203B</a>
+++++
+[#4_3_C7]
+[subs="verbatim,quotes"]
+----
+*EmbeddedLink* =
+  <[ %ns%: ] %RoleName% %ili%:ref="%Tid%"
+    [ %ili%:order_pos=”%PosNumber%” ]>
+    [ *EmbeddedLinkStruct* ]
+  </[ %ns%: ] %RoleName%>.
+
+*EmbeddedLinkStruct* =
+  <[ %ns%: ] [ %TopicName%. ] %AssociationName%>
+    (* *Attribute* *)
+  </[ %ns%: ] [ TopicName%. ] %AssociationName%>.
+----
+
+Für `%RoleName%` muss der Name der Rolle angegeben werden, welche auf das gegenüberliegende Objekt verweist (die andere Rolle wird nicht codiert). In EmbeddedLinkStruct werden allfällige Attribute der Beziehung codiert. Die XML-Attribute `ref` und `order_pos` haben die gleiche Bedeutung wie bei nicht eingebetteten Beziehungen. `%TopicName%` muss nur angegeben werden, wenn es mit Klassen / Assoziationen oder Strukturen aus anderen Topics des gleichen Modells einen Namenskonflikt gibt.
+
+===== Nicht eingebettete Beziehungen
+Nicht eingebettete Beziehungen werden wie Objektinstanzen von Klassen übertragen.
+
+Hinweis: Für Beziehungen ohne expliziten Namen wird der (Klassen)Name durch zusammenhängen der einzelnen Rollennamen gebildet (d.h. z.B. %RoleName1RoleName2%).
+
+Rollen werden wie Attribute behandelt. Die Rollen selbst werden wie folgt codiert:
+
+++++
+<a href="#4_3_C8">&#x203B</a>
+++++
+[#4_3_C8]
+[subs="verbatim,quotes"]
+----
+*Role* =
+  <[ %ns%: ] %RoleName% %ili%:ref="%Tid%"
+    [ %ili%:order_pos="%PosNumber%" ]>
+  </[ %ns% ] %RoleName%>.
+----
+
+In `ref` wird dabei die Transferidentifikation des referenzierten Objekts eingetragen.
+
+In geordneten Beziehungen definiert das Attribut `order_pos` (Wert > 0!) die innerhalb des Transferbehälters absolute Position in der geordneten Liste der Beziehungsobjekte.
+
+==== Codierung von Grafikdefinitionen
+Für jede Grafikdefinition werden im Transfer die von der Grafikdefinition referenzierten Signaturklassen (Sign-ClassRef) übertragen. Die Objektinstanzen der Signaturklassen werden durch das Ausführen der Grafikdefinitionen auf einem konkreten Inputdatensatz erzeugt. Parameter werden dabei wie Attribute codiert.
+
+==== Codierung von Attributen
+
+===== Allgemeine Regeln für die Codierung von Attributen
+Jedes Attribut einer Objektinstanz (einschliesslich komplexer Attribute wie (MULTI)COORD, (MULTI)POLYLINE, (MULTI)SURFACE, (MULTI)AREA, STRUCTURE, LIST OF, BAG OF, etc.) wird wie folgt codiert:
+
+++++
+<a href="#4_3_C9">&#x203B</a>
+++++
+[#4_3_C9]
+[subs="verbatim,quotes"]
+----
+*Attribute* = {
+    <[ %ns%:  ]%AttributeName%>
+      *AttributeValue*
+    </[%ns%:]%AttributeName%>
+  }
+  | *ReferenceAttribute*.
+
+*AttributeValue* = (
+    *TextValue* | *MTextValue* | *EnumValue* | *NumericValue* |
+    *FormattedValue* | *DateValue* | *TimeValue* | *DateTimeValue* |
+    *BlackboxValue* | *ClassTypeValue* |
+    *AttributePathTypeValue* | *StructureValue* |
+    *CoordValue* | *MultiCoordValue* | *PolylineValue* | *MultiPolylineValue* |
+    *SurfaceValue* | *MultiSurfaceValue* | *OIDAttributeValue*
+  ).
+----
+
+Bei undefiniertem Attributwert wird das Attribut nicht übertragen. Die Masseinheit des Attributwerts wird nicht codiert. Beispiel für ein einfaches Attribut:
+
+ <Nummer>12345</Nummer>
+
+Bei LIST und BAG kann das Attributtag mehrfach angegeben werden. Beispiel für eine einfache Liste von Nummern:
+
+----
+<Nummer>12345</Nummer>
+<Nummer>23456</Nummer>
+<Nummer>34567</Nummer>
+----
+
+===== Codierung von Zeichenketten
+Attribute vom Basistyp TEXT bzw. MTEXT (und damit auch NAME und URI) werden wie folgt codiert:
+
+++++
+<a href="#4_3_C10">&#x203B</a>
+++++
+[#4_3_C10]
+[subs="verbatim,quotes"]
+----
+*TextValue* = *XML-NormalizedString*.
+*MTextValue* = *XML-String*.
+----
+
+===== Codierung von Aufzählungen
+Aufzählungen werden wie folgt codiert:
+
+++++
+<a href="#4_3_C11">&#x203B</a>
+++++
+[#4_3_C11]
+[subs="verbatim,quotes"]
+----
+*EnumValue* = ( *EnumElement-Name* { '.' *EnumElement-Name* } ) | 'OTHERS'.
+----
+
+Für die Codierung von Aufzählungen (unabhängig davon, ob der Wertebereich nur die Blätter oder auch die Knoten umfasst) wird die Syntax für Aufzählungskonstanten angewendet (Regel EnumValue). Das Zeichen # wird dabei weggelassen. Die vordefinierten Textausrichtungstypen HALIGNMENT und VALIGNMENT werden wie Aufzählungen codiert. Ebenso wird der Typ BOOLEAN wie eine Aufzählung übertragen.
+
+===== Codierung von numerischen Datentypen
+Numerische Werte werden wie folgt codiert:
+
+++++
+<a href="#4_3_C12">&#x203B</a>
+++++
+[#4_3_C12]
+[subs="verbatim,quotes"]
+----
+*NumericValue* = *NumericConst*.
+----
+
+Der Wert wird in der Form gemäss der Wertebereichdefinition codiert (Ausnahme: Zwischenpunkte von Kreispunkte dürfen eine höhere Genauigkeit aufweisen).
+
+Bemerkung: Float-Zahlen können in verschiedenen Darstellungen übertragen werden (mit oder ohne Mantisse). Sie können mit höherer Genauigkeit transferiert werden als durch den Wertebereich verlangt. Wesentlich ist dann lediglich, dass der Wert der Float-Zahl den verlangten Wertebereich nicht verletzt. Damit kann z.B. 100 (bei einem angenommenen Wertebereich von 0..999) als 100, 100.0000001, 10.0e1 oder 1.0e2 übertragen werden.
+
+Der Empfänger ist gehalten, die Werte, ausser bei Zwischenpunkten von Kreisbogen (vgl. <<_codierung_von_linienzügen>>), entsprechend dem numerischen Wertebereich zu runden.
+
+===== Codierung von formatierten Wertebereichen
+Formatierte Wertebereiche werden entsprechend der Formatdefinition codiert:
+
+++++
+<a href="#4_3_C13">&#x203B</a>
+++++
+[#4_3_C13]
+[subs="verbatim,quotes"]
+----
+*FormattedValue* = *XML-NormalizedString*.
+----
+
+===== Codierung von Datum
+Der Typ DATE wird wie folgt codiert:
+
+++++
+<a href="#4_3_C14">&#x203B</a>
+++++
+[#4_3_C14]
+[subs="verbatim,quotes"]
+----
+*DateValue* = JJJJ-MM-TT.
+----
+
+JJJJ steht für das Jahr, MM für den Monat (01 .. 12), TT für den Tag (01 .. 31). Der 1. Dezember 1997 wird also mit `1997-12-01` übertragen.
+
+===== Codierung von Zeit
+Der Typ TIME wird wie folgt codiert:
+
+++++
+<a href="#4_3_C15">&#x203B</a>
+++++
+[#4_3_C15]
+[subs="verbatim,quotes"]
+----
+*TimeValue* = HH:MM:SS.
+----
+
+Für Stunde (HH), Minute (MM) und Sekunde (SS) müssen immer zweistellige Werte angegeben werden (z.B. `01:13:00`).
+
+===== Codierung von Datum mit Zeit
+Der Typ DATETIME wird wie folgt codiert:
+
+++++
+<a href="#4_3_C16">&#x203B</a>
+++++
+[#4_3_C16]
+[subs="verbatim,quotes"]
+----
+*DateTimeValue* = **DateValue**T**TimeValue**.
+----
+
+Zwischen Datum und Zeit steht der Buchstabe T (z.B. `1997-12-01T01:13:00`).
+
+===== Codierung von Gefässen
+Attributwerte vom Typ BLACKBOX werden wie folgt codiert:
+
+++++
+<a href="#4_3_C17">&#x203B</a>
+++++
+[#4_3_C17]
+[subs="verbatim,quotes"]
+----
+*BlackboxValue* = *XML-Any* | *XML-base64Binary*.
+----
+
+Die XML-Variante des Typs BLACKBOX wird als XML-Any codiert, die binäre Variante als XML-base64Binary.
+
+===== Codierung von Klassentypen
+Attributwerte vom Typ CLASS oder STRUCTURE werden wie folgt codiert:
+
+++++
+<a href="#4_3_C18">&#x203B</a>
+++++
+[#4_3_C18]
+[subs="verbatim,quotes"]
+----
+*ClassTypeValue* = *XML-NormalizedString*.
+----
+
+Der XML-NormalizedString enthält den vollständig qualifizierten Klassen-, Struktur- oder Assoziationsnamen (z.B. `DM01AVCH24D.FixpunkteKategorie1.LFP1`).
+
+===== Codierung von Attributpfadtypen
+Attributwerte vom Typ ATTRIBUTE werden wie folgt codiert:
+
+++++
+<a href="#4_3_C19">&#x203B</a>
+++++
+[#4_3_C19]
+[subs="verbatim,quotes"]
+----
+*AttributePathTypeValue* = *XML-NormalizedString*.
+----
+
+Der XML-NormalizedString enthält den vollständig qualifizierten Klassennamen gefolgt vom durch einen Punkt abgetrennten Attributnamen (z.B. `Grunddatensatz.Fixpunkte.LFP.Nummer`).
+
+===== Codierung von Strukturattributen
+Strukturelemente vom Typ STRUCTURE werden wie folgt codiert:
+
+++++
+<a href="#4_3_C20">&#x203B</a>
+++++
+[#4_3_C20]
+[subs="verbatim,quotes"]
+----
+*StructureValue* =
+  <[ %ns%: ] [ %TopicName%. ] %StructureName%>
+    (* *Attribute* *)
+  </[ %ns%: ] [ %TopicName%. ] %StructureName%>.
+----
+
+`%TopicName%` muss nur für Strukturen angegeben werden, für welche ein Namenskonflikt mit Klassen / Beziehungen / Strukturen aus anderen Topics des gleichen Modells besteht.
+
+===== Codierung von Koordinaten
+Attributwerte vom Typ COORD werden wie folgt codiert:
+
+++++
+<a href="#4_3_C21">&#x203B</a>
+++++
+[#4_3_C21]
+[subs="verbatim,quotes"]
+----
+*CoordValue* =
+  <geom:coord>
+    <geom:c1>**NumericConst**</geom:c1>
+    <geom:c2>**NumericConst**</geom:c2>
+    [ <geom:c3>**NumericConst**</geom:c3> ]
+  </geom:coord>.
+----
+
+Die einzelnen XML-Unterobjekte müssen wie folgt gefüllt werden:
+
+* c1. Erste Komponente der Koordinate (codiert wie numerischer Wert).
+
+* c2. Zweite Komponente der Koordinate (nur bei 2D- und 3D-Koordinaten, codiert wie numerischer Wert).
+
+* c3. Dritte Komponente der Koordinate (nur bei 3D-Koordinaten, codiert wie numerischer Wert).
+
+Attributwerte vom Typ MULTICOORD werden wie folgt codiert:
+
+++++
+<a href="#4_3_C22">&#x203B</a>
+++++
+[#4_3_C22]
+[subs="verbatim,quotes"]
+----
+*MultiCoordValue* =
+  <geom:multicoord>
+    (* *CoordValue* *)
+  </geom:multicoord>.
+----
+
+===== Codierung von Linienzügen
+Attributwerte vom Typ POLYLINE werden wie folgt codiert:
+
+++++
+<a href="#4_3_C23">&#x203B</a>
+++++
+[#4_3_C23]
+[subs="verbatim,quotes"]
+----
+*PolylineValue* =
+  <geom:polyline>
+    *SegmentSequence*
+  </geom:polyline>.
+
+*StartSegment* = *CoordValue*.
+
+*StraightSegment* = *CoordValue*.
+
+*ArcSegment* =
+  <geom:arc>
+    <geom:c1>**NumericConst**</geom:c1>
+    <geom:c2>**NumericConst**</geom:c2>
+    [ <geom:c3>**NumericConst**</geom:c3> ]
+    <geom:a1>**NumericConst**</geom:a1>
+    <geom:a2>**NumericConst**</geom:a2>
+    [ <geom:r>**NumericConst**</geom:r> ]
+  </geom:arc>.
+
+*LineFormSegment* = *StructureValue*.
+
+*SegmentSequence* = *StartSegment* (* *StraightSegment*
+                               | *ArcSegment*
+                               | *LineFormSegment* *).
+----
+
+Gerade Kurvenstücke eines Linienzugs werden gemäss Regel StraightSegment codiert, für kreisbogenförmige Segmente gilt die Regel ArcSegment. Mit LINE FORM definierte Liniensegmente werden wie eine Struktur (LineStructure) codiert.
+
+Bemerkungen: Für Kreisbogensegmente (Regel ArcSegment) kann der Radius (optionales XML-Attribut r) zusätzlich zur Zwischenpunktkoordinate (a1/a2) übermittelt werden. Er ist immer positiv. Der Zwischenpunkt eines Kreisbogens ist nur für die Lage von Bedeutung. Bei Differenzen zwischen Radius und Koordinatenwerten gilt der Radius (vgl. <<_linienzug_mit_strecken_und_kreisbogen_als_vordefinierte_kurvenstücke>>). Damit bei fehlendem Radius die systeminternen Kreisbogenattribute möglichst präzis bestimmt werden können, sollen die Koordinatenwerte des Zwischenpunktes nicht gemäss Wertebereichsdefinition gerundet werden. Wenn der Radius definiert ist, darf der Zwischenpunkt um höchstens 1 Genauigkeitseinheit (der Wert 1 der hintersten Stelle gemäss Wertebereichsdefinition) multipliziert mit der Hälfte der Quadratwurzel von 2 von der Spur des aus dem Radius gerechneten Kreisbogens abweichen. Die Stützpunkthöhe (c3) muss nur bei 3D-Polylines übertragen werden.
+
+Attributwerte vom Typ MULTIPOLYLINE (und auch für POLYLINE im Falle von einem Datenbestands-Ausschnitt) werden wie folgt codiert:
+
+++++
+<a href="#4_3_C24">&#x203B</a>
+++++
+[#4_3_C24]
+[subs="verbatim,quotes"]
+----
+*MultiPolylineValue* =
+  <geom:multipolyline>
+   (* *PolylineValue* *)
+  </geom:multipolyline>.
+----
+
+===== Codierung von Einzelflächen und Gebietseinteilungen
+SURFACE und AREA werden wie folgt codiert:
+
+++++
+<a href="#4_3_C25">&#x203B</a>
+++++
+[#4_3_C25]
+[subs="verbatim,quotes"]
+----
+*SurfaceValue* =
+  <geom:surface>
+    *Boundaries*
+  </geom:surface>.
+
+*Boundaries* = *OuterBoundary* { *InnerBoundary* }.
+
+*OuterBoundary* =
+  <geom:exterior>
+    *PolylineValue*
+  </geom:exterior>.
+
+*InnerBoundary* =
+  <geom:interior>
+    *PolylineValue*
+  </geom:interior>.
+----
+
+Flächen werden als Folge von Rändern (Boundaries) übertragen.
+
+Ein Rand ist eine Folge von Randlinien, wobei jeweils die nächste Randlinie mit dem Endpunkt der vorhergehenden Randlinie beginnt. Der Endpunkt der letzten Randlinie ist identisch mit dem Anfangspunkt der ersten Randlinie. Die Randlinien eines Randes bilden also zusammen einen geschlossenen Linienzug (Polygon). Bei diesem müssen alle Punkte (ausser Anfangs-/Endpunkt) disjunkt sein (vgl. <<_linienzug_mit_strecken_und_kreisbogen_als_vordefinierte_kurvenstücke>> und xref:fig22[xrefstyle=short]). Ein Rand darf bei beliebigen Stützpunkten in Randlinien aufgeteilt werden. Die Aufteilung in Randlinien darf bei jedem Transfer – insbesondere auch bei inkrementeller Nachlieferung – unterschiedlich sein.
+
+Der erste Rand einer Fläche (OuterBoundary) ist der äussere Rand der Fläche. Die allenfalls folgenden inneren Ränder (InnerBoundary) der Fläche begrenzen die Inseln der Fläche. Sie dürfen gemeinsame Stützpunkte mit anderen Rändern aufweisen, soweit die Bedingungen gemäss <<_geometrie_von_flächen>> erfüllt sind. 
+Liegen auf beiden Seiten einer Randlinie definierte Gebietsobjekte (AREA), müssen die beiden Randlinien deckungsgleich sein. Dies ist der Fall, wenn alle Stützpunkte identisch aber in umgekehrter Reihenfolge angeordnet sind und alle weiteren Werte deckungsgleicher Linienstücke (Zwischenpunktkoordinaten, Radius) identisch sind.
+
+Attributwerte vom Typ MULTISURFACE (und auch für SURFACE im Falle von einem Datenbestands-Ausschnitt) werden wie folgt codiert:
+
+++++
+<a href="#4_3_C26">&#x203B</a>
+++++
+[#4_3_C26]
+[subs="verbatim,quotes"]
+----
+*MultiSurfaceValue* =
+   <geom:multisurface>
+    (* *SurfaceValue* *)
+  </geom:multisurface>.
+----
+
+===== Codierung von Referenzen
+Attribute vom Typ REFERENCE TO werden wie folgt codiert:
+
+++++
+<a href="#4_3_C27">&#x203B</a>
+++++
+[#4_3_C27]
+[subs="verbatim,quotes"]
+----
+*ReferenceAttribute* =
+  <[ %ns%: ] %AttributeName% %ili%:ref="%Tid%">
+  </[ %ns%: ] %AttributeName%>.
+----
+
+Das XML-Attribut `ref` hat die gleiche Bedeutung wie bei eigentlichen Beziehungen.
+
+===== Codierung von Metaobjekten
+Attribute vom Typ METAOBJECT (vgl. Anhang A _Das interne INTERLIS-Datenmodell_) werden wie LIST OF oder BAG OF codiert. Parameter vom Typ METAOBJECT (Syntaxregel ParameterDef) werden jedoch _nicht_ übermittelt. Parameter vom Typ METAOBJECT OF werden wie Attribute vom Typ NAME übertragen.
+
+===== Codierung von OIDType
+Attributwerte vom Typ OIDType werden wie eine XML-ID inkl. Oid-Werteraum codiert. Ist OIDType ein NumericType gelten ausserdem für den Wert (ohne den Oid-Werteraum) die Regeln für die Codierung von numerischen Typen.
+
+++++
+<a href="#4_3_C28">&#x203B</a>
+++++
+[#4_3_C28]
+[subs="verbatim,quotes"]
+----
+*OIDAttributeValue* = *XML-ID*.
+----

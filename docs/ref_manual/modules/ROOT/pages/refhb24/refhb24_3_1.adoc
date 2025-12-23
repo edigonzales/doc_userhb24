@@ -1,4 +1,4 @@
-== Verwendete Syntax
+=== Verwendete Syntax
 Zur Festlegung des konzeptionellen Datenmodells (Datenschemas) und der Transferparameter eines Datentransfers wird in den folgenden Kapiteln eine formale Sprache definiert. Diese Sprache ist selbst formal definiert. Syntaxregeln beschreiben dabei die zulässige Reihenfolge von Symbolen.
 
 Die Beschreibung folgt damit der Art und Weise, die bei der Beschreibung moderner Programmiersprachen üblich ist. Hier wird deshalb nur eine knappe, für das Verständnis nötige Darstellung angegeben. Für Einzelheiten wird auf die Literatur verwiesen. Eine kurze Einführung befindet sich z.B. in «Programmieren in Modula-2» von Niklaus Wirth.

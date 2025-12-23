@@ -1,6 +1,5 @@
-= Einleitung
+== Einleitung
 
 ****
 Kapitel 1 (Status des Standards, Vorwort) steht nicht online zur Verfügung.
 ****
-

@@ -1,5 +1,5 @@
 site:
-  title: INTERLIS // Documentation
+  title: INTERLIS // Dokumentation
   start_page: user_manual::userhb24/userhb_index.adoc
   
 content:
@@ -22,5 +22,22 @@ asciidoc:
   attributes:
     page-pagination: ''
     kroki-fetch-diagram: true    
+    lang: de
+    section-refsig: 'Kapitel'
+    table-caption: Tabelle@
+    example-caption: Beispiel@
+    figure-caption: Abbildung@
+    important-caption: Wichtig@
+    last-update-label: Zuletzt aktualisiert@
+    listing-caption: Listing@
+    manname-title: Name@
+    note-caption: Hinweis@
+    preface-title: Vorwort@
+    caution-caption: Achtung@
+    tip-caption: Tipp@
+    warning-caption: Warnung@
+    untitled-label: Ohne Titel@
+    version-label: Version@
+    page-toctitle: Inhalt@    
   extensions:
     - asciidoctor-kroki

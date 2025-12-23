@@ -1,0 +1,79 @@
+== Allgemeine Regeln für den sequentiellen Transfer
+
+=== Ableitbarkeit aus dem Datenmodell
+Jeder INTERLIS-Transfer kann aus dem dazugehörigen INTERLIS-Datenmodell durch die Anwendung von Regeln abgeleitet werden (modell-basierter Datentransfer).
+
+=== Aufbau eines Transfers: Vorspann
+Ein INTERLIS-Transfer ist ein sequentieller Objektstrom. Der Objektstrom ist in die Teile Vorspann und Datenbereich unterteilt.
+
+Im Vorspann sind mindestens folgende Angaben zum Transfer enthalten:
+
+* Angabe der aktuellen INTERLIS-Versionsnummer (vgl. <<_hauptregel>>). xref:refhb24_3_3.adoc[]
+.
+
+* Verweis auf das/die zugehörige(n) Datenmodell(e).
+
+* Bezeichnung des Absenders (SENDER).
+
+Optional können im Vorspann Angaben zum Herausgeber des Objektidentifikatoren-Aufbaus erfolgen.
+
+Optional können im Vorspann Kommentare enthalten sein.
+
+Der Aufbau des Datenbereichs ist in den folgenden Abschnitten näher beschrieben.
+
+=== Transferierbare Objekte
+Im Datenbereich können Objekte (d.h. Objektinstanzen) von konkreten Klassen, Beziehungen, Sichten und Grafikdefinitionen transferiert werden. Objekte von Sichten werden auf dem Transfer wie Objekte von konkreten Klassen behandelt. Die inkrementelle Nachlieferung von Sichten ist vorläufig nicht möglich. Objekte von Sichten werden nur transferiert, wenn die zugehörigen Sichten innerhalb eines VIEW TOPIC deklariert wurden, sonst werden sie nicht übermittelt. Ausserdem werden Sichten nicht übermittelt, wenn sie mit TRANSIENT markiert wurden.
+
+=== Reihenfolge der Objekte im Datenbereich
+Der Datenbereich besteht aus einer Folge von Behältern (Themen-Instanzen). Behälter können nur vollständig übertragen werden. Bei inkrementeller Nachlieferung werden nur die geänderten bzw. gelöschten Objekte übertragen. Zusammen mit der Vorgeschichte wird jedoch auch bei der inkrementellen Nachlieferung konzeptionell der ganze Behälter übertragen. Es ist grundsätzlich möglich, dass ein Transfer Behälter aus verschiedenen Modellen enthält. Ein Behälter enthält wiederum alle seine Objekte. Die Reihenfolge der Objekte im Transfer ist beliebig, insbesondere müssen die Objekte innerhalb eines Behälters nicht unbedingt nach Beziehungen geordnet oder nach Klassen gruppiert sein (im Gegensatz zu INTERLIS 1). Leere Behälter müssen nicht übertragen werden.
+
+=== Codierung der Objekte
+Im Objektstrom erhält jeder Behälter und jedes Objekt eine Identifikation. Die Identifikationen von Behältern und Objekten müssen über den gesamten Transfer eindeutig sein. Zu jedem Objekt wird ausserdem die Behälter-Identifikation mitgeliefert, in dem das Objekt ursprünglich erzeugt wurde (Originalbehälter). Bei inkrementeller Nachlieferung, bzw. beim initialen Transfer, muss die Identifikation des Behälters und der Objektinstanz generell und stabil sein, d.h. ein Objektidentifikator (vgl. Anhang F _Aufbau von Objektidentifikatoren (OID)_).
+
+Alle Objektattribute (inkl. COORD, SURFACE, AREA, POLYLINE, STRUCTURE, BAG OF, LIST OF, etc.) werden unmittelbar zum Objekt gespeichert. Attribute vom Typ AREA werden wie Attribute vom Typ SURFACE codiert. Attribute vom Typ BAG werden wie Attribute vom Typ LIST codiert. STRUCTURE wird wie LIST \{1\} codiert.
+
+Als Zeichenvorrat für die Übermittlung von Attributwerten stehen standardmässig nur die druckbaren Zeichen des US-ASCII Zeichensatzes (32 bis 126) und die Zeichen gemäss Anhang D _Zeichentabelle_ zur Verfügung.
+
+=== Transferarten
+Zu jedem Behälter müssen folgende Angaben geliefert werden:
+
+* Angaben zur Art (KIND) des Transfers: FULL, INITIAL oder UPDATE.
+
+* Angaben zum Anfangs- (STARTSTATE) bzw. Endzustand (ENDSTATE) der Nachlieferung (nur bei Transferart INITIAL (ENDSTATE) oder UPDATE (STARTSTATE und ENDSTATE)).
+
+* Angaben zur Konsistenz des Inhaltes: COMPLETE, INCOMPLETE.
+
+Es ist zulässig, dass im gleichen Transfer Behälter mit verschiedenen Transferarten (FULL, INTIAL und/oder UPDATE) vorkommen. Die Transferarten haben folgende Bedeutung:
+
+* FULL – Vollständiger Transfer. Beim Erhalt eines FULL-Behälters muss der Empfänger einen neuen Behälter zuerst initialisieren und dann alle Objekte mit INSERT in den Behälter einfügen. FULL ist als Basis für Nachlieferungen ungeeignet, da die Objektidentifikationen nur für diesen Transfer gültig sind. Transferdateien gemäss INTERLIS 1 entsprechen FULL. In der Transferart FULL kann nur die Operation INSERT vorkommen.
+
+* INITIAL – Erstlieferung. Entspricht der Transferart FULL mit dem Unterschied, dass der Behälter und die darin enthaltenen Objekte generelle und stabile OID besitzen müssen. In der Transferart INITIAL kann ebenfalls nur die Operation INSERT vorkommen.
+
+* UPDATE – Nachlieferung. Ein UPDATE-Behälter enthält Objekte mit INSERT-, UPDATE- oder DELETE-Operationen. Alle Objekte und der Behälter besitzen generelle und stabile OID. UPDATE-Behälter dürfen vom Zielsystem nur verarbeitet werden, wenn der Anfangszustand (STARTSTATE) des Behälters bereits mit INITIAL oder UPDATE empfangen wurde.
+
+Für die Transferart UPDATE gelten ausserdem folgende zusätzlichen Transferregeln:
+
+* Das Empfängersystem kann davon ausgehen, dass nach der vollständigen Verarbeitung aller Daten eines UPDATE-Behälters wieder ein konsistenter Zustand herrscht, d.h. ein UPDATE-Behälter führt einen Behälter von einem konsistenten Zustand STARTSTATE in einen anderen konsistenten Zustand ENDSTATE über.
+
+* Ein UPDATE-Behälter ist für sich allein gesehen nicht konsistent, da Beziehungen meist nur zusammen mit der Vorgeschichte aufgelöst werden können.
+
+Ausserdem muss zu jedem Objekt die Nachlieferungsoperation angegeben werden (vgl. <<_behälter_replikation_und_datentransfer>>). Die Operationen INSERT, UPDATE und DELETE bedeuten folgendes:
+
+* Die Operation INSERT hat die Bedeutung von «neues Objekt einfügen» (insert object).
+
+* Die Operation UPDATE bedeutet «Objektattributwerte aufdatieren» (update object). Es müssen alle Attribute (nicht nur die geänderten) geliefert werden.
+
+* Die Operation DELETE bedeutet «Objekt löschen» (delete object). Es sollen alle Attribute (nicht nur der OID) geliefert werden.
+
+In vielen Fällen muss nicht ein ganzer Datenbestand, sondern nur ein Ausschnitt daraus transferiert werden. Als Folge der Ausschnittbildung können Geometrien (Polylinien und Flächen) unvollständig sein. Damit dies ohne ein zusätzliches Modell möglich ist, sollen Objekte (und als Folge der jeweilige Behälter) als INCOMPLETE markiert werden können.
+
+=== Normative Referenzen
+In der nachfolgenden XML-Codierung bzw. Herleitung des XML-Schema wird auf diverse externe Dokumentationen verwiesen, welche hier zusammengefasst sind:
+
+\{1\} W3C: XML 1.0 Spezifikation, Ausgabe 2008
+
+\{2\} W3C: XML Schema 1.1 Spezifikation, Ausgabe 2012
+
+\{3\} IETF: RFC 3629, UTF-8 Spezifikation
+
+\{4\} IETF: RFC 2045, Abschnitt 6.8 (Base64 Codierung)
