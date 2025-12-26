@@ -1,0 +1,105 @@
+[unnumbered]
+= Anhang F (Standard-Erweiterungsvorschlag) – Aufbau von Objektidentifikatoren (OID)
+
+[unnumbered]
+== Vorbemerkung
+Die folgende Spezifikation ist nicht normativer Bestandteil von INTERLIS. Dies ist ein Standard-Erweiterungsvorschlag auf der Basis des INTERLIS 2-Referenzhandbuches im Sinne einer Empfehlung. Es ist geplant, diesen Vorschlag nach einer breiten Diskussion in eine definitive Regelung umzuwandeln. Für Anwendungsbeispiele siehe auch die entsprechenden INTERLIS 2-Benutzerhandbücher.
+
+[unnumbered]
+== Einleitung
+Mit der immer grösseren Verfügbarkeit von Geodaten wird vermehrt auch deren Nachführung (Fortführung) und Integration in verschiedene Datenbanken verlangt. Dies sind einige Gründe für den Bedarf nach einer einheitlichen Regelung von Objektidentifikatoren (OID): Ein OID identifiziert eine Objektinstanz von deren Entstehung bis zu ihrem Untergang auch wenn die Attributwerte sich ändern. Im Gegensatz zu den Benutzerschlüsseln (vgl. Anhang G Eindeutigkeit von Benutzerschlüsseln im INTERLIS 2-Referenzhandbuch) ist der OID vom Anwender als «nicht-sprechendes» («opaques») Attribut zu betrachten, das typischerweise über Systemfunktionen verwaltet wird.
+
+Ein OID muss zumindest innerhalb einer Transfergemeinschaft eindeutig, einmalig und unveränderbar sein.
+
+An die Vergabe und die Nutzung von OID werden unter anderem folgende Anforderungen ge-
+stellt:
+
+ - Der OID ist ein genereller und stabiler Identifikator, auch bei grossen Datenmengen. Als Identifikator ist er ein Attribut, dessen Wert ein Objekt in seiner Klasse eindeutig kennzeichnet Als genereller Identifikator hat sein Wert ein Objekt nicht nur in seiner Klasse, sondern innerhalb aller Klassen einer Transfergemeinschaft eindeutig zu kennzeichnen. Als stabiler Identifikator ist er ferner zeitunabhängig, d.h. während des Lebenszyklus eines Objektes darf er nicht verändert und der OID eines gelöschten Objektes nicht mehr verwendet werden.
+ - Unabhängig von Hardware- und Softwareproduzenten.
+ - Unabhängig von Plattformen.
+ - Im Mehrplatz- als auch im Einzelplatz-Betrieb, bzw. in autonomen Systemen nutzbar (z.B. im Felde). 
+ - Wenig Platzbedarf und nach Bedarf optimierbar.
+ - Einfach implementierbar.
+
+Weitere Anforderungen sind nicht unbedingt technischer Art, wie z.B.: möglichst wenig Organisationsaufwand, Vergabe unter eigener (nationaler) Kontrolle, nutzbar auch mit älteren Systemen und Akzeptanz bei den Systemherstellern. Dies sind anspruchsvolle, teilweise entgegengesetzte Anforderungen. Eine spezielle Vorgabe ist, dass ein OID von einem Produzentensystem mindestens zehn Millionen Mal vergeben werden kann. Als weitere Vorgabe gelte, dass er eine feste Länge hat damit die Handhabung erleichtert wird (dies schliesst andere bekannte Verfahren, z.B. eine so genannte URI als Präfix aus). Eine Prüfziffer ist nicht vorzusehen: es wird angenommen, dass tiefere Kommunikationsebenen entsprechende Mittel bereitstellen.
+
+Grundsätzlich wird die Eindeutigkeit eines OID immer über einen zentralen Mechanismus erreicht. Die zwei Extreme – d.h. die zentrale Vergabe jedes einzelnen OID auf der einen und die
+vollständig dezentrale, autonome Generierung von OID auf der anderen Seite – führen zu unbefriedigenden Lösungen. Einen OID, der z.B. über eine Netzwerkkartennummer und einen Zeitstempel vergeben wird, wird für nicht praktikabel und zukunftsweisend gehalten, zumal dann jedes Gerät eine Netzwerkkarte besitzen muss und nicht abzusehen ist, ob diese Technologie in den nächsten Jahren nicht durch andere Entwicklungen überholt wird.
+
+Die Entstehung dieser Spezifikation hat eine lange Vorgeschichte. Es wurden über mehrere Jahre verschiedene Vernehmlassungen, Studien und Sitzungen durchgeführt. Ein Teil der dabei
+entstandenen Dokumente kann Interessierten abgegeben werden (Bestellung unter anderem auf https://www.interlis.ch[www.interlis.ch], bzw. mailto:info@interlis.ch[info@interlis.ch]).
+
+[unnumbered]
+== Aufbau des Objektidentifikators (OID)
+Ein Objektidentifikator (OID) besteht aus einem Präfix- und einem Postfix-Anteil und hat als Gesamtheit eine Länge von 16 alphanumerischen Stellen in seiner darstellbaren Form. Der OID wird namentlich auf der Datenschnittstelle oder dem Anwender gegenüber immer als Einheit behandelt. Der OID-Wertebereich STANDARDOID des INTERLIS-Modells entspricht dieser Definition. Er definiert aber nur die Gesamtlänge und nicht den detaillierten Aufbau.
+
+----
+OIDDef = Prefix Postfix.
+----
+
+[unnumbered]
+== Präfix
+Das Präfix wird von einer zentralen Stelle vergeben. Damit wird die Eindeutigkeit innerhalb einer Transfergemeinschaft gegeben. Typischerweise ist für jeden Behälter (z.B. ein Datenbank-Prozess, der Daten eines konkreten Themas verwaltet) ein neues Präfix erforderlich. Als Bestimmungsort für das Präfix gilt das Land des Präfix-erzeugenden Prozesses. Dieser Prozess ist nicht unbedingt am gleichen Ort wie das Produzentensystem, das den gesamten OID erzeugt.
+
+Das Präfix besteht aus einer Folge von 8 Zeichen mit folgendem zulässigen Zeichenvorrat:
+
+----
+Prefix = Letter { Letter | Digit }. !! Folge von 8 Zeichen
+Letter = ( 'A' | .. | 'Z' | 'a' | .. | 'z' ).
+Digit = ( '0' | '1' | .. | '9' ).
+----
+
+Ein Präfix ist demnach definiert als eine Folge von Buchstaben und Ziffern, wobei das erste Zeichen ein Buchstabe sein muss (s. auch den Aufbau von XML-Tag-Namen oder das Kapitel Na-
+men im INTERLIS 2-Referenzhandbuch).
+
+Weiter gilt die Regelung, dass die ersten zwei Präfix-Stellen gemäss der ISO-Norm 3166 festgelegt werden. Für in Deutschland, in Österreich oder der Schweiz erzeugte Präfixe sind dort z.B. die Buchstaben "de", "at" und "ch” festgelegt. Für die Erzeugung eines Präfixes stehen damit pro Stelle insgesamt 62 verschiedene Varianten zur Verfügung (0..9: ASCII 48 bis 57; A..Z:
+ASCII 65 bis 90; a..z: ASCII 97 bis 122). Die Kombination der 62 Zeichen mit der Anzahl Stellen ergibt eine Menge von OIDs, die wahrscheinlich grösser ist, als die meisten Anwendungen jemals benötigen.
+
+[unnumbered]
+== Postfix
+Ein Postfix wird durch den Datenproduzenten, bzw. das Produzentensystem selber verwaltet. Er besteht seinerseits aus einer Folge von 8 Zeichen. Durch den ASCII-kompatiblen, kolonnenorientierten Ansatz wird verlangt, dass die allenfalls "freien" Stellen links mit Nullen ("0") besetzt werden (siehe das erste und dritte Beispiel eines OID's unten). Der kleinstmögliche Ordinalwert des Postfix-Anteils wird damit als "00000000" repräsentiert. 
+
+----
+Postfix = { Letter | Digit }. !! Folge von 8 Zeichen
+----
+
+Weitere Einschränkungen des Präfix- oder Postfix-Anteils sind bei Bedarf in zusätzlichen Spezifikationen zu regeln.
+
+[unnumbered]
+== Zusammenfassung und Anwendungsbeispiele
+
+[cols="1,1,3,4",options="header"]
+|===
+|OID |Länge |Bedeutung |Bemerkungen
+
+|Präfix
+|2 + 6 Char.
+|Länderkennung + ein von einer zuständigen, zentralen Stelle einmalig vergebener „globaler“ Identifikations-Anteil
+|Weltweit eindeutige Länderkennung, z.B. de (Deutschland), at (Österreich), ch (Schweiz), entsprechend ISO-Norm 3166. Weitere Einschränkungen sind in zusätzlichen Spezifikationen zu regeln.
+
+|Postfix
+|8 Char.
+|Sequenz (numerisch oder alphanumerisch) des Produzentensystems als „lokaler“ Identifikations-Anteil
+|Weitere Einschränkungen, wie z.B. Zeitstempel mit Sequenznummer, sind in zusätzlichen Spezifikationen zu regeln.
+|===
+
+.Beispiele von Formel-Ausdrücken:
+====
+----
+A000000000000000    Theoretisch kleinstmöglicher OID
+zwzzzzzzzzzzzzzz    Grösstmöglicher OID, mit zw für Zimbabwe
+deg5mQXX2000004a    Willkürlich gewählter OID aus Deutschland (de)
+chgAAAAAAAAA0azD    Willkürlich gewählter OID aus der Schweiz (ch)
+----
+====
+
+[unnumbered]
+== Organisation
+Eine zentrale Stelle (etwa eine Bundesstelle), die von der Transfergemeinschaft anerkannt wird, unterhält einen zentralen Dienst für die Vergabe von OID's. Die Datenproduzenten können von dort einen oder mehrere Präfix-Anteile über geeignete Kommunikationskanäle beziehen. Dies könnte zum Beispiel eine Internet-Seite sein, die mit einem E-Mail-Dienst verbunden ist. Ein solcher Dienst kann relativ sicher gemacht und gegen Missbrauch geschützt werden.
+
+Es ist den Implementationen in den Sender- und Empfängersystemen überlassen, die in dieser Spezifikation ausdrücklich genannten Eigenschaften auszunutzen und den OID z.B. zu Sortierzwecken zu verwenden oder um interne Optimierungen vorzunehmen. Eine solche Optimierung könnte z.B. darin bestehen, dass der Präfix-Anteil im System an einem zentralen Ort verwaltet wird und die verschiedenen Objekte nur den Postfix-Anteil enthalten und sich zusätzlich auf einen (gemeinsamen) Präfix-Anteil beziehen. Eine andere Sparmassnahme ist die systeminterne Speicherung des Postfix-Anteils in Binärcodierung.
+
+Für Übungszwecke sind zu verwenden:
+ 
+ - bei OID für Baskets der OID-Präfix "chB00000".
+ - für alle andern OID der OID-Präfix "ch100000".

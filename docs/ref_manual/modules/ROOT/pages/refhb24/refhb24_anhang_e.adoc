@@ -1,0 +1,1598 @@
+[unnumbered]
+= Anhang E (informativ) – Das kleine Beispiel Roads
+
+[unnumbered]
+== Einleitung
+Zum leichteren Einstieg in INTERLIS 2 ist hier ein kleines aber vollständiges Beispiel zusammengestellt. Dieses Beispiel beschreibt einen Datensatz, der für einen vollständigen Datentransfer (FULL) ausgelegt worden ist. Für Anwendungsbeispiele mit inkrementeller Nachlieferung (inkl. OID) werden entsprechende Beispieldatensätze und Benutzerhandbücher zur Verfügung gestellt.
+
+Das Beispiel besteht aus folgenden Teilen:
+
+ - Den Datenmodellen RoadsExdm2ben und RoadsExdm2ien.
+ - Dem XML-Datensatz RoadsExdm2ien (Datei RoadsExdm2ien.xtf) welcher Objekte gemäss dem Datenmodell RoadsExdm2ien enthält.
+ - Dem Grafikmodell RoadsExgm2ien. Im Grafikmodell ist eine mögliche Darstellung zum Datenmodell RoadsExdm2ien definiert (Bemerkung: zum gleichen Datenmodell sind beliebig viele Darstellungen möglich).
+ - Einer Sammlung von Signaturobjekten (Signaturenbibliothek) in RoadsExgm2ien_Symbols (Datei RoadsExgm2ien_Symbols.xtf). Die Signaturenbibliothek ist ein XML-Datensatz gemäss dem Signaturenmodell StandardSymbology (vgl. Anhang L Signaturenmodelle). Die Signaturenbibliothek wird im Grafikmodell RoadsExgm2ien für die Darstellung der Beispieldaten aus dem RoadsExdm2ien.xtf-Datensatz benutzt. Der Name "RoadsExdm2ben" ist eine Abkürzung von «**Roads** **Ex**ample, **d**ata **m**odel, INTERLIS **2**, **b**asic model, **en**glish». Die einzelnen Teile sind im Folgenden näher beschrieben.
+
+.UML-Klassendiagramm der Datenmodelle
+image::refhb24/refhb24_fig26.png[]
+
+[unnumbered]
+== Datenmodelle RoadsExdm2ben und RoadsExdm2ien
+Im Datenmodell RoadsExdm2ben sind die Objekte LandCover (Bodenbedeckungsflächen), StreetAxis (Strassenachsen), StreetName (Strassennamen) und PointObject (Punktobjekte) enthalten. Das Datenmodell RoadsExdm2ien ist eine Erweiterung von RoadsExdm2ben. Die Datenmodelle sind im UML-Klassendiagramm übersichtsmässig zusammengestellt.
+
+Bemerkung: Das Beispiel ist bewusst sehr einfach gehalten und erhebt daher keinerlei Anspruch auf Vollständigkeit. Die zugehörigen in INTERLIS 2 beschriebenen Modelle lauten wie folgt:
+
+[source,interlis]
+----
+!! File RoadsExdm2ben.ili Release 2014-07-09
+INTERLIS 2.4;
+
+MODEL RoadsExdm2ben (en) AT "http://www.interlis.ch/models/refhb24"
+  VERSION "2014-07-09" =
+
+  UNIT
+    Angle_Degree = 180 / PI [INTERLIS.rad];
+  END UNIT;
+
+  DOMAIN
+    Point2D = COORD
+      0.000 .. 200.000 [INTERLIS.m], !! Min_East Max_East
+      0.000 .. 200.000 [INTERLIS.m]  !! Min_North Max_North
+      ROTATION 2 -> 1;
+
+    Orientation = 0.0 .. 359.9 CIRCULAR [Angle_Degree];
+  END DOMAIN;
+
+  TOPIC Roads =
+
+    CLASS LandCover =
+      Type: MANDATORY (
+        building,
+        street,
+        water,
+        other
+      );
+
+      Geometry: MANDATORY SURFACE WITH (STRAIGHTS)
+        VERTEX Point2D WITHOUT OVERLAPS > 0.100;
+    END LandCover;
+
+    CLASS Street =
+      Name: MANDATORY TEXT*32;
+    END Street;
+
+    CLASS StreetAxis =
+      Geometry: MANDATORY POLYLINE WITH (STRAIGHTS)
+        VERTEX Point2D;
+    END StreetAxis;
+
+    ASSOCIATION StreetAxisAssoc =
+      Street -- {1} Street;
+      StreetAxis -- StreetAxis;
+    END StreetAxisAssoc;
+
+    CLASS StreetNamePosition =
+      NamPos: MANDATORY Point2D;
+      NamOri: MANDATORY Orientation;
+    END StreetNamePosition;
+
+    ASSOCIATION StreetNamePositionAssoc =
+      Street -- {0..1} Street;
+      StreetNamePosition -- StreetNamePosition;
+    END StreetNamePositionAssoc;
+
+    CLASS RoadSign =
+      Type: MANDATORY (
+        prohibition,
+        indication,
+        danger,
+        velocity
+      );
+      Position: MANDATORY Point2D;
+    END RoadSign;
+
+  END Roads; !! of TOPIC
+
+END RoadsExdm2ben. !! of MODEL
+
+
+!! File RoadsExdm2ien.ili Release 2014-07-09
+INTERLIS 2.4;
+
+MODEL RoadsExdm2ien (en) AT "http://www.interlis.ch/models/refhb24"
+  VERSION "2014-07-09" =
+
+  IMPORTS RoadsExdm2ben;
+
+  TOPIC RoadsExtended EXTENDS RoadsExdm2ben.Roads =
+
+    CLASS StreetAxis (EXTENDED) =
+      Precision: MANDATORY (
+        precise,
+        unprecise
+      );
+    END StreetAxis;
+
+    CLASS RoadSign (EXTENDED) =
+      Type (EXTENDED): (
+        prohibition (
+          noentry,
+          noparking,
+          other
+        )
+      );
+    END RoadSign;
+
+  END RoadsExtended; !! of TOPIC
+
+END RoadsExdm2ien. !! of MODEL
+----
+
+[unnumbered]
+== Datensatz RoadsExdm2ien gemäss Datenmodell RoadsExdm2ien
+
+Nachfolgend ist ein Beispieldatensatz zum Datenmodell RoadsExdm2ien angegeben. Die XML-Formatierung wurde über die Regeln gemäss Kapitel xref:refhb24/refhb24_root.adoc#_#_sequentieller_transfer[Sequentieller Transfer] aus dem Datenmodell RoadsExdm2ien hergeleitet.
+
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<ili:transfer xmlns:ili="http://www.interlis.ch/xtf/2.4/INTERLIS" xmlns:geom="http://www.interlis.ch/geometry/1.0" xmlns:roads="http://www.interlis.ch/xtf/2.4/RoadsExdm2ben" xmlns="http://www.interlis.ch/xtf/2.4/RoadsExdm2ien" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ili:headersection>
+    <ili:models>
+      <ili:model>RoadsExdm2ien</ili:model>
+    </ili:models>
+    <ili:sender>KOGIS</ili:sender>
+    <ili:comment>example dataset ili2 refmanual appendix C</ili:comment>
+  </ili:headersection>
+  <ili:datasection>
+    <RoadsExtended ili:bid="REFHANDB00000001">
+      <!-- === LandCover === -->
+      <roads:LandCover ili:tid="16">
+        <roads:Type>water</roads:Type>
+        <roads:Geometry>
+          <geom:surface>
+            <geom:exterior>
+              <geom:polyline>
+                <geom:coord>
+                  <geom:c1>39.038</geom:c1>
+                  <geom:c2>60.315</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>41.200</geom:c1>
+                  <geom:c2>59.302</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>43.362</geom:c1>
+                  <geom:c2>60.315</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>44.713</geom:c1>
+                  <geom:c2>66.268</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>45.794</geom:c1>
+                  <geom:c2>67.662</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>48.766</geom:c1>
+                  <geom:c2>67.408</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>53.360</geom:c1>
+                  <geom:c2>64.115</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>56.197</geom:c1>
+                  <geom:c2>62.595</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>57.818</geom:c1>
+                  <geom:c2>63.862</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>58.899</geom:c1>
+                  <geom:c2>68.928</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>55.927</geom:c1>
+                  <geom:c2>72.348</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>47.955</geom:c1>
+                  <geom:c2>75.515</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>42.281</geom:c1>
+                  <geom:c2>75.388</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>39.308</geom:c1>
+                  <geom:c2>73.235</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>36.741</geom:c1>
+                  <geom:c2>69.688</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>35.525</geom:c1>
+                  <geom:c2>66.268</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>35.661</geom:c1>
+                  <geom:c2>63.735</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>37.957</geom:c1>
+                  <geom:c2>61.455</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>39.038</geom:c1>
+                  <geom:c2>60.315</geom:c2>
+                </geom:coord>
+              </geom:polyline>
+            </geom:exterior>
+          </geom:surface>
+        </roads:Geometry>
+      </roads:LandCover>
+      <roads:LandCover ili:tid="18">
+        <roads:Type>building</roads:Type>
+        <roads:Geometry>
+          <geom:surface>
+            <geom:exterior>
+              <geom:polyline>
+                <geom:coord>
+                  <geom:c1>101.459</geom:c1>
+                  <geom:c2>65.485</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>108.186</geom:c1>
+                  <geom:c2>69.369</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>102.086</geom:c1>
+                  <geom:c2>79.936</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>95.359</geom:c1>
+                  <geom:c2>76.053</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>101.459</geom:c1>
+                  <geom:c2>65.485</geom:c2>
+                </geom:coord>
+              </geom:polyline>
+            </geom:exterior>
+          </geom:surface>
+        </roads:Geometry>
+      </roads:LandCover>
+      <roads:LandCover ili:tid="20">
+        <roads:Type>building</roads:Type>
+        <roads:Geometry>
+          <geom:surface>
+            <geom:exterior>
+              <geom:polyline>
+                <geom:coord>
+                  <geom:c1>60.489</geom:c1>
+                  <geom:c2>49.608</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>79.900</geom:c1>
+                  <geom:c2>55.839</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>75.351</geom:c1>
+                  <geom:c2>70.932</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>67.678</geom:c1>
+                  <geom:c2>68.781</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>69.938</geom:c1>
+                  <geom:c2>61.721</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>57.582</geom:c1>
+                  <geom:c2>58.029</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>60.489</geom:c1>
+                  <geom:c2>49.608</geom:c2>
+                </geom:coord>
+              </geom:polyline>
+            </geom:exterior>
+          </geom:surface>
+        </roads:Geometry>
+      </roads:LandCover>
+      <roads:LandCover ili:tid="22">
+        <roads:Type>street</roads:Type>
+        <roads:Geometry>
+          <geom:surface>
+            <geom:exterior>
+              <geom:polyline>
+                <geom:coord>
+                  <geom:c1>45.067</geom:c1>
+                  <geom:c2>58.655</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>50.669</geom:c1>
+                  <geom:c2>42.579</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>57.060</geom:c1>
+                  <geom:c2>44.638</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>51.432</geom:c1>
+                  <geom:c2>60.469</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>45.067</geom:c1>
+                  <geom:c2>58.655</geom:c2>
+                </geom:coord>
+              </geom:polyline>
+            </geom:exterior>
+          </geom:surface>
+        </roads:Geometry>
+      </roads:LandCover>
+      <roads:LandCover ili:tid="24">
+        <roads:Type>other</roads:Type>
+        <roads:Geometry>
+          <geom:surface>
+            <geom:exterior>
+              <geom:polyline>
+                <geom:coord>
+                  <geom:c1>114.027</geom:c1>
+                  <geom:c2>99.314</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>31.351</geom:c1>
+                  <geom:c2>99.314</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>31.140</geom:c1>
+                  <geom:c2>92.530</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>70.419</geom:c1>
+                  <geom:c2>86.177</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>86.481</geom:c1>
+                  <geom:c2>79.710</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>114.027</geom:c1>
+                  <geom:c2>99.314</geom:c2>
+                </geom:coord>
+              </geom:polyline>
+            </geom:exterior>
+          </geom:surface>
+        </roads:Geometry>
+      </roads:LandCover>
+      <roads:LandCover ili:tid="26">
+        <roads:Type>other</roads:Type>
+        <roads:Geometry>
+          <geom:surface>
+            <geom:exterior>
+              <geom:polyline>
+                <geom:coord>
+                  <geom:c1>113.559</geom:c1>
+                  <geom:c2>62.880</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>114.027</geom:c1>
+                  <geom:c2>99.314</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>86.481</geom:c1>
+                  <geom:c2>79.710</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>94.381</geom:c1>
+                  <geom:c2>66.289</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>96.779</geom:c1>
+                  <geom:c2>57.177</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>113.559</geom:c1>
+                  <geom:c2>62.880</geom:c2>
+                </geom:coord>
+              </geom:polyline>
+            </geom:exterior>
+            <geom:interior>
+              <geom:polyline>
+                <geom:coord>
+                  <geom:c1>108.186</geom:c1>
+                  <geom:c2>69.369</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>101.459</geom:c1>
+                  <geom:c2>65.485</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>95.359</geom:c1>
+                  <geom:c2>76.053</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>102.086</geom:c1>
+                  <geom:c2>79.936</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>108.186</geom:c1>
+                  <geom:c2>69.369</geom:c2>
+                </geom:coord>
+              </geom:polyline>
+            </geom:interior>
+          </geom:surface>
+        </roads:Geometry>
+      </roads:LandCover>
+      <roads:LandCover ili:tid="29">
+        <roads:Type>street</roads:Type>
+        <roads:Geometry>
+          <geom:surface>
+            <geom:exterior>
+              <geom:polyline>
+                <geom:coord>
+                  <geom:c1>100.621</geom:c1>
+                  <geom:c2>24.239</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>109.729</geom:c1>
+                  <geom:c2>24.239</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>105.640</geom:c1>
+                  <geom:c2>48.068</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>96.779</geom:c1>
+                  <geom:c2>45.088</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>100.621</geom:c1>
+                  <geom:c2>24.239</geom:c2>
+                </geom:coord>
+              </geom:polyline>
+            </geom:exterior>
+          </geom:surface>
+        </roads:Geometry>
+      </roads:LandCover>
+      <roads:LandCover ili:tid="31">
+        <roads:Type>other</roads:Type>
+        <roads:Geometry>
+          <geom:surface>
+            <geom:exterior>
+              <geom:polyline>
+                <geom:coord>
+                  <geom:c1>30.900</geom:c1>
+                  <geom:c2>24.478</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>100.621</geom:c1>
+                  <geom:c2>24.239</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>96.779</geom:c1>
+                  <geom:c2>45.088</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>30.900</geom:c1>
+                  <geom:c2>24.478</geom:c2>
+                </geom:coord>
+              </geom:polyline>
+            </geom:exterior>
+          </geom:surface>
+        </roads:Geometry>
+      </roads:LandCover>
+      <roads:LandCover ili:tid="33">
+        <roads:Type>other</roads:Type>
+        <roads:Geometry>
+          <geom:surface>
+            <geom:exterior>
+              <geom:polyline>
+                <geom:coord>
+                  <geom:c1>31.110</geom:c1>
+                  <geom:c2>83.750</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>31.140</geom:c1>
+                  <geom:c2>36.458</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>50.669</geom:c1>
+                  <geom:c2>42.579</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>45.067</geom:c1>
+                  <geom:c2>58.655</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>51.432</geom:c1>
+                  <geom:c2>60.469</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>57.060</geom:c1>
+                  <geom:c2>44.638</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>87.839</geom:c1>
+                  <geom:c2>54.138</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>85.282</geom:c1>
+                  <geom:c2>63.410</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>78.847</geom:c1>
+                  <geom:c2>73.433</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>67.549</geom:c1>
+                  <geom:c2>77.788</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>31.110</geom:c1>
+                  <geom:c2>83.750</geom:c2>
+                </geom:coord>
+              </geom:polyline>
+            </geom:exterior>
+            <geom:interior>
+              <geom:polyline>
+                <geom:coord>
+                  <geom:c1>41.200</geom:c1>
+                  <geom:c2>59.302</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>39.038</geom:c1>
+                  <geom:c2>60.315</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>37.957</geom:c1>
+                  <geom:c2>61.455</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>35.661</geom:c1>
+                  <geom:c2>63.735</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>35.525</geom:c1>
+                  <geom:c2>66.268</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>36.741</geom:c1>
+                  <geom:c2>69.688</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>39.308</geom:c1>
+                  <geom:c2>73.235</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>42.281</geom:c1>
+                  <geom:c2>75.388</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>47.955</geom:c1>
+                  <geom:c2>75.515</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>55.927</geom:c1>
+                  <geom:c2>72.348</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>58.899</geom:c1>
+                  <geom:c2>68.928</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>57.818</geom:c1>
+                  <geom:c2>63.862</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>56.197</geom:c1>
+                  <geom:c2>62.595</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>53.360</geom:c1>
+                  <geom:c2>64.115</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>48.766</geom:c1>
+                  <geom:c2>67.408</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>45.794</geom:c1>
+                  <geom:c2>67.662</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>44.713</geom:c1>
+                  <geom:c2>66.268</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>43.362</geom:c1>
+                  <geom:c2>60.315</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>41.200</geom:c1>
+                  <geom:c2>59.302</geom:c2>
+                </geom:coord>
+              </geom:polyline>
+            </geom:interior>
+            <geom:interior>
+              <geom:polyline>
+                <geom:coord>
+                  <geom:c1>79.900</geom:c1>
+                  <geom:c2>55.839</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>60.489</geom:c1>
+                  <geom:c2>49.608</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>57.582</geom:c1>
+                  <geom:c2>58.029</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>69.938</geom:c1>
+                  <geom:c2>61.721</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>67.678</geom:c1>
+                  <geom:c2>68.781</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>75.351</geom:c1>
+                  <geom:c2>70.932</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>79.900</geom:c1>
+                  <geom:c2>55.839</geom:c2>
+                </geom:coord>
+              </geom:polyline>
+            </geom:interior>
+          </geom:surface>
+        </roads:Geometry>
+      </roads:LandCover>
+      <roads:LandCover ili:tid="37">
+        <roads:Type>street</roads:Type>
+        <roads:Geometry>
+          <geom:surface>
+            <geom:exterior>
+              <geom:polyline>
+                <geom:coord>
+                  <geom:c1>31.140</geom:c1>
+                  <geom:c2>92.530</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>31.110</geom:c1>
+                  <geom:c2>83.750</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>67.549</geom:c1>
+                  <geom:c2>77.788</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>78.847</geom:c1>
+                  <geom:c2>73.433</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>85.282</geom:c1>
+                  <geom:c2>63.410</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>87.839</geom:c1>
+                  <geom:c2>54.138</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>96.779</geom:c1>
+                  <geom:c2>57.177</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>94.381</geom:c1>
+                  <geom:c2>66.289</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>86.481</geom:c1>
+                  <geom:c2>79.710</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>70.419</geom:c1>
+                  <geom:c2>86.177</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>31.140</geom:c1>
+                  <geom:c2>92.530</geom:c2>
+                </geom:coord>
+              </geom:polyline>
+            </geom:exterior>
+          </geom:surface>
+        </roads:Geometry>
+      </roads:LandCover>
+      <roads:LandCover ili:tid="39">
+        <roads:Type>other</roads:Type>
+        <roads:Geometry>
+          <geom:surface>
+            <geom:exterior>
+              <geom:polyline>
+                <geom:coord>
+                  <geom:c1>113.811</geom:c1>
+                  <geom:c2>51.168</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>105.640</geom:c1>
+                  <geom:c2>48.068</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>109.729</geom:c1>
+                  <geom:c2>24.239</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>114.269</geom:c1>
+                  <geom:c2>24.017</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>113.811</geom:c1>
+                  <geom:c2>51.168</geom:c2>
+                </geom:coord>
+              </geom:polyline>
+            </geom:exterior>
+          </geom:surface>
+        </roads:Geometry>
+      </roads:LandCover>
+      <roads:LandCover ili:tid="41">
+        <roads:Type>street</roads:Type>
+        <roads:Geometry>
+          <geom:surface>
+            <geom:exterior>
+              <geom:polyline>
+                <geom:coord>
+                  <geom:c1>105.640</geom:c1>
+                  <geom:c2>48.068</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>113.811</geom:c1>
+                  <geom:c2>51.168</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>113.559</geom:c1>
+                  <geom:c2>62.880</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>96.779</geom:c1>
+                  <geom:c2>57.177</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>87.839</geom:c1>
+                  <geom:c2>54.138</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>57.060</geom:c1>
+                  <geom:c2>44.638</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>50.669</geom:c1>
+                  <geom:c2>42.579</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>31.140</geom:c1>
+                  <geom:c2>36.458</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>30.900</geom:c1>
+                  <geom:c2>24.478</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>96.779</geom:c1>
+                  <geom:c2>45.088</geom:c2>
+                </geom:coord>
+                <geom:coord>
+                  <geom:c1>105.640</geom:c1>
+                  <geom:c2>48.068</geom:c2>
+                </geom:coord>
+              </geom:polyline>
+            </geom:exterior>
+          </geom:surface>
+        </roads:Geometry>
+      </roads:LandCover>
+      <!-- === Street === -->
+      <roads:Street ili:tid="1">
+        <roads:Name>Austrasse</roads:Name>
+      </roads:Street>
+      <roads:Street ili:tid="2">
+        <roads:Name>Eymattstrasse</roads:Name>
+      </roads:Street>
+      <roads:Street ili:tid="3">
+        <roads:Name>Feldweg</roads:Name>
+      </roads:Street>
+      <roads:Street ili:tid="4">
+        <roads:Name>Seeweg</roads:Name>
+      </roads:Street>
+      <!-- === StreetAxis / StreetAxisAssoc === -->
+      <StreetAxis ili:tid="8">
+        <roads:Geometry>
+          <geom:polyline>
+            <geom:coord>
+              <geom:c1>55.600</geom:c1>
+              <geom:c2>37.649</geom:c2>
+            </geom:coord>
+            <geom:coord>
+              <geom:c1>15.573</geom:c1>
+              <geom:c2>25.785</geom:c2>
+            </geom:coord>
+          </geom:polyline>
+        </roads:Geometry>
+        <roads:Street ili:ref="1"/>
+        <Precision>precise</Precision>
+      </StreetAxis>
+      <StreetAxis ili:tid="9">
+        <roads:Geometry>
+          <geom:polyline>
+            <geom:coord>
+              <geom:c1>55.600</geom:c1>
+              <geom:c2>37.649</geom:c2>
+            </geom:coord>
+            <geom:coord>
+              <geom:c1>94.990</geom:c1>
+              <geom:c2>50.109</geom:c2>
+            </geom:coord>
+          </geom:polyline>
+        </roads:Geometry>
+        <roads:Street ili:ref="1"/>
+        <Precision>precise</Precision>
+      </StreetAxis>
+      <StreetAxis ili:tid="10">
+        <roads:Geometry>
+          <geom:polyline>
+            <geom:coord>
+              <geom:c1>94.990</geom:c1>
+              <geom:c2>50.109</geom:c2>
+            </geom:coord>
+            <geom:coord>
+              <geom:c1>101.099</geom:c1>
+              <geom:c2>52.279</geom:c2>
+            </geom:coord>
+          </geom:polyline>
+        </roads:Geometry>
+        <roads:Street ili:ref="1"/>
+        <Precision>precise</Precision>
+      </StreetAxis>
+      <StreetAxis ili:tid="11">
+        <roads:Geometry>
+          <geom:polyline>
+            <geom:coord>
+              <geom:c1>101.099</geom:c1>
+              <geom:c2>52.279</geom:c2>
+            </geom:coord>
+            <geom:coord>
+              <geom:c1>126.100</geom:c1>
+              <geom:c2>62.279</geom:c2>
+            </geom:coord>
+          </geom:polyline>
+        </roads:Geometry>
+        <roads:Street ili:ref="1"/>
+        <Precision>precise</Precision>
+      </StreetAxis>
+      <StreetAxis ili:tid="12">
+        <roads:Geometry>
+          <geom:polyline>
+            <geom:coord>
+              <geom:c1>94.990</geom:c1>
+              <geom:c2>50.109</geom:c2>
+            </geom:coord>
+            <geom:coord>
+              <geom:c1>89.504</geom:c1>
+              <geom:c2>65.795</geom:c2>
+            </geom:coord>
+            <geom:coord>
+              <geom:c1>83.594</geom:c1>
+              <geom:c2>75.598</geom:c2>
+            </geom:coord>
+            <geom:coord>
+              <geom:c1>71.774</geom:c1>
+              <geom:c2>80.712</geom:c2>
+            </geom:coord>
+            <geom:coord>
+              <geom:c1>11.423</geom:c1>
+              <geom:c2>91.154</geom:c2>
+            </geom:coord>
+          </geom:polyline>
+        </roads:Geometry>
+        <roads:Street ili:ref="2"/>
+        <Precision>precise</Precision>
+      </StreetAxis>
+      <StreetAxis ili:tid="13">
+        <roads:Geometry>
+          <geom:polyline>
+            <geom:coord>
+              <geom:c1>101.099</geom:c1>
+              <geom:c2>52.279</geom:c2>
+            </geom:coord>
+            <geom:coord>
+              <geom:c1>107.400</geom:c1>
+              <geom:c2>14.603</geom:c2>
+            </geom:coord>
+          </geom:polyline>
+        </roads:Geometry>
+        <roads:Street ili:ref="3"/>
+        <Precision>unprecise</Precision>
+      </StreetAxis>
+      <StreetAxis ili:tid="15">
+        <roads:Geometry>
+          <geom:polyline>
+            <geom:coord>
+              <geom:c1>55.600</geom:c1>
+              <geom:c2>37.649</geom:c2>
+            </geom:coord>
+            <geom:coord>
+              <geom:c1>49.359</geom:c1>
+              <geom:c2>56.752</geom:c2>
+            </geom:coord>
+          </geom:polyline>
+        </roads:Geometry>
+        <roads:Street ili:ref="4"/>
+        <Precision>unprecise</Precision>
+      </StreetAxis>
+      <!-- === StreetNamePosition / StreetNamePositionAssoc === -->
+      <roads:StreetNamePosition ili:tid="5">
+        <roads:NamPos>
+          <geom:coord>
+            <geom:c1>71.660</geom:c1>
+            <geom:c2>45.231</geom:c2>
+          </geom:coord>
+        </roads:NamPos>
+        <roads:NamOri>15.0</roads:NamOri>
+        <roads:Street ili:ref="1"/>
+      </roads:StreetNamePosition>
+      <roads:StreetNamePosition ili:tid="6">
+        <roads:NamPos>
+          <geom:coord>
+            <geom:c1>58.249</geom:c1>
+            <geom:c2>85.081</geom:c2>
+          </geom:coord>
+        </roads:NamPos>
+        <roads:NamOri>351.0</roads:NamOri>
+        <roads:Street ili:ref="2"/>
+      </roads:StreetNamePosition>
+      <roads:StreetNamePosition ili:tid="7">
+        <roads:NamPos>
+          <geom:coord>
+            <geom:c1>106.095</geom:c1>
+            <geom:c2>33.554</geom:c2>
+          </geom:coord>
+        </roads:NamPos>
+        <roads:NamOri>280.0</roads:NamOri>
+        <roads:Street ili:ref="3"/>
+      </roads:StreetNamePosition>
+      <roads:StreetNamePosition ili:tid="14">
+        <roads:NamPos>
+          <geom:coord>
+            <geom:c1>53.031</geom:c1>
+            <geom:c2>51.367</geom:c2>
+          </geom:coord>
+        </roads:NamPos>
+        <roads:NamOri>291.3</roads:NamOri>
+        <roads:Street ili:ref="4"/>
+      </roads:StreetNamePosition>
+      <!-- === RoadSign === -->
+      <RoadSign ili:tid="501">
+        <roads:Type>prohibition.noparking</roads:Type>
+        <roads:Position>
+          <geom:coord>
+            <geom:c1>69.389</geom:c1>
+            <geom:c2>92.056</geom:c2>
+          </geom:coord>
+        </roads:Position>
+      </RoadSign>
+      <RoadSign ili:tid="502">
+        <roads:Type>prohibition.noparking</roads:Type>
+        <roads:Position>
+          <geom:coord>
+            <geom:c1>80.608</geom:c1>
+            <geom:c2>88.623</geom:c2>
+          </geom:coord>
+        </roads:Position>
+      </RoadSign>
+      <RoadSign ili:tid="503">
+        <roads:Type>prohibition.noparking</roads:Type>
+        <roads:Position>
+          <geom:coord>
+            <geom:c1>58.059</geom:c1>
+            <geom:c2>93.667</geom:c2>
+          </geom:coord>
+        </roads:Position>
+      </RoadSign>
+      <RoadSign ili:tid="504">
+        <roads:Type>danger</roads:Type>
+        <roads:Position>
+          <geom:coord>
+            <geom:c1>92.741</geom:c1>
+            <geom:c2>38.295</geom:c2>
+          </geom:coord>
+        </roads:Position>
+      </RoadSign>
+    </RoadsExtended>
+    <!-- end of basket REFHANDB00000001 -->
+  </ili:datasection>
+</ili:transfer>
+----
+
+[unnumbered]
+== Grafikbeschreibung RoadsExgm2ien
+Zum Datenmodell wird eine Darstellung mit Hilfe der Grafikbeschreibung RoadsExgm2ien definiert. Das Grafikmodell lautet wie folgt:
+
+[source,interlis]
+----
+!! File RoadsExgm2ien.ili Release 2014-07-09
+INTERLIS 2.4;
+
+MODEL RoadsExgm2ien (en) AT "http://www.interlis.ch/models/refhb24"
+  VERSION "2014-07-09" = !! Roads graphics
+
+  IMPORTS RoadsExdm2ben;
+  IMPORTS RoadsExdm2ien;
+  IMPORTS StandardSymbology;
+
+  SIGN BASKET StandardSymbology ~ StandardSymbology.StandardSigns =
+    OBJECTS OF SurfaceSign: Building, Street, Water, Other;
+    OBJECTS OF PolylineSign: continuous, dotted;
+    OBJECTS OF TextSign: Linefont_18;
+    OBJECTS OF SymbolSign: NoParking, GP;
+  END StandardSymbology;
+
+  TOPIC Graphics =
+    DEPENDS ON RoadsExdm2ben.Roads, RoadsExdm2ien.RoadsExtended;
+
+    GRAPHIC Surface_Graphics
+      BASED ON RoadsExdm2ien.RoadsExtended.LandCover =
+
+        Building OF StandardSymbology.StandardSigns.SurfaceSign:
+          WHERE Type == #building (
+            Sign := {Building};
+            Geometry := Geometry;
+            Priority := 100
+          );
+
+        Street OF StandardSymbology.StandardSigns.SurfaceSign:
+          WHERE Type == #street (
+            Sign := {Street};
+            Geometry := Geometry;
+            Priority := 100
+          );
+
+        Water OF StandardSymbology.StandardSigns.SurfaceSign:
+          WHERE Type == #water (
+            Sign := {Water};
+            Geometry := Geometry;
+            Priority := 100
+          );
+
+        Other OF StandardSymbology.StandardSigns.SurfaceSign:
+          WHERE Type == #other (
+            Sign := {Other};
+            Geometry := Geometry;
+            Priority := 100
+          );
+
+    END Surface_Graphics;
+
+    VIEW Surface_Boundary
+      INSPECTION OF RoadsExdm2ien.RoadsExtended.LandCover -> Geometry;
+    =
+      ATTRIBUTE
+        ALL OF LandCover;
+    END Surface_Boundary;
+
+    VIEW Surface_Boundary2
+      INSPECTION OF Base ~ Surface_Boundary -> Lines;
+    =
+      ATTRIBUTE
+        Geometry := Base -> Geometry;
+    END Surface_Boundary2;
+
+    GRAPHIC SurfaceBoundary_Graphics
+      BASED ON Surface_Boundary2 =
+
+        Boundary OF StandardSymbology.StandardSigns.PolylineSign: (
+          Sign := {continuous};
+          Geometry := Geometry;
+          Priority := 101
+        );
+
+    END SurfaceBoundary_Graphics;
+
+    GRAPHIC Polyline_Graphics
+      BASED ON RoadsExdm2ien.RoadsExtended.StreetAxis =
+
+        Street_precise OF StandardSymbology.StandardSigns.PolylineSign:
+          WHERE Precision == #precise (
+            Sign := {continuous};
+            Geometry := Geometry;
+            Priority := 110
+          );
+
+        Street_unprecise OF StandardSymbology.StandardSigns.PolylineSign:
+          WHERE Precision == #unprecise (
+            Sign := {dotted};
+            Geometry := Geometry;
+            Priority := 110
+          );
+
+    END Polyline_Graphics;
+
+    GRAPHIC Text_Graphics
+      BASED ON RoadsExdm2ien.RoadsExtended.StreetNamePosition =
+
+        StreetName OF StandardSymbology.StandardSigns.TextSign: (
+          Sign := {Linefont_18};
+          Txt := Street -> Name;
+          Geometry := NamPos;
+          Rotation := NamOri;
+          Priority := 120
+        );
+
+    END Text_Graphics;
+
+    GRAPHIC Point_Graphics
+      BASED ON RoadsExdm2ien.RoadsExtended.RoadSign =
+
+        Tree OF StandardSymbology.StandardSigns.SymbolSign:
+          WHERE Type == #prohibition.noparking (
+            Sign := {NoParking};
+            Geometry := Position;
+            Priority := 130
+          );
+
+        GP OF StandardSymbology.StandardSigns.SymbolSign:
+          WHERE Type == #danger (
+            Sign := {GP};
+            Geometry := Position;
+            Priority := 130
+          );
+
+    END Point_Graphics;
+
+  END Graphics;
+
+END RoadsExgm2ien.
+----
+
+Das Grafikmodell RoadsExgm2ien greift auf Signaturen in der Signaturenbibliothek RoadsExgm2ien_Symbols (Datei RoadsExgm2ien_Symbols.xtf) zurück. Die Signaturenbibliothek ist im folgenden Abschnitt beschrieben.
+
+[unnumbered]
+== Signaturenbibliothek RoadsExgm2ien_Symbols.xtf
+Nachfolgend ist die Signaturenbibliothek RoadsExgm2ien_Symbols als XML-Datensatz dargestellt (Datei RoadsExgm2ien_Symbols.xtf). Die Signaturenbibliothek enthält Symboldefinitionen für Fixpunkte und Bäume, sowie Linien-, Textanschrift- und Flächensignaturen. Das zugehörige Signaturen-Datenmodell (StandardSymbology) ist im Anhang L Signaturenmodelle enthalten.
+
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<ili:transfer xmlns:ili="http://www.interlis.ch/xtf/2.4/INTERLIS" xmlns:geom="http://www.interlis.ch/geometry/1.0" xmlns="http://www.interlis.ch/xtf/2.4/StandardSymbology" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ili:headersection>
+    <ili:models>
+      <ili:model>StandardSymbology</ili:model>
+    </ili:models>
+    <ili:sender>KOGIS</ili:sender>
+    <ili:comment>example symbology dataset ili2 refmanual appendix C</ili:comment>
+  </ili:headersection>
+  <ili:datasection>
+    <StandardSigns ili:bid="REFHANDB00000002">
+      <!-- Color Library -->
+      <Color ili:tid="1">
+        <Name>red</Name>
+        <L>40.0</L>
+        <C>70.0</C>
+        <H>0.0</H>
+        <T>1.0</T>
+      </Color>
+      <Color ili:tid="2">
+        <Name>green</Name>
+        <L>49.4</L>
+        <C>48.5</C>
+        <H>153.36</H>
+        <T>1.0</T>
+      </Color>
+      <Color ili:tid="3">
+        <Name>light_gray</Name>
+        <L>75.0</L>
+        <C>0.0</C>
+        <H>0.0</H>
+        <T>1.0</T>
+      </Color>
+      <Color ili:tid="4">
+        <Name>dark_grey</Name>
+        <L>25.0</L>
+        <C>0.0</C>
+        <H>0.0</H>
+        <T>1.0</T>
+      </Color>
+      <Color ili:tid="5">
+        <Name>dark_blue</Name>
+        <L>50.3</L>
+        <C>43.5</C>
+        <H>261.1</H>
+        <T>1.0</T>
+      </Color>
+      <Color ili:tid="6">
+        <Name>black</Name>
+        <L>0.0</L>
+        <C>0.0</C>
+        <H>0.0</H>
+        <T>1.0</T>
+      </Color>
+      <Color ili:tid="7">
+        <Name>white</Name>
+        <L>100.0</L>
+        <C>0.0</C>
+        <H>0.0</H>
+        <T>1.0</T>
+      </Color>
+      <PolylineAttrs ili:tid="4001">
+        <Width>0.01</Width>
+        <Join>round</Join>
+        <Caps>butt</Caps>
+      </PolylineAttrs>
+      <PolylineAttrs ili:tid="4002">
+        <Width>0.01</Width>
+        <Join>miter</Join>
+        <MiterLimit>2.0</MiterLimit>
+        <Caps>butt</Caps>
+      </PolylineAttrs>
+      <!-- Font/Symbol Library -->
+      <FontSymbol ili:tid="101">
+        <Name>Triangle</Name>
+        <Geometry>
+          <FontSymbol_Surface>
+            <Geometry>
+              <geom:surface>
+                <geom:exterior>
+                  <geom:polyline>
+                    <geom:coord>
+                      <geom:c1>-0.5</geom:c1>
+                      <geom:c2>-0.5</geom:c2>
+                    </geom:coord>
+                    <geom:coord>
+                      <geom:c1>0.0</geom:c1>
+                      <geom:c2>0.5</geom:c2>
+                    </geom:coord>
+                    <geom:coord>
+                      <geom:c1>0.5</geom:c1>
+                      <geom:c2>-0.5</geom:c2>
+                    </geom:coord>
+                    <geom:coord>
+                      <geom:c1>-0.5</geom:c1>
+                      <geom:c2>-0.5</geom:c2>
+                    </geom:coord>
+                  </geom:polyline>
+                </geom:exterior>
+              </geom:surface>
+            </Geometry>
+          </FontSymbol_Surface>
+        </Geometry>
+        <Geometry>
+          <FontSymbol_Polyline>
+            <Color ili:ref="6"/>
+            <Geometry>
+              <geom:polyline>
+                <geom:coord>
+                  <geom:c1>-0.5</geom:c1>
+                  <geom:c2>0.0</geom:c2>
+                </geom:coord>
+                <geom:arc>
+                  <geom:c1>0.5</geom:c1>
+                  <geom:c2>0.0</geom:c2>
+                  <geom:a1>0.0</geom:a1>
+                  <geom:a2>0.5</geom:a2>
+                  <geom:r>0.5</geom:r>
+                </geom:arc>
+                <geom:arc>
+                  <geom:c1>-0.5</geom:c1>
+                  <geom:c2>0.0</geom:c2>
+                  <geom:a1>0.0</geom:a1>
+                  <geom:a2>-0.5</geom:a2>
+                  <geom:r>0.5</geom:r>
+                </geom:arc>
+              </geom:polyline>
+            </Geometry>
+          </FontSymbol_Polyline>
+        </Geometry>
+        <Font ili:ref="10"/>
+      </FontSymbol>
+      <FontSymbol ili:tid="102">
+        <Name>NoParking</Name>
+        <Geometry>
+          <FontSymbol_Polyline>
+            <Color ili:ref="6"/>
+            <Geometry>
+              <geom:polyline>
+                <geom:coord>
+                  <geom:c1>-0.5</geom:c1>
+                  <geom:c2>0.0</geom:c2>
+                </geom:coord>
+                <geom:arc>
+                  <geom:c1>0.5</geom:c1>
+                  <geom:c2>0.0</geom:c2>
+                  <geom:a1>0.0</geom:a1>
+                  <geom:a2>0.5</geom:a2>
+                  <geom:r>0.5</geom:r>
+                </geom:arc>
+                <geom:arc>
+                  <geom:c1>-0.5</geom:c1>
+                  <geom:c2>0.0</geom:c2>
+                  <geom:a1>0.0</geom:a1>
+                  <geom:a2>-0.5</geom:a2>
+                  <geom:r>0.5</geom:r>
+                </geom:arc>
+              </geom:polyline>
+            </Geometry>
+          </FontSymbol_Polyline>
+        </Geometry>
+        <Geometry>
+          <FontSymbol_Surface>
+            <FillColor ili:ref="1"/>
+            <Geometry>
+              <geom:surface>
+                <geom:exterior>
+                  <geom:polyline>
+                    <geom:coord>
+                      <geom:c1>-0.233</geom:c1>
+                      <geom:c2>0.325</geom:c2>
+                    </geom:coord>
+                    <geom:arc>
+                      <geom:c1>0.325</geom:c1>
+                      <geom:c2>-0.233</geom:c2>
+                      <geom:a1>0.283</geom:a1>
+                      <geom:a2>0.283</geom:a2>
+                      <geom:r>0.4</geom:r>
+                    </geom:arc>
+                    <geom:coord>
+                      <geom:c1>-0.233</geom:c1>
+                      <geom:c2>0.325</geom:c2>
+                    </geom:coord>
+                  </geom:polyline>
+                </geom:exterior>
+              </geom:surface>
+            </Geometry>
+          </FontSymbol_Surface>
+        </Geometry>
+        <Geometry>
+          <FontSymbol_Surface>
+            <FillColor ili:ref="1"/>
+            <Geometry>
+              <geom:surface>
+                <geom:exterior>
+                  <geom:polyline>
+                    <geom:coord>
+                      <geom:c1>0.228</geom:c1>
+                      <geom:c2>-0.324</geom:c2>
+                    </geom:coord>
+                    <geom:arc>
+                      <geom:c1>-0.327</geom:c1>
+                      <geom:c2>0.238</geom:c2>
+                      <geom:a1>-0.283</geom:a1>
+                      <geom:a2>-0.283</geom:a2>
+                      <geom:r>0.4</geom:r>
+                    </geom:arc>
+                    <geom:coord>
+                      <geom:c1>0.228</geom:c1>
+                      <geom:c2>-0.324</geom:c2>
+                    </geom:coord>
+                  </geom:polyline>
+                </geom:exterior>
+              </geom:surface>
+            </Geometry>
+          </FontSymbol_Surface>
+        </Geometry>
+        <Geometry>
+          <FontSymbol_Surface>
+            <FillColor ili:ref="5"/>
+            <Geometry>
+              <geom:surface>
+                <geom:exterior>
+                  <geom:polyline>
+                    <geom:coord>
+                      <geom:c1>-0.5</geom:c1>
+                      <geom:c2>0.0</geom:c2>
+                    </geom:coord>
+                    <geom:arc>
+                      <geom:c1>0.5</geom:c1>
+                      <geom:c2>0.0</geom:c2>
+                      <geom:a1>0.0</geom:a1>
+                      <geom:a2>0.5</geom:a2>
+                      <geom:r>0.5</geom:r>
+                    </geom:arc>
+                    <geom:arc>
+                      <geom:c1>-0.5</geom:c1>
+                      <geom:c2>0.0</geom:c2>
+                      <geom:a1>0.0</geom:a1>
+                      <geom:a2>-0.5</geom:a2>
+                      <geom:r>0.5</geom:r>
+                    </geom:arc>
+                  </geom:polyline>
+                </geom:exterior>
+                <geom:interior>
+                  <geom:polyline>
+                    <geom:coord>
+                      <geom:c1>-0.233</geom:c1>
+                      <geom:c2>0.325</geom:c2>
+                    </geom:coord>
+                    <geom:arc>
+                      <geom:c1>0.325</geom:c1>
+                      <geom:c2>-0.233</geom:c2>
+                      <geom:a1>0.283</geom:a1>
+                      <geom:a2>0.283</geom:a2>
+                      <geom:r>0.4</geom:r>
+                    </geom:arc>
+                    <geom:coord>
+                      <geom:c1>-0.233</geom:c1>
+                      <geom:c2>0.325</geom:c2>
+                    </geom:coord>
+                  </geom:polyline>
+                </geom:interior>
+                <geom:interior>
+                  <geom:polyline>
+                    <geom:coord>
+                      <geom:c1>0.228</geom:c1>
+                      <geom:c2>-0.324</geom:c2>
+                    </geom:coord>
+                    <geom:arc>
+                      <geom:c1>-0.327</geom:c1>
+                      <geom:c2>0.238</geom:c2>
+                      <geom:a1>-0.283</geom:a1>
+                      <geom:a2>-0.283</geom:a2>
+                      <geom:r>0.4</geom:r>
+                    </geom:arc>
+                    <geom:coord>
+                      <geom:c1>0.228</geom:c1>
+                      <geom:c2>-0.324</geom:c2>
+                    </geom:coord>
+                  </geom:polyline>
+                </geom:interior>
+              </geom:surface>
+            </Geometry>
+          </FontSymbol_Surface>
+        </Geometry>
+        <Geometry>
+          <FontSymbol_Polyline>
+            <Color ili:ref="7"/>
+            <Geometry>
+              <geom:polyline>
+                <geom:coord>
+                  <geom:c1>-0.233</geom:c1>
+                  <geom:c2>0.325</geom:c2>
+                </geom:coord>
+                <geom:arc>
+                  <geom:c1>0.325</geom:c1>
+                  <geom:c2>-0.233</geom:c2>
+                  <geom:a1>0.283</geom:a1>
+                  <geom:a2>0.283</geom:a2>
+                  <geom:r>0.4</geom:r>
+                </geom:arc>
+                <geom:coord>
+                  <geom:c1>-0.233</geom:c1>
+                  <geom:c2>0.325</geom:c2>
+                </geom:coord>
+              </geom:polyline>
+            </Geometry>
+          </FontSymbol_Polyline>
+        </Geometry>
+        <Geometry>
+          <FontSymbol_Polyline>
+            <Color ili:ref="7"/>
+            <Geometry>
+              <geom:polyline>
+                <geom:coord>
+                  <geom:c1>0.228</geom:c1>
+                  <geom:c2>-0.324</geom:c2>
+                </geom:coord>
+                <geom:arc>
+                  <geom:c1>-0.327</geom:c1>
+                  <geom:c2>0.238</geom:c2>
+                  <geom:a1>-0.283</geom:a1>
+                  <geom:a2>-0.283</geom:a2>
+                  <geom:r>0.4</geom:r>
+                </geom:arc>
+                <geom:coord>
+                  <geom:c1>0.228</geom:c1>
+                  <geom:c2>-0.324</geom:c2>
+                </geom:coord>
+              </geom:polyline>
+            </Geometry>
+          </FontSymbol_Polyline>
+        </Geometry>
+        <Font ili:ref="10"/>
+      </FontSymbol>
+      <!-- Internal Symbol Font "Symbols" -->
+      <Font ili:tid="10">
+        <Name>Symbols</Name>
+        <Internal>true</Internal>
+        <Type>symbol</Type>
+      </Font>
+      <!-- External Text Font "Leroy" -->
+      <Font ili:tid="11">
+        <Name>Leroy</Name>
+        <Internal>false</Internal>
+        <Type>text</Type>
+        <BottomBase>0.3</BottomBase>
+      </Font>
+      <!-- Line Styles -->
+      <LineStyle_Solid ili:tid="21">
+        <Name>LineSolid_01</Name>
+        <Color ili:ref="6"/>
+      </LineStyle_Solid>
+      <LineStyle_Dashed ili:tid="22">
+        <Name>LineDashed_01</Name>
+        <Dashes>
+          <DashRec>
+            <DLength>0.1</DLength>
+          </DashRec>
+        </Dashes>
+        <Dashes>
+          <DashRec>
+            <DLength>0.1</DLength>
+          </DashRec>
+        </Dashes>
+        <Color ili:ref="6"/>
+      </LineStyle_Dashed>
+      <!-- Text Signs -->
+      <TextSign ili:tid="1001">
+        <ili:Name>Linefont_18</ili:Name>
+        <Height>1.8</Height>
+        <Font ili:ref="11"/>
+      </TextSign>
+      <!-- Symbol Signs -->
+      <SymbolSign ili:tid="2001">
+        <ili:Name>GP</ili:Name>
+        <Scale>1.0</Scale>
+        <Color ili:ref="2"/>
+        <Symbol ili:ref="101"/>
+      </SymbolSign>
+      <SymbolSign ili:tid="2002">
+        <ili:Name>NoParking</ili:Name>
+        <Scale>1.0</Scale>
+        <Symbol ili:ref="102"/>
+      </SymbolSign>
+      <!-- Polyline Signs -->
+      <PolylineSign ili:tid="3001">
+        <ili:Name>continuous</ili:Name>
+        <Style ili:ref="21">
+          <PolylineSignLineStyleAssoc>
+            <Offset>0.0</Offset>
+          </PolylineSignLineStyleAssoc>
+        </Style>
+      </PolylineSign>
+      <PolylineSign ili:tid="3002">
+        <ili:Name>dotted</ili:Name>
+        <Style ili:ref="22">
+          <PolylineSignLineStyleAssoc>
+            <Offset>0.0</Offset>
+          </PolylineSignLineStyleAssoc>
+        </Style>
+      </PolylineSign>
+      <!-- Surface Signs -->
+      <SurfaceSign ili:tid="5001">
+        <ili:Name>Building</ili:Name>
+        <FillColor ili:ref="4"/>
+      </SurfaceSign>
+      <SurfaceSign ili:tid="5002">
+        <ili:Name>Street</ili:Name>
+        <FillColor ili:ref="3"/>
+      </SurfaceSign>
+      <SurfaceSign ili:tid="5003">
+        <ili:Name>Water</ili:Name>
+        <FillColor ili:ref="5"/>
+      </SurfaceSign>
+      <SurfaceSign ili:tid="5005">
+        <ili:Name>Other</ili:Name>
+        <FillColor ili:ref="2"/>
+      </SurfaceSign>
+    </StandardSigns>
+    <!-- end of basket REFHANDB00000002 -->
+  </ili:datasection>
+</ili:transfer>
+----
+
+[unnumbered]
+== Grafische Darstellung des Beispiels
+Aus dem Datensatz RoadsExdm2ien (Datei RoadsExdm2ien.xtf), den Beschreibungen im Grafikmodell RoadsExgm2ien (Datei RoadsExgm2ien.ili) und der Signaturenbibliothek RoadsExgm2ien_Symbols (Datei RoadsExgm2ien_Symbols.xtf) erzeugt ein INTERLIS 2-Grafikprozessor folgende Grafik:
+
+.Grafik, erzeugt aus den Daten- und Grafikbeschreibungen.
+image::refhb24/refhb24_fig27.png[]

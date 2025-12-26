@@ -1,0 +1,117 @@
+[unnumbered]
+= Anhang G (Standard-Erweiterungsvorschlag) – Eindeutigkeit von Benutzerschlüsseln
+
+[unnumbered]
+== Bemerkung
+Die folgende Spezifikation ist nicht normativer Bestandteil von INTERLIS. Dies ist ein Standard-Erweiterungsvorschlag auf der Basis des INTERLIS 2-Referenzhandbuches im Sinne einer Empfehlung. Es ist geplant, diesen Vorschlag nach einer breiten Diskussion in eine definitive Regelung umzuwandeln. Für Anwendungsbeispiele siehe auch die entsprechenden INTERLIS 2-Benutzerhandbücher.
+
+[unnumbered]
+== Modellierungs-Alternativen
+Wird von Benutzerschlüsseln verlangt, dass sie eindeutig sind, stellt sich immer Frage, in welchem Rahmen die Eindeutigkeit gilt. Rein technisch gesehen ist es häufig klar, dass die Eindeutigkeit nur innerhalb eines bestimmten Behälters garantiert werden kann, weil auf die anderen Behälter gar kein Zugriff besteht. Vom Modellierungsstandpunkt aus ist der Behälter aber bedeutungslos, da nichts über seinen Umfang ausgesagt werden kann.
+
+Zunächst einmal ist zu fragen, ob in einem Basismodell wirklich eine Eindeutigkeit verlangt werden muss. Aus Sicht der übergeordneten Stelle (z.B. Bund) ist es durchaus denkbar, dass die
+Eindeutigkeit nicht für alle gilt, sondern zum Beispiel nur für das (Bundes-) interne Datenmodell.
+
+Im Weiteren werden zwei Varianten vorgestellt, die das gegebene Problem der eindeutigen Benutzerschlüssel lösen:
+
+ - Variante Zentrale Regelung.
+ - Variante Dezentrale Regelung (Delegationsprinzip).
+
+[unnumbered]
+== Variante Zentrale Regelung
+Ohne weitergehende Überlegungen wird eine zentrale Regelung im Vordergrund stehen. Dabei legt eine zentrale Stelle für alle Objekte einer Klasse fest, dass ein bestimmter Benutzerschlüssel über das gesamte Gebiet eindeutig sein muss. Dies kann mit organisatorischen Massnahmen geschehen oder alle Beteiligten greifen auf eine zentrale Datenbank zu.
+
+[source,interlis]
+----
+TOPIC Grundeigentum =
+  CLASS Parzelle =
+    Nummer: 1 .. 99999;
+    Geometrie: AREA WITH (STRAIGHTS, ARCS) VERTEX CHKoord WITHOUT OVERLAPS > 0.005;
+    UNIQUE Nummer;
+  END Parzelle;
+END Grundeigentum.
+----
+
+Oft legt die zentrale Stelle eine Gebietseinteilung fest, bei der alle Gebietsnummern über das gesamte Gebiet eindeutig sind. Sollen die Parzellen, die sich ja wiederum innerhalb dieser Gebiete befinden, über das Gesamte eindeutig sein, dann muss der Benutzerschlüssel aus der Kombination von Gebietsnummern und Parzellennummer bestehen:
+
+[source,interlis]
+----
+CLASS Parzelle =
+  Gebietsnummer: 1 .. 9999;
+  Nummer: 1 .. 99999;
+  Geometrie: AREA WITH (STRAIGHTS, ARCS) VERTEX CHKoord WITHOUT OVERLAPS > 0.005;
+  UNIQUE Gebietsnummer, Nummer; !! Benutzerschluessel
+END Parzelle;
+----
+
+[unnumbered]
+== Variante Dezentrale Regelung (Delegationsprinzip)
+Wenn entsprechende Datenstrukturen in einem Datenmodell vorgesehen sind, ist es möglich, dass Objekte primär in kleineren Behältern (z.B. ein Behälter pro Gemeinde) erfasst werden, um sie dann ohne Probleme zu grösseren Behältern (z.B. einen für einen ganzen Kanton) zusammenzufassen. Nimmt man weiter an, dass der Bund festlegt, dass Parzellennummern fünfstellige Zahlen sein sollen, aber offen lässt, in welchem Rahmen sie eindeutig sein sollen, während ein Kanton zusätzlich festlegt, dass sie im Rahmen einer Gemeinde eindeutig sein sollen, ist folgende Modellierung möglich:
+
+[source,interlis]
+----
+INTERLIS 2.4;
+
+MODEL Bund (de) AT "http://www.interlis.ch/"
+  VERSION "2005-06-16" =
+
+  DOMAIN
+    CHKoord = COORD
+      0.000 .. 200.000 [INTERLIS.m], !! Min_Ost Max_Ost
+      0.000 .. 200.000 [INTERLIS.m]  !! Min_Nord Max_Nord
+      ROTATION 2 -> 1;
+  END DOMAIN;
+
+  TOPIC Grundeigentum =
+
+    CLASS Parzelle =
+      Nummer: 1 .. 99999;
+      Geometrie: AREA WITH (STRAIGHTS, ARCS)
+        VERTEX CHKoord WITHOUT OVERLAPS > 0.005;
+    END Parzelle;
+
+  END Grundeigentum;
+
+END Bund.
+
+
+INTERLIS 2.4;
+
+MODEL KantonA (de) AT "http://www.interlis.ch/"
+  VERSION "2005-06-16" =
+
+  IMPORTS Bund;
+
+  TOPIC OrgStruktur =
+
+    CLASS Gemeinde =
+      Name: TEXT*30;
+      UNIQUE
+        Name;
+    END Gemeinde;
+
+  END OrgStruktur;
+
+  TOPIC Grundeigentum EXTENDS Bund.Grundeigentum =
+    DEPENDS ON OrgStruktur;
+
+    ASSOCIATION GdeParzelle =
+      Gemeinde (EXTERNAL) -- {1} KantonA.OrgStruktur.Gemeinde;
+      Parzelle -- {0..*} Parzelle;
+    END GdeParzelle;
+
+    CONSTRAINTS OF Parzelle =
+      UNIQUE
+        Nummer, Gemeinde;
+    END;
+
+  END Grundeigentum;
+
+END KantonA.
+----
+
+Die Namen der Gemeinden müssen gemäss Definition im Rahmen aller Objekte der Klasse eindeutig sein. Es ist dabei irrelevant, ob diese Bedingung auf Grund der Aufteilung in konkrete Behälter wirklich überprüfbar ist. Sachlich gesehen gilt die Anforderung.
+
+Um festzulegen, dass die Parzellennummer im Rahmen einer Gemeinde eindeutig sein muss, wird zwischen Parzelle und Gemeinde eine Beziehung erstellt und verlangt, dass die Kombination von Gemeinde und Nummer eindeutig ist. Dabei ist es wiederum nicht relevant, ob ein Behälter einen Teil einer Gemeinde, eine ganze Gemeinde oder mehrere Gemeinden umfasst. Vom Modellierungstandpunkt aus gilt die Anforderung.
+
+Geht man z.B. davon aus, dass ein System die Parzellen einer bestimmten Gemeinde enthält, ist es durchaus möglich, dass bei den Parzellen systemintern auf die Beziehung zur Gemeinde verzichtet wird und diese nur für die Datenübergabe an andere Systeme beigefügt wird.

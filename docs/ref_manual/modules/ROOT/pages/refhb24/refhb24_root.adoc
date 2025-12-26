@@ -9,3 +9,7 @@ include::refhb24_2_grundprinzipien.adoc[]
 include::refhb24_3_beschreibungssprache.adoc[]
 
 include::refhb24_4_sequentieller_transfer.adoc[]
+
+include::refhb24_5_haftungsausschuss.adoc[]
+
+include::refhb24_6_urheberrechte.adoc[]
