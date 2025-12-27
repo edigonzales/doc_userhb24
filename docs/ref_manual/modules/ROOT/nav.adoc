@@ -12,3 +12,6 @@
 * xref:refhb24/refhb24_anhang_e.adoc[Anhang E - Das kleine Beispiel Roads]
 * xref:refhb24/refhb24_anhang_f.adoc[Anhang F - Aufbau von Objektidentifikatoren (OID)]
 * xref:refhb24/refhb24_anhang_g.adoc[Anhang G - Eindeutigkeit von Benutzerschlüsseln]
+* xref:refhb24/refhb24_anhang_h.adoc[Anhang H - Einheiten-Definitionen]
+* xref:refhb24/refhb24_anhang_i.adoc[Anhang I – Zeit-Definitionen]
+* xref:refhb24/refhb24_anhang_j.adoc[Anhang J – Farben-Definitionen]

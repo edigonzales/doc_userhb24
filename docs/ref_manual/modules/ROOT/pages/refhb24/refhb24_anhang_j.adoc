@@ -1,0 +1,238 @@
+[unnumbered]
+= Anhang J (Standard-Erweiterungsvorschlag) – Farben-Definitionen
+
+[unnumbered]
+== Bemerkung
+Die folgende Spezifikation ist nicht normativer Bestandteil von INTERLIS. Dies ist ein Standard-Erweiterungsvorschlag auf der Basis des INTERLIS 2-Referenzhandbuches im Sinne einer Empfehlung. Es ist geplant, diesen Vorschlag nach einer breiten Diskussion in eine definitive Regelung umzuwandeln. Für Anwendungsbeispiele siehe auch die entsprechenden INTERLIS 2-Benutzerhandbücher.
+
+[unnumbered]
+== Einleitung
+Diese Spezifikation begründet detailliert, dass sich ein L* C*~ab~ h*~ab~ genannter Farbraum am besten für Farben-Definitionen eignet. Es stellt diesen Farbraum ausführlich vor, zitiert Umrechnungsformeln zu anderen Farbräumen und gibt Hinweise darauf, wie eine Transformation von L* C*~ab~ h*~ab~-Koordinaten in das Farb-Koordinatensystem eines konkreten Bildschirms oder Druckers implementiert werden kann. Zudem begründet es die nachfolgend gewählten Wertebereiche und Genauigkeiten und gibt die Koordinaten ausgewählter Beispielwerte an.
+
+Da es INTERLIS 2 unter anderem ermöglicht, Grafiken zu beschreiben, muss es möglich sein, Farben zu spezifizieren. Eine system- und geräteneutrale Definition von "Farbe" ist jedoch erstaunlich komplex und setzt das Verständnis von Konzepten voraus, die nicht allgemein bekannt sind.
+
+Farbe ist ein Produkt aus Licht (= Farbreiz), Auge (= Farbvalenz) und Gehirnfunktion (= Sinneseindruck). Farben lassen sich eigentlich mit Zahlen nicht exakt beschreiben, sodass zwei Menschen darunter dasselbe verstehen. Es ist aber möglich, Farbwerte zu messen und sich auf eine Messung zu einigen, sodass eine präzise Verständigung unter Fachleuten möglich ist.
+
+Ein Weg zur Spezifikation von Farben als Zeichenkette sollte mehreren Anforderungen genügen:
+
+* *Geräteunabhängigkeit* — Es sollte klar definiert sein, welche Farbe mit einer bestimmten Angabe tatsächlich gemeint ist. Nur so kann sichergestellt werden, dass das Ergebnis auf allen Geräten den Erwartungen entspricht.
+
+* *Ausdrucksstärke* — Es sollte möglich sein, alle Farben zu spezifizieren, die ein „normales“ Gerät (insbesondere auch qualitativ gute Drucker und Plotter) darstellen kann. Das Spektrum spezifizierbarer Farben sollte also möglichst gross sein. Idealerweise umfasst es alle Farben, die ein Mensch wahrnehmen kann.
+
+* *Intuitivität* — Beim Lesen einer Farbangabe sollte ein Mensch intuitiv eine ungefähre Vorstellung davon erhalten, was für eine Farbe gemeint ist. Ein INTERLIS-Modell besitzt immer auch Dokumentationscharakter und sollte für Menschen ohne grösseren Aufwand verständlich sein.
+
+* *Systemneutralität* — Die Art und Weise der Farbangabe sollte kein System (GIS, Betriebssystem, Hardware) bevorzugen oder gar die Anschaffung besonderer Hilfsmittel bedingen.
+
+[unnumbered]
+== Farbraum
+Die untenstehende Tabelle fasst die Eignung verschiedener Farbräume für die Anwendung in INTERLIS-Darstellungsbeschreibungen zusammen:
+
+[#figj1]
+.Eignung verschiedener Farbräume für die Zwecke von INTERLIS.
+image::refhb24/refhb24_figj1.png[]
+
+Der letzte der in xref:figj1[xrefstyle=short] erwähnten Farbräume L* C*~ab~ h*~ab~ (d.h. L* a* b* mit Polarkoordinaten) erfüllt die oben postulierten Anforderungen am besten.
+
+[unnumbered]
+== L* a* b*
+In der grafischen Branche recht verbreitet ist der Farbraum L* a* b* (manchmal auch CIELAB genannt), der über die in xref:figj2[xrefstyle=short] beschriebene Transformation aus XYZ ableitbar ist.
+
+[#figj2]
+.Die Umrechnung von XYZ zu L* a* b*.
+image::refhb24/refhb24_figj2.png[]
+
+In die Berechnung von xref:figj2[xrefstyle=short] fliesst mit ‹Xn, Yn, Zn› ein "Referenzweiss" ein, um eine allfällige Färbung des Lichts zu kompensieren. Häufig werden die Werte von CIE-Standardlichtquellen (meist D50, gelegentlich D65) eingesetzt. Die XYZ-Koordinaten dieser Lichtquellen finden sich beispielsweise in [Sangwine/Horne, 1989], Tabelle 3.1.
+
+Dieser Raum besitzt eine Reihe von nützlichen Eigenschaften:
+
+* *Geräteunabhängigkeit* — L*a*b* ist von XYZ abgeleitet und hängt damit nicht von einem bestimmten Gerät ab. Es ist eindeutig definiert, welche Farbe zu einem L*a*b*-Tripel gehört.
+
+* *Ausdrucksstärke* — Jeder Farbe, die eine reflektierende Fläche abgeben kann, ist in L*a*b* ein Punkt zugeordnet.
+
+* *Intuitive Verständlichkeit* — L* ist die Helligkeit, wobei eine vollkommen schwarze Fläche (die keinerlei Licht reflektiert) ein L* von 0 und ein perfekter Reflektor (der alles Licht reflektiert) ein L* von 100 besitzt. Ein menschlicher Betrachter empfindet eine Farbe mit L* = 50 als mittlere Helligkeit. a* ist die Rot-Grün-Achse: Farben mit a* = 0 werden als weder rot noch grün empfunden, Farben mit negativem a* sind grün, Farben mit positivem a* rot. Analog ist b* die Blau-Gelb-Achse. Je weiter eine Farbe in der durch a* und b* aufgespannten Ebene vom Nullpunkt entfernt ist, umso gesättigter ist sie.
+
+* *Systemneutralität* — L*a*b* ist vollkommen systemneutral; als internationaler Standard ist der Farbraum unabhängig von einer bestimmten Firma.
+
+* *Zunehmende Verbreitung* — L*a*b* findet im professionellen Druck zunehmende Verbreitung. Programme wie Adobe Photoshop oder Acrobat (PDF) unterstützen den L*a*b*-Farbraum.
+
+* *Leichte Transformierbarkeit zu RGB* — L*a*b*-Tripel sind durch Multiplikation mit einer 3×3-Matrix, gefolgt von einer Potenzierung (Gammakorrektur), die effizient mittels einer Tabelle erfolgen kann, in die RGB-Werte eines beliebigen Bildschirms transformierbar (s. [Adobe, 1992], Kapitel 23). Der Aufwand für Systemimplementierer ist somit sehr gering.
+
+* *Gute Komprimierbarkeit* — Nur am Rande erwähnt sei, dass sich L*a*b* besser als RGB für verlustbehaftete Verfahren zum Komprimieren von Bildern eignet. Im Zusammenhang mit INTERLIS ist dies jedoch irrelevant.
+
+[#figj3]
+.Umrechnung vom kartesischen L*a*b*-Raum in die polare Form L* C*~ab~ h*~ab~ (nach [Sangwine/Horne, 1998]).
+image::refhb24/refhb24_figj3.png[width=400]
+
+[unnumbered]
+== L* C*~ab~ h*~ab~
+Wie oben beschrieben, entsprechen im L* a* b*-Raum die einzelnen Achsen L* (dunkel — hell), a* (grün — rot) und b* (blau — gelb unmittelbar wahrnehmbaren Eigenschaften der Farben. Die intuitive Verständlichkeit kann jedoch noch gesteigert werden, wenn die Farbkoordinaten nicht über ein kartesisches, sondern über ein polares System angegeben werden (siehe xref:figj4[xrefstyle=short]).
+
+[#figj4]
+.Der Farbraum L* C*~ab~ h*~ab~ arbeitet mit polaren Koordinaten auf L* a* b*.
+image::refhb24/refhb24_figj4.png[]
+
+Die Formel in Abbildung H.3 für h*~ab~ trifft nur für positive a* und b* zu; eine korrekte Version würde Fallunterscheidungen für die einzelnen Quadranten enthalten. Dieses polare System verbindet die intuitive Verständlichkeit von HLS und HSV mit den oben beschriebenen zahlreichen Vorteilen von L*a*b*, da nun die Achsen L* (Helligkeit, engl. _Luminance_), C* (Farbsättigung, engl. _Chroma_) und h* (Farbton, engl. _hue_) separat verfügbar sind.
+
+Sind präzise Farben-Angaben gewünscht, dann sollen diese in INTERLIS-Modellen auf der Basis dieses Farb-Koordinatensystems gemacht werden.
+
+[unnumbered]
+== Nötige Genauigkeit
+Teil eines INTERLIS-Modells ist die Angabe, mit welcher Genauigkeit numerische Grössen festzuhalten sind. Nun ist der L*a*b*-Raum so definiert, dass der Unterschied zwischen zwei Farben gerade noch wahrnehmbar ist, wenn der gemäss xref:figj5[xrefstyle=short] berechnete Wert gleich 1 ist.
+
+*Bemerkung:* [Has/Newman, o.D.] weist darauf hin, dass die Wahrnehmbarkeit von Farbunterschieden auch davon abhängt, wie viel Zeit zum Vergleich zur Verfügung steht. Der Artikel zitiert ein Experiment, bei dem gemessen wurde, wie lange ein unerfahrener Betrachter benötigt, bis er den Unterschied bemerkt. Es werden Zahlen von 5 Sekunden für ΔE~ab~ = 15, 10 Sekunden für ΔE~ab~ = 10 und 15 Sekunden für ΔE~ab~ = 5 genannt.
+
+[#figj5]
+.Berechnung des Farbunterschieds im kartesischen L* a* b*-Raum.
+image::refhb24/refhb24_figj5.png[width=300]
+
+Genauigkeit der L*-Achse: Für die Helligkeit reicht damit eine Genauigkeit von einer Nachkommastelle aus.
+
+Genauigkeit der C*~ab~- und h*~ab~-Achsen: Zwar sind a* und b* theoretisch unbeschränkt, aber in der Praxis werden Grenzen von ±128, auf ganze Zahlen gerundet, als mehr als ausreichend betrachtet (siehe [Adobe, 1992]). Welche Genauigkeit ist damit für C*~ab~ und h*~ab~ nötig, damit die Ungenauigkeit in der a*/b*-Ebene nicht grösser als 1 wird?
+
+Die durch die Winkelangabe eingeführte Ungenauigkeit steigt mit zunehmender Distanz vom Nullpunkt. Damit kann eine Genauigkeit als ausreichend erachtet werden, wenn ⟨127, 128⟩ und ⟨128, 128⟩ in der a*/b*-Ebene noch unterscheidbar sind. Wie aus xref:figj3[xrefstyle=short] ersichtlich ist, reicht für diesen extremen Fall eine Nachkommastelle aus. Es handelt sich dort um zwei gerade noch unterscheidbare Orangetöne, die allerdings so stark gesättigt sind, dass sie von kaum einem Gerät darstellbar sein dürften.
+
+[#figj6]
+.Kartesische und polare Koordinaten einer sehr weit vom Nullpunkt entfernten Farbe (zur Umrechnung siehe xref:figj3[xrefstyle=short])
+image::refhb24/refhb24_figj6.png[width=300]
+
+[unnumbered]
+== Kombination mit Namen
+Farbnamen sind einfacher als Farbcodes (d.h. Zahlen) zu benutzen, besitzen aber den Nachteil, dass nur eine beschränkte Menge von Farben verwendet werden kann. In INTERLIS sind nun Namen mit einer numerischen Spezifikation verbindbar, so dass die Benutzer ihre eigenen Farbnamen definieren und untereinander mit den üblichen INTERLIS-Mitteln austauschen können.
+
+Mit dieser Definition ist es auch möglich, dass bei Bedarf existierende Farbnamensysteme und Farbmustekataloge — wie das Pantone- oder HKS-System — mit INTERLIS dokumentiert und genutzt werden können.
+
+refhb24_root.html#_meta_modelle_und_meta_objekte
+
+Dies erfolgt durch die Definition einer Metaklasse (vgl. xref:refhb24/refhb24_root.adoc#_meta_modelle_und_meta_objekte[Meta-Modelle und Meta-Objekte im INTERLIS-2-Referenzhandbuch]). Deren Instanzen, so genannte Meta-Objekte, werden in einer besonderen Transferdatei festgehalten und vom INTERLIS-2-Compiler eingelesen. Sie stehen für INTERLIS-Datenmodelle zur Verfügung und können daher in Grafik-Definitionen benutzt werden, um beispielsweise die Farbe einer Signatur zu bestimmen.
+
+[unnumbered]
+== Einsatzbeispiel in INTERLIS-Modellen
+
+[source,interlis]
+----
+!! Bestandteil des Signaturenmodells
+INTERLIS 2.4;
+
+SYMBOLOGY MODEL SymbologyExample AT "http://www.interlis.ch/"
+  VERSION "2014-07-09" =
+
+  TOPIC Signs =
+
+    CLASS LChColor EXTENDS INTERLIS.METAOBJECT =
+      !! Attribut "Name" ererbt von INTERLIS.METAOBJECT
+      Luminance: MANDATORY 0.0 .. 100.0;
+      Chroma: MANDATORY 0.0 .. 181.1;
+      Hue: MANDATORY 0.0 .. 359.9 CIRCULAR [DEGREE] COUNTERCLOCKWISE;
+    END LChColor;
+    ...
+
+    !! Bestandteil der Signatur-Klassen-Definition im Signaturenmodell
+    CLASS BunteSignatur EXTENDS SIGN =
+      ...
+
+      PARAMETER
+        Farbe: METAOBJECT OF SymbologyExample.Signs.LChColor;
+      END PARAMETER;
+
+    END BunteSignatur;
+    ...
+  END Signs;
+  ...
+END SymbologyExample.
+----
+
+In einer benutzerdefinierten Darstellungsanweisung (hier SimplePunktGr genannt) könnte dann z.B. die Farbe einer benutzerdefinierten bunten Signatur wie folgt angegeben werden (vgl. xref:refhb24/refhb24_root.adoc#_darstellungsbeschreibungen[Darstellungsbeschreibungen im INTERLIS 2-Referenzhandbuch]):
+
+[source,interlis]
+----
+INTERLIS 2.4;
+
+MODEL SimpleGrafik AT "http://www.interlis.ch/"
+  VERSION "2014-07-09" =
+
+  IMPORTS SymbologyExample, Daten;
+
+  SIGN BASKET SimpleSigns ~ SymbologyExample.Signs =
+    OBJECTS OF Farbe: Braun;
+    OBJECTS OF BunteSignatur: Punkt;
+  END SimpleSigns;
+
+  TOPIC BuntePunktGrafik =
+    DEPENDS ON Daten.Punkte;
+
+    GRAPHIC SimpleBuntePunktGr
+      BASED ON Daten.Punkte.Punkt =
+
+      Symbol OF SymbologyExample.Signs.BunteSignatur: (
+        Sign := {Punkt};
+        Pos := Lage;
+        Farbe := {Braun};
+      );
+
+    END SimpleBuntePunktGr;
+
+  END BuntePunktGrafik;
+
+END SimpleGrafik.
+----
+
+Auf die Angabe eines kompletten Beispiels wie auch die Anzeige der nötigen Metatabelle wird hier verzichtet; es sei stattdessen auf xref:refhb24/refhb24_anhang_e.adoc[Anhang E - Das kleine Beispiel Roads] verwiesen.
+
+xref:figj7[xrefstyle=short] nennt einige Farben mitsamt ihren Koordinaten. Da unsicher ist, ob dieses Dokument auf einem System geschrieben (und wohl auch gedruckt) wurde, das in der Lage ist, Farben korrekt wiederzugeben, muss an dieser Stelle leider darauf verzichtet werden, die Farben bunt darzustellen.
+
+[#figj7]
+.Kartesische und polare Koordinaten einiger Farben.
+image::refhb24/refhb24_figj7.png[width=500]
+
+Ein konkretes Anwendungsbeispiel mit Farben-Definitionen ist im xref:refhb24/refhb24_anhang_e.adoc[Anhang E - Das kleine Beispiel Roads] zu finden.
+
+[unnumbered]
+== Hinweise für Systemimplementierer
+Den Implementierern von INTERLIS-konformen Systemen stellt sich die Frage, wie die Farbwerte aus dem geräteunabhängigen L* C*~ab~ h*~ab~-System in das Farb-Koordinatensystem eines konkreten Bildschirms oder Druckers zu transformieren sind.
+
+Ein standardisiertes Dateiformat ermöglicht es, die Farbverzerrung eines bestimmten Gerätes in Form so genannter Geräte- oder Farbprofile festzuhalten (so genanntes ICC-Profil-Format). Unter anderem enthalten diese Dateien Parameter, welche in die Umrechnung von einem geräteunabhängigen Farbraum zum gerätespezifischen Farb-Koordinatensystem einfliessen. Ersteres ist entweder XYZ oder L*a*b*, Letzteres typischerweise RGB oder CMYK. Das Format und die nötigen Umrechnungsfunktionen werden durch [ICC, 1996] definiert.
+
+Ein Systemimplementierer kann nun in seinem Produkt direkt ICC-Profile unterstützen. Das Dateiformat ist relativ einfach aufgebaut, und die Umrechnungsfunktionen sind schnell implementiert. Für einige Plattformen stehen fertige Programmbibliotheken (wie _Apple ColorSync_ oder _Kodak KCMS_) zur Verfügung.
+
+Es sei in diesem Zusammenhang darauf hingewiesen, dass PDF den Farbraum L*a*b* direkt unterstützt. PostScript ermöglicht es sogar, eigene Farbräume als beliebige Transformationen aus XYZ zu definieren. Die Umkehrfunktion der in Abbildung H.2 angegebenen Formel findet sich als Beispiel 4.11 in [Adobe, 1990]. Es ist relativ einfach, eine analoge Funktion in PostScript zu programmieren, welche direkt L* C*~ab~ h*~ab~ entgegennimmt.
+
+[unnumbered]
+== Literaturhinweise
+
+* [Adobe, 1990] Adobe Systems: *PostScript Language Reference Manual*. 2nd Ed., 1990. ISBN 0-201-18127-4. 764 Seiten.  
++
+_Das Referenzhandbuch für PostScript unter anderem auch mit Hinweisen auf die Behandlung von Farben und verschiedene Umrechnungsmethoden, die in PostScript verfügbar sind. Beispiel 4.11 auf Seite 191 definiert den L*a*b*-Farbraum in PostScript._
+
+* [Adobe, 1992] Adobe Developers Association: *TIFF Revision 6.0*.  
++
+https://partners.adobe.com/public/developer/en/tiff/TIFF6.pdf  
++
+_Kapitel 23 definiert eine Variante des TIFF-Formats für Bilder im L*a*b*-Farbraum und nennt eine Anzahl von Vorteilen gegenüber RGB. Ausserdem wird eine schnelle Methode zur Umrechnung von L*a*b* zu RGB skizziert._
+
+* [Apple, 2005] Apple Computer, Inc.: *Introduction to Color and Color Management Systems*. In: _Inside Macintosh — Managing Color with ColorSync_.  
++
+https://developer.apple.com/library/mac/documentation/GraphicsImaging/Conceptual/csintro/csintro_intro/csintro_intro.html  
++
+_Allgemein verständliche Einführung in verschiedene Farbräume, mit illustrativen Grafiken._
+
+* [Apple, 2005] Apple Computer, Inc.: *A Brief Overview Of Color*.  
++
+https://developer.apple.com/library/mac/documentation/GraphicsImaging/Conceptual/csintro/csintro_ovrvw/csintro_ovrvw.html  
++
+_Sehr kurz gehaltene, allgemein verständliche Grobeinführung in verschiedene Konzepte im Zusammenhang mit Farben. An Laien gerichtet._
+
+* [Has/Newman, o.D.] Michael Has, Todd Newman: *Color Management: Current Practice and the Adoption of a New Standard*.  
++
+http://www.color.org/wpaper1.html  
++
+_Nennt Messdaten für den Rot-, Grün- und Blaureferenzpunkt von zwei typischen Computermonitoren und zeigt, dass sie stark von den häufig zitierten xy-Werten der NTSC-Standard-Phosphorfarben abweichen. Gibt eine Transformation von XYZ zum RGB-Raum eines bestimmten Bildschirms an._
+
+* [ICC, 1996] International Color Consortium: *ICC Profile Format Specification*.  
++
+http://www.color.org/profile.html  
++
+_Definiert ein Dateiformat, mit dem beliebige Geräte im Hinblick auf ihre Farbwiedergabe charakterisiert werden können. Anhang A diskutiert verschiedene Farbräume._
+
+* [Poynton, 1997] Charles A. Poynton: *Frequently Asked Questions about Color*.  
++
+http://www.poyn
