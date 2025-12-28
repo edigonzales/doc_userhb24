@@ -1,3 +1,4 @@
+:noindex:
 === Sichten
 Sichten (Views) sind Klassen und Strukturen, deren Objekte nicht originär sondern virtuell sind, da sie aus Objekten anderer Sichten oder Klassen bzw. Strukturen abgeleitet werden. Sichten werden unter anderem dazu verwendet, die Grundlagen für Grafiken und spezielle Konsistenzbedingungen zu formulieren. Eine weitere Anwendung ist die Weitergabe der Daten an Empfängersysteme in einer abgeleiteten, in der Regel vereinfachten Form.
 

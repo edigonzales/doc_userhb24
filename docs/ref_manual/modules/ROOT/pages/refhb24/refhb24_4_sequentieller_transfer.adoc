@@ -1,3 +1,4 @@
+:noindex:
 == Sequentieller Transfer
 
 include::refhb24_4_1.adoc[]

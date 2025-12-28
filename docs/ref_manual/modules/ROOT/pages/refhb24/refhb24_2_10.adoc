@@ -1,3 +1,4 @@
+:noindex:
 === Weitere Gliederung des Referenzhandbuchs
 Im nächsten xref:_beschreibungssprache[xrefstyle=short] wird die Beschreibungssprache formal definiert. Im xref:_sequentieller_transfer[xrefstyle=short] wird der sequentielle Transfer von Geodaten spezifiziert. Dieses Kapitel enthält einen allgemeinen Teil, der für alle aktuellen und künftigen sequentiellen INTERLIS 2-Transferdienste gilt und einen speziellen Teil, der für den INTERLIS 2-Transferdienst mit XML gilt.
 

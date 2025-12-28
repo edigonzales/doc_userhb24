@@ -1,3 +1,4 @@
+:noindex:
 === Vererbung
 Verschiedene Konstrukte von INTERLIS können im Sinne der objekt-orientierten Denkweise erweitert werden: Eine erste Definition schafft die Grundlage, die dann in mehreren Schritten spezialisiert werden kann.
 

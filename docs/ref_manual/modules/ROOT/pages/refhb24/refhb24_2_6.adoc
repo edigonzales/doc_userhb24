@@ -1,3 +1,4 @@
+:noindex:
 === Grafik-Konzept
 Darstellungsbeschreibungen bauen auf Klassen oder Sichten auf und deklarieren in so genannten _Grafikdefinitionen_ (siehe xref:fig5[xrefstyle=short] und Anhang M Glossar) welche Grafiksignaturen (z.B. Punktsymbol, Linie, Flächenfüllung oder Textanschrift) den Objekten der Sicht zugeordnet werden sollen, damit ein Grafikumsetzer darstellbare Grafikobjekte erzeugen kann. Die Grafiksignaturen sind in einem eigenen Signaturenmodell definiert, wo auch die Signatur-Eigenschaften beschrieben sind.
 

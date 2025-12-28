@@ -1,3 +1,4 @@
+:noindex:
 == Beschreibungssprache
 
 include::refhb24_3_1.adoc[]

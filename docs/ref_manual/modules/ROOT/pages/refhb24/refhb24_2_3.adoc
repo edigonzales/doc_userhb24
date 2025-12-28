@@ -1,3 +1,4 @@
+:noindex:
 === Gliederung in Modelle und Thema
 In einem Modell (bzw. Schema) wird eine Vorstellung der Welt beschrieben, wie sie für eine bestimmte Anwendung von Bedeutung ist. Ein Modell ist in sich abgeschlossen, darf aber Teile von anderen Modellen verwenden oder erweitern. Ein INTERLIS-Modell ist dadurch in gewisser Weise mit den Modulen oder «Packages» mancher Programmiersprachen vergleichbar.
 

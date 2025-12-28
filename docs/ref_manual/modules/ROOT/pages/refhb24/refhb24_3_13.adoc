@@ -1,3 +1,4 @@
+:noindex:
 === Ausdrücke
 Ausdrücke (Expression) werden z.B. als Argument von Funktionen oder in Konsistenz- und Selektionsbedingungen verwendet. Bei einem logischen Ausdruck (Logical-Expression) muss der Ergebnistyp Boolean sein. Ausdrücke beziehen sich auf ein Kontextobjekt, d.h. das Objekt, für das man die Bedingung formuliert. Ausgehend von diesem kann ein Attribut, ein Strukturelement, eine Funktion, etc. angesprochen werden. Solche Gegenstände sowie Vergleichsgrössen wie Konstanten und Laufzeitparameter fliessen als Faktoren in Prädikate ein. Prädikate können mittels Operatoren zu einem Ausdruck verknüpft werden.
 

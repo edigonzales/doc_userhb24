@@ -1,3 +1,4 @@
+:noindex:
 === Übersicht
 INTERLIS dient der Zusammenarbeit von Informationssystemen, insbesondere von geografischen Informationssystemen oder Landinformationssystemen. Wie der Name sagt, steht INTERLIS zwischen (*INTER*) **L**and-**I**nfomations-**S**ystemen. Zentral hierfür ist, dass alle beteiligten Systeme eine klare Vorstellung von jenen Konzepten besitzen, die für die Zusammenarbeit relevant sind.
 

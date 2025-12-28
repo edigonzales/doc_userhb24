@@ -1,3 +1,4 @@
+:noindex:
 === Umgang mit Metaobjekten
 ==== Allgemeine Aussagen zu Metaobjekten
 Metaobjekte im Sinne von INTERLIS 2 sind Objekte, die im Rahmen der Beschreibung von Anwendungsmodellen von Bedeutung sind. Dies wird für Referenzsysteme und Grafiksignaturen genutzt.

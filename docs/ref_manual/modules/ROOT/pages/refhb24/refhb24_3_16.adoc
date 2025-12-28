@@ -1,3 +1,4 @@
+:noindex:
 === Darstellungsbeschreibungen
 Eine Darstellungsbeschreibung besteht aus Grafikdefinitionen, die immer auf einer Sicht oder einer Klasse basieren (Schlüsselwort `BASED ON`). Mit einer Grafikdefinition wird konzeptionell versucht, jedem Objekt dieser Sicht oder Klasse – sofern es nicht mit einer Selektion (Schlüsselwort `WHERE`), die sich auf die Sicht oder Klasse bezieht, noch ausgefiltert wurde – durch eine oder mehrere Zeichnungsregeln (Regel DrawingRule) je eine Grafiksignatur zuzuordnen (Punktsymbol, Linie, Flächenfüllung, Textanschrift) und damit ein oder mehrere Grafikobjekte zu erzeugen, welche die entsprechende Darstellung auslösen (siehe xref:fig5[xrefstyle=short]). Dazu muss jede Zeichnungsregel eine Grafiksignatur (mit Metaobjekt-Namen) auswählen und Argumente festlegen für die dazugehörigen Parameter.
 

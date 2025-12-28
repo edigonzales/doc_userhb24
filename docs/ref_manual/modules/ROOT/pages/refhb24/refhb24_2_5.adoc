@@ -1,3 +1,4 @@
+:noindex:
 === Sichten-Konzept
 Mit INTERLIS 2 können neben den eigentlichen Sachobjekten auch Sichten modelliert werden. Sichten sind im Prinzip virtuelle Klassen, deren Instanzen nicht Daten eines eigentlichen Gegenstandes der realen Welt sind, sondern rechnerisch aus anderen Objekten abgeleitet werden.
 

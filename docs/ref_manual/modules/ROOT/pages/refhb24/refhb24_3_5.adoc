@@ -1,3 +1,4 @@
+:noindex:
 === Modelle, Themen, Klassen
 
 ==== Modelle

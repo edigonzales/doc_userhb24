@@ -1,3 +1,4 @@
+:noindex:
 === Wertebereiche und Konstanten
 Mit der Vorstellung eines Wertebereichs sind verschiedene Aspekte verbunden. Primär muss ein Datentyp festgelegt werden. Die INTERLIS-Datentypen sind unabhängig von der Implementation. Es wird deshalb z.B. nicht von Integer oder Real, sondern einfach von numerischen Datentypen gesprochen (vgl. <<_numerische_datentypen>>).
 

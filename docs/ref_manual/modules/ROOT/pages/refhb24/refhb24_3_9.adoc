@@ -1,3 +1,4 @@
+:noindex:
 === Einheiten
 Einheiten werden immer durch eine Bezeichnung und (in [ ]-Klammern) ein Kurzzeichen beschrieben. Bezeichnung und Kurzzeichen müssen Namen sein. Fehlt die Kurzzeichen-Angabe, ist sie gleich der Bezeichnung. Je nach Art der Einheit können weitere Angaben folgen. Der Gebrauch einer Einheit erfolgt immer über das Kurzzeichen. Die Bezeichnung hat damit nur dokumentarischen Charakter.
 

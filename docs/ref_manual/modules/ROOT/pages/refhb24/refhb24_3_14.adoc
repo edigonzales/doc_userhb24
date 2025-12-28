@@ -1,3 +1,4 @@
+:noindex:
 === Funktionen
 Eine Funktion wird mittels ihrem Namen, den formalen Parametern sowie einer kurzen Funktionsbeschreibung als Erläuterung definiert. Die Namen der Parameter haben nur dokumentarischen Wert.
 

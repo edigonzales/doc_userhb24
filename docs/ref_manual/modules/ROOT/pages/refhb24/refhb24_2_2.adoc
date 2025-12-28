@@ -1,3 +1,4 @@
+:noindex:
 === Nutzung von Modellen
 Ein INTERLIS-Modell (bzw. INTERLIS-Schema) ist primär eine Verständigungshilfe für Anwender. Die Sprache ist so gestaltet, dass ein Modell leicht von Menschen gelesen werden kann. Dennoch sind INTERLIS-Modelle präzis, eindeutig und ohne Missverständnisse interpretierbar. Die textuelle INTERLIS-Sprache bietet sich daher geradezu an als notwendige Ergänzung der grafischen Beschreibungssprache Unified Modeling Language (UML, www.omg.org/uml).
 

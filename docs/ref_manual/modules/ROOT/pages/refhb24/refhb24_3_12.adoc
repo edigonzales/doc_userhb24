@@ -1,3 +1,4 @@
+:noindex:
 === Konsistenzbedingungen
 Konsistenzbedingungen dienen der Definition von Einschränkungen, welchen die Objekte genügen müssen.
 

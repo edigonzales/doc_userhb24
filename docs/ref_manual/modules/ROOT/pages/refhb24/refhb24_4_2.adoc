@@ -1,3 +1,4 @@
+:noindex:
 === Allgemeine Regeln für den sequentiellen Transfer
 
 ==== Ableitbarkeit aus dem Datenmodell

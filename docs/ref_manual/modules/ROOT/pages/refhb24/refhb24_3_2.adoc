@@ -1,3 +1,4 @@
+:noindex:
 === Grundsymbole der Sprache
 Die Beschreibungssprache weist die folgenden Symbol-Klassen auf: Namen, Zeichenketten, Zahlen, Erläuterungen, Sonderzeichen, reservierte Wörter und Kommentare.
 

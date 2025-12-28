@@ -1,3 +1,4 @@
+:noindex:
 === Objekt-Konzept
 
 ==== Objekte und Klassen

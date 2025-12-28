@@ -1,3 +1,4 @@
+:noindex:
 === Dienste, Werkzeugfähigkeit und Konformität
 INTERLIS 2 ermöglicht die konzeptionelle Beschreibung von Daten und definiert einen systemneutralen Daten-Transfer. INTERLIS 2 verzichtet bewusst darauf, die Implementation vorzuschreiben und bleibt damit systemunabhängig. In der Praxis wird sich damit häufig die Frage stellen, ob ein bestimmtes Werkzeug oder ein bestimmter Dienst INTERLIS 2-konform ist oder nicht.
 

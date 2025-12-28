@@ -1,3 +1,4 @@
+:noindex:
 === Umgang mit Rundung von numerischen Werten und Koordinaten
 
 In INTERLIS wird von numerischen Werten, von Punkten, Linien und Flächen / Flächennetzen gesprochen. Dabei kann definiert werden, welche Stellenzahl die Werte aufweisen sollen. Da INTERLIS nicht in die Systeme hinein regulieren will, ist es den Systemen überlassen, wie sie die Werte (Zahlen, Koordinaten) intern speichern. Die Speicherung muss nur in der Lage sein, Werte gemäss der Wertebereichdefinition festzuhalten.
