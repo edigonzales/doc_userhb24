@@ -1,7 +1,7 @@
 [unnumbered]
 = Anhang A (normativ) – Das interne INTERLIS-Datenmodell
 
-Im Folgenden ist das gesamte interne Datenmodell nochmals zusammenfassend abgebildet.Dieses Modell dient nur zur Illustration und ist nicht kompilierbar (weil zum Beispiel Namen verwendet werden, die gemäss Sprachdefinition Schlüsselwörter sind (vgl. Kapitel 3.2.7 Sonderzeichen und reservierte Wörter)). Einer INTERLIS verarbeitenden Software, z.B. dem von KOGIS zur Verfügung gestellten INTERLIS-Compiler, müssen die Elemente des Modells bekannt sein.
+Im Folgenden ist das gesamte interne Datenmodell nochmals zusammenfassend abgebildet.Dieses Modell dient nur zur Illustration und ist nicht kompilierbar (weil zum Beispiel Namen verwendet werden, die gemäss Sprachdefinition Schlüsselwörter sind (vgl. xref:refhb24/refhb24_root.adoc#_sonderzeichen_und_reservierte_wörter[Sonderzeichen und reservierte Wörter])). Einer INTERLIS verarbeitenden Software, z.B. dem von KOGIS zur Verfügung gestellten INTERLIS-Compiler, müssen die Elemente des Modells bekannt sein.
 
 [source,interlis]
 ----

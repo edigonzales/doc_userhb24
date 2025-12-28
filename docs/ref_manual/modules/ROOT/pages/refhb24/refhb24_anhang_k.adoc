@@ -1,0 +1,794 @@
+[unnumbered]
+= Anhang K (Standard-Erweiterungsvorschlag) - Koordinatensysteme und Koordinaten-Referenzsysteme
+
+[unnumbered]
+== Bemerkung
+
+Die folgende Spezifikation ist nicht normativer Bestandteil von INTERLIS. Dies ist ein Standard-Erweiterungsvorschlag auf der Basis des INTERLIS-2-Referenzhandbuches im Sinne einer Empfehlung. Es ist geplant, diesen Vorschlag nach einer breiten Diskussion in eine definitive Regelung umzuwandeln. Für Anwendungsbeispiele siehe auch die entsprechenden INTERLIS-2-Benutzerhandbücher.
+
+[unnumbered]
+== Einleitung
+
+Koordinaten beschreiben die Position eines Punktes in einem Raum, für den ein Koordinatensystem eingeführt ist. Ist ein Koordinatensystem bezüglich der Erde fest positioniert – man sagt auch: gelagert – dann nennt man es ein Koordinaten-Referenzsystem. Durch Koordinaten werden aber nicht nur Positionen festgehalten, sondern auch metrische Grössen, die aus Koordinaten ableitbar sind. Dazu gehören unter anderem Distanzen, Flächen, Volumen, Winkel und Richtungen, sowie weitere Eigenschaften wie Steigungen und Krümmungen.
+
+Es gibt eine Vielzahl von Klassen (Typen) von Koordinatensystemen, und eine noch viel grössere Anzahl von Objekten, d.h. von Realisierungen (Instanzen) von Koordinatensystemen (siehe z.B. [Voser 1999]). Die schweizerischen Landeskoordinaten beispielsweise stützen sich auf eine besondere Instanz (Objekt) eines Koordinaten-Referenzsystems [Gubler et al. 1996], das über eine Kartenprojektion aus einem geodätischen Referenzsystem hergeleitet werden kann [Snyder 1987, Bugayevskiy 1995]. Diese geodätischen Referenzsysteme bilden eine eigene Kategorie von Koordinaten-Referenzsystemen, welche die Geometrie eines Erdmodells beschreiben. Dabei wird z.B. zur Beschreibung der 2-dimensionalen Lage eine Kugel oder ein Ellipsoid zu Hilfe genommen und auf deren Oberfläche werden geografische Koordinaten definiert. Etwas komplizierter sieht es für die Höhe aus: Als geometrisch-physikalisches Erdmodell wird das Geoid [Marti 1997] bzw. ein Schwere­modell [Torge 1975] verwendet, welches orthometrische bzw. normale Höhen definiert. Doch oft sind in der Praxis nur Gebrauchshöhen in Verwendung.
+
+Da Geodaten von Geomatik-Anwendungen einen Raumbezug aufweisen, muss jedem Geodatensatz ein Koordinatensystem zu Grunde liegen. Da sich einzelne Koordinatensysteme wesentlich voneinander unterscheiden, so ist es notwendig, entsprechende Referenzdaten mit den Geodaten mitzuliefern. Aus diesem Grund ermöglicht auch INTERLIS, diese Daten zum Koordinatensystem zu beschreiben.
+
+Erst durch die Kenntnis des zu Grunde liegenden Koordinatensystems wird es möglich, die darin beschriebenen Geodaten in ein anderes Koordinatensystem überzuführen. Dies wiederum ist notwendig, um Geodaten, welche in unterschiedlichen Koordinatensystemen vorliegen, gemeinsam nutzen zu können [Voser 1996].
+
+Wir betrachten zuerst Koordinatensysteme allgemeiner Art, dann die Beziehungen (Abbildungen) zwischen (allgemeinen) Koordinatensystemen, und anschliessend führen wir die Koordinaten-Referenzsysteme ein und beschäftigen uns damit.
+
+[unnumbered]
+== Koordinatensysteme
+
+Ein _Koordinatensystem_ ermöglicht es, einen metrischen Raum «auszumessen». Ein Koordinatensystem hat einen Ursprung, Koordinatenachsen (deren Anzahl der Dimension des aufgespannten Raumes entspricht), sowie Masseinheiten, die den Achsen zugeordnet sind. Je nachdem es sich bei dem aufgespannten Raum um einen 1-, 2- oder 3-dimensionalen Raum handelt, wird durch das Koordinatensystem jedem Punkt des Raumes eine Einzelzahl, ein Zahlenpaar oder ein Zahlentripel als Koordinate(n) zugeordnet.
+
+Der Euklidische 1-, 2- bzw. 3-dimensionale Raum ist definiert durch seine 1, 2 bzw. 3 geraden Achsen. Gekrümmte Räume brauchen zusätzliche Parameter zur Definition der Einbettung ihrer gekrümmten Achsen in einen Euklidischen Raum. Für geodätische Zwecke braucht man neben den Euklidischen Räumen verschiedener Dimension noch die 2-dimensionalen ellipsoidischen Räume sowie verschiedene Höhensysteme, welche als spezielle 1-dimensionale Euklidische Räume behandelt werden. Für diese braucht man das Schweremodell oder das Geoid.
+
+Etwas abweichend vom bisherigen Gebrauch in der Geodäsie verwenden wir den Begriff _geodätisches Datum_ als Synonym für _geodätisches Referenzsystem_ und bezeichnen damit nichts anderes als ein besonderes Koordinatensystem, nämlich ein 3-dimensionales kartesisches Koordinatensystem, das bezüglich der Erde positioniert ist. Das kann auf zwei Arten geschehen:
+
+a. Man definiert das mittlere Gravitationszentrum der Erde als Nullpunkt des Koordinatensystems, die erste Achse durch die mittlere Rotationsachse der Erde, die zweite Achse senkrecht dazu durch den mittleren Meridian von Greenwich, und die dritte Achse senkrecht zu den beiden ersten, so dass insgesamt ein rechtsdrehendes System entsteht. So wird z.B. das Koordinatensystem WGS84 definiert.
+
+b. Die Erdoberfläche eines bestimmten Gebietes (meist eines Landes) wird optimal angenähert durch eine Kugel oder ein Rotationsellipsoid, dessen Drehachse parallel zur mittleren Rotationsachse der Erde verläuft. Dieses Rotationsellipsoid definiert ein kartesisches Koordinatensystem durch seine kleine Halbachse parallel zur Drehachse, durch eine seiner grossen Halbachsen und durch eine dritte Achse senkrecht zu den beiden ersten, so dass wiederum ein rechtsdrehendes System entsteht.
+
+Ein gemäss (a) oder (b) auf der Erde positioniertes 3-dimensionales kartesisches Koordinatensystem nennen wir _geodätisches Datum_ oder _geodätisches Referenzsystem_.
+
+[unnumbered]
+== Unterschiedliche Herkunft von Koordinatensystemen in der Geomatik
+
+Sehr unterschiedliche Gründe führen zur Definition von Koordinatensystemen in der Geomatik:
+
+* *Sensorik:* Die Datenerfassung der klassischen Geodäsie (z.B. mit dem Theodolit) aber auch Photogrammetrie und Fernerkundung verwenden in ihren Erfassungssensoren das der jeweiligen Methode entsprechende (lokale) Koordinatensystem für die Erfassung.
+
+* *Geopositionierung:* Die Positionsbeschreibung auf der Erde mit Hilfe eines (geodätischen) Erdmodells. Es gibt dabei drei Arten von (geodätischen) Erdmodellen [Voser 1999]:
+
+** _physikalisch:_ Das Erdmodell wird durch das Schwerefeld beschrieben oder durch das Geoid.
+** _mathematisch:_ Das Erdmodell ist ein symmetrischer Körper (z.B. eine Kugel oder ein Ellipsoid).
+** _topografisch:_ Das Erdmodell berücksichtigt auch Gebirge und Täler (Geländeoberflächenmodell).
+
+Den genannten Erdmodellen entsprechen unterschiedliche Koordinatensysteme.
+
+*Kartenpositionierung:* Da die Oberflächen der genannten Erdmodelle gekrümmte oder noch komplexere Gestalt annehmen, wird die Berechnung von Distanzen, Winkeln etc. sehr schwierig. Aus diesem Grund verwendet man Kartenprojektionen, welche die 2-dimensionale Fläche in eine Ebene abbilden. Eine Kartenprojektion ist eine geometrisch klar definierte Abbildungsvorschrift von der Oberfläche eines mathematischen Erdmodells in die Ebene. Bei diesem Vorgang treten Verzerrungen auf. Diese sind jedoch im Voraus bestimmbar und kontrollierbar.
+
+[unnumbered]
+== Abbildungen zwischen Koordinatensystemen
+
+Da viele Geodaten in unterschiedlichen Koordinatensystemen erfasst werden, oder von unterschiedlichen Institutionen in anderen Systemen verwaltet werden, ist es notwendig, die Methoden zu kennen, um die in einem Ausgangs-Koordinatensystem A vorliegenden Daten in ein gewünschtes Ziel-Koordinatensystem Z umzurechnen. Diese Umrechnung nennt man Abbildung des Koordinatensystems A bzw. des durch A definierten Raumes ins Koordinatensystem Z bzw. in den durch Z definierten Raum. Die Abbildung zwischen zwei Koordinatensystemen bzw. zwischen den beiden durch sie definierten Räumen ist bestimmt durch die Klassen der beiden Koordinatensysteme.
+
+Es sind zwei wesentlich verschiedene Abbildungen von Koordinatensystemen zu unterscheiden, wenn man die Herkunft der Formeln und ihrer Parameter in Betracht zieht, nämlich Konversionen und Transformationen.
+
+Eine _Konversion_ ist eine durch Formeln und deren Parameter fest definierte Abbildung zwischen zwei Koordinatensystemen. Die Formeln und vor allem die Werte der notwendigen Parameter sind im Voraus festgelegt [Voser 1999]. Zu den Konversionen gehören beispielsweise die Kartenprojektionen, das heisst z.B. die Abbildungen von der Ellipsoidoberfläche in die Ebene. Ebenfalls in die Kategorie der Konversionen fällt die Umrechnung von ellipsoidischen Koordinaten in die zugehörigen kartesischen Koordinaten mit dem Ursprung im Ellipsoidzentrum oder umgekehrt.
+
+Als _Transformation_ bezeichnet man eine Abbildung zwischen zwei Koordinatensystemen, wenn die Abbildungsvorschrift (Formel) auf Grund von Annahmen (Hypothesen) festgelegt wird und die Parameter durch statistische Analyse von Messungen in beiden Koordinatensystemen ermittelt werden [Voser 1999]. Typische Transformationen werden beim Übergang zwischen unterschiedlichen geodätischen Erdmodellen vorgenommen (geodätische Datumstransformationen), oder bei der Einpassung lokaler Koordinaten in übergeordnete Systeme, wie beispielsweise beim Digitalisieren die Umrechnung von Blatt- oder Digitalisiertisch-Koordinaten in Projektionskoordinaten.
+
+[unnumbered]
+== Koordinaten-Referenzsysteme
+
+Koordinaten-Referenzsystem heisst ein Koordinatensystem, das über eine Folge von Zwischen-Koordinatensystemen durch Konversionen aus einem geodätischen Referenzsystem (d.h. aus einem geodätischen Datum) hergeleitet werden kann.
+
+Die geodätischen Referenzsysteme (oder geodätischen Datums) sind selbst die wichtigsten Koordinaten-Referenzsysteme. Diese beziehen sich auf ein geodätisches Erdmodell (siehe oben).
+
+[unnumbered]
+== Übersicht wichtiger Koordinaten-Referenzsysteme
+
+In der xref:figk1[xrefstyle=short] unten sind einige wichtige geodätische und kartografische Ausprägungen von Koordinaten-Referenzsystemen dargestellt. Am Anfang der Folge von Koordinatensystemen und Abbildungen steht die Erde. Man versucht dieser ein geometrisches Erdmodell zuzuweisen, um damit Positionen auf ihr zu beschreiben. Zunächst kann man der Erde als Ganzes ein 3-dimensionales kartesisches Koordinatensystem zuordnen mit Nullpunkt im Gravitationszentrum der Erde (siehe Methode (a) im Kapitel Koordinatensysteme weiter oben). In der Folge bearbeitet man allerdings die Lage und die Höhe eines Punktes unabhängig voneinander. Betrachten wir zunächst nur, was zur Bestimmung der Lage zu unternehmen ist: Aus geodätischen Messungen werden die Grösse und die Form eines Rotationsellipsoides bestimmt, das die Erdoberfläche lokal optimal annähert. Diesem Rotationsellipsoid kann nach der Methode (b) im Kapitel Koordinatensysteme ein geodätisches Datum zugeordnet werden. Viele der für nationale Landesvermessungen ausgewählten Erdmodelle sind «lokal» gelagert, d.h. so, dass der Mittelpunkt des Ellipsoides nicht mit dem Gravitationszentrum der Erde (Schwerpunkt, physikalischer Erdmittelpunkt) zusammenfällt. Nun gibt es aber, wie wir oben ((a) im Kapitel Koordinatensysteme) gesehen haben, geodätische Referenzsysteme, welche im Schwerpunkt gelagert sind. Aus diesem Grund ist es heutzutage relativ einfach möglich, die Parameter der Datums-Transformation zu einem solch übergeordneten System zu bestimmen. Hat man sich für ein lokales Rotationsellipsoid entschieden, so kann andererseits dessen Oberfläche je nach Anforderung durch eine geeignete Kartenprojektion in eine Ebene abgebildet werden.
+
+[#figk1]
+.Von der Erdoberfläche zu zweidimensionalen Lagekoordinaten.
+image::refhb24/refhb24_figk1.png[]
+
+[unnumbered]
+== Datenstruktur für Koordinatensysteme und Abbildungen zwischen diesen
+
+Das vorgeschlagene konzeptionelle Schema für die Daten, welche zur Beschreibung von Koordinatensystemen und von Abbildungen zwischen diesen benötigt werden, beschränkt sich bewusst _nicht_ auf Koordinaten-Referenzsysteme sondern ist allgemein für Koordinatensysteme konzipiert. Denn auch beispielsweise Digitalisiertisch- und Bildschirm-Koordinatensysteme oder Signaturen-Koordinatensysteme ohne expliziten Bezug zur Erdoberfläche sollen beschrieben werden können.
+
+Koordinatensysteme und Abbildungen zwischen diesen sind die beiden Schlüsselkonzepte für die exakte Charakterisierung der räumlichen Referenzierung von Geodaten. Entsprechend weist das konzeptionelle Modell (oder konzeptionelle Schema) der Datenstruktur zwei Hauptgruppen von Klassen auf, nämlich «Coordinate systems for geodetic purposes» und «Mappings between coordinate systems». Die dritte Dimension, Höhe, wird wie folgt bearbeitet: In einem 3-dimensionalen kartesischen Koordinatensystem ist die Höhe implizit integriert als dritte Koordinate. Aber Koordinatensysteme des täglichen Gebrauchs sind normalerweise die Kombination eines 2-dimensionalen Lage-Koordinatensystems und eines zusätzlichen 1-dimensionalen Höhensystems. Die Daten von Koordinatensystemen dieses Typs werden beschrieben durch zwei unabhängige Datensätze, zunächst durch die Daten eines 2-dimensionalen Koordinatensystems (2-dimensional kartesisch oder ellipsoidisch) und zusätzlich durch die Daten eines Höhensystems von passendem Typ (normal, orthometrisch oder ellipsoidisch).
+
+Wie werden mit Hilfe der vorgeschlagenen Datenstrukturen Abbildungen zwischen Koordinatensystemen realisiert? Auf die folgende Art: Koordinatensysteme bilden die Knoten und Abbildungen zwischen ihnen bilden die Kanten in einer Graphenstruktur. Im DOMAIN-Abschnitt eines Anwendungsmodells (Anwendungsschemas) findet man den Namen des verwendeten Koordinatensystems. Sollen nun die gegebenen Koordinaten auf ein anderes Koordinatensystem abgebildet werden oder sind beispielsweise GeoTIFF-Parameter zu berechnen, die einer solchen Abbildung entsprechen, dann hat ein geeignetes Programm in der Graphenstruktur von Koordinatensystemen und Abbildungen den kürzesten Weg zu finden vom Knoten des gegebenen Koordinatensystems (gemäss DOMAIN) zum Knoten des Zielsystems und dann die nötigen Abbildungen zu berechnen, vom Ausgangssystem über evtl. Zwischen-Koordinatensysteme bis zum Zielsystem.
+
+Für die Beschreibung von Koordinatensystemen stellt INTERLIS zwei interne Klassen und Schlüsselwörter zur Verfügung, nämlich: AXIS und COORDSYSTEM. Diese kommen im konzeptionellen Datenmodell (dem Koordinatensystem-Modell oder Koordinatensystem-Schema) "CoordSys" zum Einsatz (siehe unten). Details dazu sind zu finden im xref:refhb24/refhb24_root.adoc#_referenzsysteme[Referenzsysteme im INTERLIS-2-Referenzhandbuch].
+
+[unnumbered]
+== Literaturhinweise
+
+* [Bugayevskiy 1995] Bugayevskiy, Lev M.; Snyder, John P.: *Map Projections, A Reference Manual*. Taylor & Francis, London, Bristol, 1995.
+
+* [Gubler et al. 1996] Gubler, E.; Gutknecht, D.; Marti, U.; Schneider, D.; Signer, Th.; Vogel, B.; Wiget, A.: *Die neue Landesvermessung der Schweiz LV95*. VPK 2/96.
+
+* [Marti 1997] Marti, Urs: *Geoid der Schweiz 1997*. Geodätisch-geophysikalische Arbeiten in der Schweiz, Schweizerische Geodätische Kommission, Volume 56, Zürich, 1997.
+
+* [Torge 1975] Torge, Wolfgang: *Geodäsie*. Sammlung Göschen 2163, de Gruyter, Berlin – New York, 1975.
+
+* [Snyder 1987] Snyder, John P.: *Map Projections – A Working Manual*. U.S. Geological Survey Professional Paper 1395, Washington, 1987.
+
+* [Voser 1996] Voser, Stefan A.: *Anforderungen an die Geometrie zur gemeinsamen Nutzung unterschiedlicher Datenquellen*. 4. deutsche Arc/Info-Anwender-Konferenz, Proceedings, März 1996, Freising.
+
+* [Voser 1999] Voser, Stefan A.: *MapRef – The Internet Collection of Map Projections and Reference Systems for Europe*. 14. ESRI European User Conference, Presentation and Proceedings, 15.–17. Nov. 1999, Munich.  
++
+https://www.mapref.org/
+
+[unnumbered]
+== Das Referenzsystem-Modell
+Datenstruktur für Koordinatensysteme und Koordinaten-Referenzsysteme sowie Abbildungen zwischen ihnen. Konzeptionelles Datenmodell (konzeptionelles Schema) mit INTERLIS.
+
+[source,interlis]
+----
+!! File CoordSys.ili Release 2014-07-09
+INTERLIS 2.4;
+
+REFSYSTEM MODEL CoordSys (en) AT "http://www.interlis.ch/models/refhb24"
+  VERSION "2014-07-09" =
+
+  UNIT
+    Angle_Degree = 180 / PI [INTERLIS.rad];
+    Angle_Minute = 1 / 60 [Angle_Degree];
+    Angle_Second = 1 / 60 [Angle_Minute];
+  END UNIT;
+
+  STRUCTURE Angle_DMS_S =
+    Degrees: -180 .. 180 CIRCULAR [Angle_Degree];
+    CONTINUOUS SUBDIVISION Minutes: 0 .. 59 CIRCULAR [Angle_Minute];
+    CONTINUOUS SUBDIVISION Seconds: 0.000 .. 59.999 CIRCULAR [Angle_Second];
+  END Angle_DMS_S;
+
+  DOMAIN
+    Angle_DMS = FORMAT BASED ON Angle_DMS_S (Degrees ":" Minutes ":" Seconds);
+    Angle_DMS_90 EXTENDS Angle_DMS = "-90:00:00.000" .. "90:00:00.000";
+  END DOMAIN;
+
+  TOPIC CoordsysTopic =
+
+    !! Special space aspects to be referenced
+    !! **************************************
+
+    CLASS Ellipsoid EXTENDS INTERLIS.REFSYSTEM =
+      EllipsoidAlias: TEXT*70;
+      SemiMajorAxis: MANDATORY 6360000.0000 .. 6390000.0000 [INTERLIS.m];
+      InverseFlattening: MANDATORY 0.00000000 .. 350.00000000;
+      !! The inverse flattening 0 characterizes the 2-dim sphere
+      Remarks: TEXT*70;
+    END Ellipsoid;
+
+    CLASS GravityModel EXTENDS INTERLIS.REFSYSTEM =
+      GravityModAlias: TEXT*70;
+      Definition: TEXT*70;
+    END GravityModel;
+
+    CLASS GeoidModel EXTENDS INTERLIS.REFSYSTEM =
+      GeoidModAlias: TEXT*70;
+      Definition: TEXT*70;
+    END GeoidModel;
+
+    !! Coordinate systems for geodetic purposes
+    !! ****************************************
+
+    STRUCTURE LengthAXIS EXTENDS INTERLIS.AXIS =
+      ShortName: TEXT*12;
+      Description: TEXT*255;
+      PARAMETER
+        Unit (EXTENDED): NUMERIC [INTERLIS.LENGTH];
+      END PARAMETER;
+    END LengthAXIS;
+
+    STRUCTURE AngleAXIS EXTENDS INTERLIS.AXIS =
+      ShortName: TEXT*12;
+      Description: TEXT*255;
+      PARAMETER
+        Unit (EXTENDED): NUMERIC [INTERLIS.ANGLE];
+      END PARAMETER;
+    END AngleAXIS;
+
+    CLASS GeoCartesian1D EXTENDS INTERLIS.COORDSYSTEM =
+      Axis (EXTENDED): LIST {1} OF LengthAXIS;
+    END GeoCartesian1D;
+
+    CLASS GeoHeight EXTENDS GeoCartesian1D =
+      System: MANDATORY (
+        normal,
+        orthometric,
+        ellipsoidal,
+        other
+      );
+      ReferenceHeight: MANDATORY -10000.000 .. +10000.000 [INTERLIS.m];
+      ReferenceHeightDescr: TEXT*70;
+    END GeoHeight;
+
+    ASSOCIATION HeightEllips =
+      GeoHeightRef -- {*} GeoHeight;
+      EllipsoidRef -- {1} Ellipsoid;
+    END HeightEllips;
+
+    ASSOCIATION HeightGravit =
+      GeoHeightRef -- {*} GeoHeight;
+      GravityRef -- {1} GravityModel;
+    END HeightGravit;
+
+    ASSOCIATION HeightGeoid =
+      GeoHeightRef -- {*} GeoHeight;
+      GeoidRef -- {1} GeoidModel;
+    END HeightGeoid;
+
+    CLASS GeoCartesian2D EXTENDS INTERLIS.COORDSYSTEM =
+      Definition: TEXT*70;
+      Axis (EXTENDED): LIST {2} OF LengthAXIS;
+    END GeoCartesian2D;
+
+    CLASS GeoCartesian3D EXTENDS INTERLIS.COORDSYSTEM =
+      Definition: TEXT*70;
+      Axis (EXTENDED): LIST {3} OF LengthAXIS;
+    END GeoCartesian3D;
+
+    CLASS GeoEllipsoidal EXTENDS INTERLIS.COORDSYSTEM =
+      Definition: TEXT*70;
+      Axis (EXTENDED): LIST {2} OF AngleAXIS;
+    END GeoEllipsoidal;
+
+    ASSOCIATION EllCSEllips =
+      GeoEllipsoidalRef -- {*} GeoEllipsoidal;
+      EllipsoidRef -- {1} Ellipsoid;
+    END EllCSEllips;
+
+    !! Mappings between coordinate systems
+    !! ***********************************
+
+    ASSOCIATION ToGeoEllipsoidal =
+      From -- {0..*} GeoCartesian3D;
+      To -- {0..*} GeoEllipsoidal;
+      ToHeight -- {0..*} GeoHeight;
+
+      MANDATORY CONSTRAINT
+        ToHeight -> System == #ellipsoidal;
+
+      MANDATORY CONSTRAINT
+        To -> EllipsoidRef -> Name == ToHeight -> EllipsoidRef -> Name;
+    END ToGeoEllipsoidal;
+
+    ASSOCIATION ToGeoCartesian3D =
+      From2 -- {0..*} GeoEllipsoidal;
+      FromHeight -- {0..*} GeoHeight;
+      To3 -- {0..*} GeoCartesian3D;
+
+      MANDATORY CONSTRAINT
+        FromHeight -> System == #ellipsoidal;
+
+      MANDATORY CONSTRAINT
+        From2 -> EllipsoidRef -> Name == FromHeight -> EllipsoidRef -> Name;
+    END ToGeoCartesian3D;
+
+    ASSOCIATION BidirectGeoCartesian2D =
+      From -- {0..*} GeoCartesian2D;
+      To -- {0..*} GeoCartesian2D;
+    END BidirectGeoCartesian2D;
+
+    ASSOCIATION BidirectGeoCartesian3D =
+      From -- {0..*} GeoCartesian3D;
+      To2 -- {0..*} GeoCartesian3D;
+      Precision: MANDATORY (
+        exact,
+        measure_based
+      );
+      ShiftAxis1: MANDATORY -10000.000 .. 10000.000 [INTERLIS.m];
+      ShiftAxis2: MANDATORY -10000.000 .. 10000.000 [INTERLIS.m];
+      ShiftAxis3: MANDATORY -10000.000 .. 10000.000 [INTERLIS.m];
+      RotationAxis1: Angle_DMS_90;
+      RotationAxis2: Angle_DMS_90;
+      RotationAxis3: Angle_DMS_90;
+      NewScale: 0.000001 .. 1000000.000000;
+    END BidirectGeoCartesian3D;
+
+    ASSOCIATION BidirectGeoEllipsoidal =
+      From4 -- {0..*} GeoEllipsoidal;
+      To4 -- {0..*} GeoEllipsoidal;
+    END BidirectGeoEllipsoidal;
+
+    ASSOCIATION MapProjection (ABSTRACT) =
+      From5 -- {0..*} GeoEllipsoidal;
+      To5 -- {0..*} GeoCartesian2D;
+      FromCo1_FundPt: MANDATORY Angle_DMS_90;
+      FromCo2_FundPt: MANDATORY Angle_DMS_90;
+      ToCoord1_FundPt: MANDATORY -10000000 .. +10000000 [INTERLIS.m];
+      ToCoord2_FundPt: MANDATORY -10000000 .. +10000000 [INTERLIS.m];
+    END MapProjection;
+
+    ASSOCIATION TransverseMercator EXTENDS MapProjection =
+    END TransverseMercator;
+
+    ASSOCIATION SwissProjection EXTENDS MapProjection =
+      IntermFundP1: MANDATORY Angle_DMS_90;
+      IntermFundP2: MANDATORY Angle_DMS_90;
+    END SwissProjection;
+
+    ASSOCIATION Mercator EXTENDS MapProjection =
+    END Mercator;
+
+    ASSOCIATION ObliqueMercator EXTENDS MapProjection =
+    END ObliqueMercator;
+
+    ASSOCIATION Lambert EXTENDS MapProjection =
+    END Lambert;
+
+    ASSOCIATION Polyconic EXTENDS MapProjection =
+    END Polyconic;
+
+    ASSOCIATION Albus EXTENDS MapProjection =
+    END Albus;
+
+    ASSOCIATION Azimutal EXTENDS MapProjection =
+    END Azimutal;
+
+    ASSOCIATION Stereographic EXTENDS MapProjection =
+    END Stereographic;
+
+    ASSOCIATION HeightConversion =
+      FromHeight -- {0..*} GeoHeight;
+      ToHeight -- {0..*} GeoHeight;
+      Definition: TEXT*70;
+    END HeightConversion;
+
+  END CoordsysTopic;
+
+END CoordSys.
+----
+
+Die Datei MiniCoordSysData, deren Namen in MetadataBasketDef vorkommen kann, enthält die folgenden Daten im INTERLIS 2-Transferformat.
+
+[source,interlis]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<ili:transfer xmlns:ili="http://www.interlis.ch/xtf/2.4/INTERLIS" xmlns:geom="http://www.interlis.ch/geometry/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.interlis.ch/xtf/2.4/CoordSys">
+  <ili:headersection>
+    <ili:models>
+      <ili:model>CoordSys</ili:model>
+    </ili:models>
+    <ili:sender>KOGIS</ili:sender>
+    <ili:comment>example dataset ili2 refmanual appendix K</ili:comment>
+  </ili:headersection>
+  <ili:datasection>
+    <CoordsysTopic ili:bid="BCoordSys">
+      <Ellipsoid ili:tid="BCoordSys.Bessel">
+        <ili:Name>Bessel</ili:Name>
+        <EllipsoidAlias>Bessel (1841)</EllipsoidAlias>
+        <SemiMajorAxis>6377397.1550</SemiMajorAxis>
+        <InverseFlattening>299.1528128</InverseFlattening>
+        <Remarks>Documentation swisstopo 19031266</Remarks>
+      </Ellipsoid>
+      <Ellipsoid ili:tid="BCoordSys.ETRS">
+        <ili:Name>ETRS</ili:Name>
+        <EllipsoidAlias>ETRS 89</EllipsoidAlias>
+        <SemiMajorAxis>6378137.000</SemiMajorAxis>
+        <InverseFlattening>298.2572235</InverseFlattening>
+        <Remarks>EUREF documentation</Remarks>
+      </Ellipsoid>
+      <GravityModel ili:tid="BCoordSys.SwissGravityNetwork2004">
+        <ili:Name>SwissGravityNetwork2004</ili:Name>
+        <Definition>See documentation swisstopo Landesschwerenetz</Definition>
+      </GravityModel>
+      <GravityModel ili:tid="BCoordSys.UEGN2002">
+        <ili:Name>UEGN2002</ili:Name>
+        <Definition>EGG07 documentation IAG Symposium Series Vol 133</Definition>
+      </GravityModel>
+      <GeoidModel ili:tid="BCoordSys.CHGeoid2004">
+        <ili:Name>CHGeoid2004</ili:Name>
+        <Definition>See new Swiss Geoid swisstopo</Definition>
+      </GeoidModel>
+      <GeoidModel ili:tid="BCoordSys.EGG">
+        <ili:Name>EGG</ili:Name>
+        <Definition>EGG07 documentation IAG Symposium Series Vol 133</Definition>
+      </GeoidModel>
+      <GeoHeight ili:tid="BCoordSys.SwissOrthometricAlt">
+        <ili:Name>SwissOrthometricAlt</ili:Name>
+        <ili:Axis>
+          <LengthAXIS>
+            <ShortName>h</ShortName>
+            <Description>Swiss Orthometric Altitude</Description>
+          </LengthAXIS>
+        </ili:Axis>
+        <System>orthometric</System>
+        <ReferenceHeight>373.600</ReferenceHeight>
+        <ReferenceHeightDescr>Pierre du Niton</ReferenceHeightDescr>
+        <EllipsoidRef ili:ref="BCoordSys.Bessel"/>
+        <GeoidRef ili:ref="BCoordSys.CHGeoid2004"/>
+        <GravityRef ili:ref="BCoordSys.SwissGravityNetwork2004"/>
+      </GeoHeight>
+      <GeoHeight ili:tid="BCoordSys.SwissEllipsoidalAlt">
+        <ili:Name>SwissEllipsoidalAlt</ili:Name>
+        <ili:Axis>
+          <LengthAXIS>
+            <ShortName>H</ShortName>
+            <Description>Swiss Ellipsoidal Altitude</Description>
+          </LengthAXIS>
+        </ili:Axis>
+        <System>ellipsoidal</System>
+        <ReferenceHeight>0.000</ReferenceHeight>
+        <ReferenceHeightDescr>Sea level</ReferenceHeightDescr>
+        <EllipsoidRef ili:ref="BCoordSys.Bessel"/>
+        <GeoidRef ili:ref="BCoordSys.CHGeoid2004"/>
+        <GravityRef ili:ref="BCoordSys.SwissGravityNetwork2004"/>
+      </GeoHeight>
+      <GeoHeight ili:tid="BCoordSys.SwissUsualAlt">
+        <ili:Name>SwissUsualAlt</ili:Name>
+        <ili:Axis>
+          <LengthAXIS>
+            <ShortName>H</ShortName>
+            <Description>Swiss Usual Altitude</Description>
+          </LengthAXIS>
+        </ili:Axis>
+        <System>other</System>
+        <ReferenceHeight>373.600</ReferenceHeight>
+        <ReferenceHeightDescr>Pierre du Niton</ReferenceHeightDescr>
+        <EllipsoidRef ili:ref="BCoordSys.Bessel"/>
+        <GeoidRef ili:ref="BCoordSys.CHGeoid2004"/>
+        <GravityRef ili:ref="BCoordSys.SwissGravityNetwork2004"/>
+      </GeoHeight>
+      <GeoHeight ili:tid="BCoordSys.EuropeanNormalAlt">
+        <ili:Name>EuropeanNormalAlt</ili:Name>
+        <ili:Axis>
+          <LengthAXIS>
+            <ShortName>H</ShortName>
+            <Description>European Normal Altitude</Description>
+          </LengthAXIS>
+        </ili:Axis>
+        <System>normal</System>
+        <ReferenceHeight>0</ReferenceHeight>
+        <ReferenceHeightDescr>Normaal Amsterdam Peil</ReferenceHeightDescr>
+        <EllipsoidRef ili:ref="BCoordSys.ETRS"/>
+        <GeoidRef ili:ref="BCoordSys.EGG"/>
+        <GravityRef ili:ref="BCoordSys.UEGN2002"/>
+      </GeoHeight>
+      <GeoCartesian2D ili:tid="BCoordSys.COORD2">
+        <ili:Name>COORD2</ili:Name>
+        <ili:Axis>
+          <LengthAXIS>
+            <ShortName>X</ShortName>
+            <Description>X-axis</Description>
+          </LengthAXIS>
+        </ili:Axis>
+        <ili:Axis>
+          <LengthAXIS>
+            <ShortName>Y</ShortName>
+            <Description>Y-axis</Description>
+          </LengthAXIS>
+        </ili:Axis>
+        <Definition>Mathematical Cartesian 2D Refsystem</Definition>
+      </GeoCartesian2D>
+      <GeoCartesian2D ili:tid="BCoordSys.CHLV03">
+        <ili:Name>CHLV03</ili:Name>
+        <ili:Axis>
+          <LengthAXIS>
+            <ShortName>Y</ShortName>
+            <Description>East-value</Description>
+          </LengthAXIS>
+        </ili:Axis>
+        <ili:Axis>
+          <LengthAXIS>
+            <ShortName>X</ShortName>
+            <Description>North-value</Description>
+          </LengthAXIS>
+        </ili:Axis>
+        <Definition>Swiss Geodetic Cartesian 2D Refsystem 1903</Definition>
+      </GeoCartesian2D>
+      <GeoCartesian2D ili:tid="BCoordSys.CHLV95">
+        <ili:Name>CHLV95</ili:Name>
+        <ili:Axis>
+          <LengthAXIS>
+            <ShortName>Y</ShortName>
+            <Description>East-value</Description>
+          </LengthAXIS>
+        </ili:Axis>
+        <ili:Axis>
+          <LengthAXIS>
+            <ShortName>X</ShortName>
+            <Description>North-value</Description>
+          </LengthAXIS>
+        </ili:Axis>
+        <Definition>Swiss Geodetic Cartesian 2D Refsystem 1995</Definition>
+      </GeoCartesian2D>
+      <GeoCartesian3D ili:tid="BCoordSys.COORD3">
+        <ili:Name>COORD3</ili:Name>
+        <ili:Axis>
+          <LengthAXIS>
+            <ShortName>X</ShortName>
+            <Description>X-axis</Description>
+          </LengthAXIS>
+        </ili:Axis>
+        <ili:Axis>
+          <LengthAXIS>
+            <ShortName>Y</ShortName>
+            <Description>Y-axis</Description>
+          </LengthAXIS>
+        </ili:Axis>
+        <ili:Axis>
+          <LengthAXIS>
+            <ShortName>Z</ShortName>
+            <Description>Z-axis</Description>
+          </LengthAXIS>
+        </ili:Axis>
+        <Definition>Mathematical Cartesian 3D Refsystem</Definition>
+      </GeoCartesian3D>
+      <GeoCartesian3D ili:tid="BCoordSys.CH1903">
+        <ili:Name>CH1903</ili:Name>
+        <ili:Axis>
+          <LengthAXIS>
+            <ShortName>XC</ShortName>
+            <Description>Equator Greenwich</Description>
+          </LengthAXIS>
+        </ili:Axis>
+        <ili:Axis>
+          <LengthAXIS>
+            <ShortName>YC</ShortName>
+            <Description>Equator East</Description>
+          </LengthAXIS>
+        </ili:Axis>
+        <ili:Axis>
+          <LengthAXIS>
+            <ShortName>ZC</ShortName>
+            <Description>North</Description>
+          </LengthAXIS>
+        </ili:Axis>
+        <Definition>Swiss Geodetic Cartesian 3D Refsystem 1903</Definition>
+      </GeoCartesian3D>
+      <GeoCartesian3D ili:tid="BCoordSys.CH1903+">
+        <ili:Name>CH1903+</ili:Name>
+        <ili:Axis>
+          <LengthAXIS>
+            <ShortName>XC</ShortName>
+            <Description>Equator Greenwich</Description>
+          </LengthAXIS>
+        </ili:Axis>
+        <ili:Axis>
+          <LengthAXIS>
+            <ShortName>YC</ShortName>
+            <Description>Equator East</Description>
+          </LengthAXIS>
+        </ili:Axis>
+        <ili:Axis>
+          <LengthAXIS>
+            <ShortName>ZC</ShortName>
+            <Description>North</Description>
+          </LengthAXIS>
+        </ili:Axis>
+        <Definition>Swiss Geodetic Cartesian 3D Refsystem 1995</Definition>
+      </GeoCartesian3D>
+      <GeoCartesian3D ili:tid="BCoordSys.WGS84">
+        <ili:Name>WGS84</ili:Name>
+        <ili:Axis>
+          <LengthAXIS>
+            <ShortName>XW</ShortName>
+            <Description>Equator Greenwich</Description>
+          </LengthAXIS>
+        </ili:Axis>
+        <ili:Axis>
+          <LengthAXIS>
+            <ShortName>YW</ShortName>
+            <Description>Equator East</Description>
+          </LengthAXIS>
+        </ili:Axis>
+        <ili:Axis>
+          <LengthAXIS>
+            <ShortName>ZW</ShortName>
+            <Description>North</Description>
+          </LengthAXIS>
+        </ili:Axis>
+        <Definition>World Geodetic System 1984</Definition>
+      </GeoCartesian3D>
+      <GeoCartesian3D ili:tid="BCoordSys.ETRS89">
+        <ili:Name>ETRS89</ili:Name>
+        <ili:Axis>
+          <LengthAXIS>
+            <ShortName>XW</ShortName>
+            <Description>Equator Greenwich</Description>
+          </LengthAXIS>
+        </ili:Axis>
+        <ili:Axis>
+          <LengthAXIS>
+            <ShortName>YW</ShortName>
+            <Description>Equator East</Description>
+          </LengthAXIS>
+        </ili:Axis>
+        <ili:Axis>
+          <LengthAXIS>
+            <ShortName>ZW</ShortName>
+            <Description>North</Description>
+          </LengthAXIS>
+        </ili:Axis>
+        <Definition>European Terrestrial Reference System 1989</Definition>
+      </GeoCartesian3D>
+      <GeoEllipsoidal ili:tid="BCoordSys.Switzerland">
+        <ili:Name>Switzerland</ili:Name>
+        <ili:Axis>
+          <AngleAXIS>
+            <ShortName>Lat</ShortName>
+            <Description>Latitude</Description>
+          </AngleAXIS>
+        </ili:Axis>
+        <ili:Axis>
+          <AngleAXIS>
+            <ShortName>Long</ShortName>
+            <Description>Longitude</Description>
+          </AngleAXIS>
+        </ili:Axis>
+        <Definition>Coordinates on the Swiss Ellipsoid 1903</Definition>
+        <EllipsoidRef ili:ref="BCoordSys.Bessel"/>
+      </GeoEllipsoidal>
+      <ToGeoEllipsoidal>
+        <From ili:ref="BCoordSys.CH1903"/>
+        <To ili:ref="BCoordSys.Switzerland"/>
+        <ToHeight ili:ref="BCoordSys.SwissEllipsoidalAlt"/>
+      </ToGeoEllipsoidal>
+      <ToGeoCartesian3D>
+        <From2 ili:ref="BCoordSys.Switzerland"/>
+        <FromHeight ili:ref="BCoordSys.SwissEllipsoidalAlt"/>
+        <To3 ili:ref="BCoordSys.CH1903"/>
+      </ToGeoCartesian3D>
+      <BidirectGeoCartesian3D>
+        <From ili:ref="BCoordSys.CH1903"/>
+        <To2 ili:ref="BCoordSys.WGS84"/>
+        <Precision>measure_based</Precision>
+        <ShiftAxis1>674.374</ShiftAxis1>
+        <ShiftAxis2>15.056</ShiftAxis2>
+        <ShiftAxis3>405.346</ShiftAxis3>
+        <RotationAxis1>0:0:0</RotationAxis1>
+        <RotationAxis2>0:0:0</RotationAxis2>
+        <RotationAxis3>0:0:0</RotationAxis3>
+        <NewScale>1.00</NewScale>
+      </BidirectGeoCartesian3D>
+      <BidirectGeoCartesian3D>
+        <From ili:ref="BCoordSys.WGS84"/>
+        <To2 ili:ref="BCoordSys.CH1903"/>
+        <Precision>measure_based</Precision>
+        <ShiftAxis1>-674.374</ShiftAxis1>
+        <ShiftAxis2>-15.056</ShiftAxis2>
+        <ShiftAxis3>-405.346</ShiftAxis3>
+        <RotationAxis1>-0:0:0</RotationAxis1>
+        <RotationAxis2>-0:0:0</RotationAxis2>
+        <RotationAxis3>-0:0:0</RotationAxis3>
+        <NewScale>1.0</NewScale>
+      </BidirectGeoCartesian3D>
+      <BidirectGeoCartesian3D>
+        <From ili:ref="BCoordSys.CH1903+"/>
+        <To2 ili:ref="BCoordSys.WGS84"/>
+        <Precision>measure_based</Precision>
+        <ShiftAxis1>674.374</ShiftAxis1>
+        <ShiftAxis2>15.056</ShiftAxis2>
+        <ShiftAxis3>405.346</ShiftAxis3>
+        <RotationAxis1>0:0:0</RotationAxis1>
+        <RotationAxis2>0:0:0</RotationAxis2>
+        <RotationAxis3>0:0:0</RotationAxis3>
+        <NewScale>1.00</NewScale>
+      </BidirectGeoCartesian3D>
+      <BidirectGeoCartesian3D>
+        <From ili:ref="BCoordSys.WGS84"/>
+        <To2 ili:ref="BCoordSys.CH1903+"/>
+        <Precision>measure_based</Precision>
+        <ShiftAxis1>-674.374</ShiftAxis1>
+        <ShiftAxis2>-15.056</ShiftAxis2>
+        <ShiftAxis3>-405.346</ShiftAxis3>
+        <RotationAxis1>-0:0:0</RotationAxis1>
+        <RotationAxis2>-0:0:0</RotationAxis2>
+        <RotationAxis3>-0:0:0</RotationAxis3>
+        <NewScale>1.0</NewScale>
+      </BidirectGeoCartesian3D>
+      <BidirectGeoCartesian3D>
+        <From ili:ref="BCoordSys.CH1903"/>
+        <To2 ili:ref="BCoordSys.ETRS89"/>
+        <Precision>measure_based</Precision>
+        <ShiftAxis1>674.374</ShiftAxis1>
+        <ShiftAxis2>15.056</ShiftAxis2>
+        <ShiftAxis3>405.346</ShiftAxis3>
+        <RotationAxis1>0:0:0</RotationAxis1>
+        <RotationAxis2>0:0:0</RotationAxis2>
+        <RotationAxis3>0:0:0</RotationAxis3>
+        <NewScale>1.00</NewScale>
+      </BidirectGeoCartesian3D>
+      <BidirectGeoCartesian3D>
+        <From ili:ref="BCoordSys.ETRS89"/>
+        <To2 ili:ref="BCoordSys.CH1903"/>
+        <Precision>measure_based</Precision>
+        <ShiftAxis1>-674.374</ShiftAxis1>
+        <ShiftAxis2>-15.056</ShiftAxis2>
+        <ShiftAxis3>-405.346</ShiftAxis3>
+        <RotationAxis1>-0:0:0</RotationAxis1>
+        <RotationAxis2>-0:0:0</RotationAxis2>
+        <RotationAxis3>-0:0:0</RotationAxis3>
+        <NewScale>1.0</NewScale>
+      </BidirectGeoCartesian3D>
+      <BidirectGeoCartesian3D>
+        <From ili:ref="BCoordSys.CH1903+"/>
+        <To2 ili:ref="BCoordSys.ETRS89"/>
+        <Precision>measure_based</Precision>
+        <ShiftAxis1>674.374</ShiftAxis1>
+        <ShiftAxis2>15.056</ShiftAxis2>
+        <ShiftAxis3>405.346</ShiftAxis3>
+        <RotationAxis1>0:0:0</RotationAxis1>
+        <RotationAxis2>0:0:0</RotationAxis2>
+        <RotationAxis3>0:0:0</RotationAxis3>
+        <NewScale>1.00</NewScale>
+      </BidirectGeoCartesian3D>
+      <BidirectGeoCartesian3D>
+        <From ili:ref="BCoordSys.ETRS89"/>
+        <To2 ili:ref="BCoordSys.CH1903+"/>
+        <Precision>measure_based</Precision>
+        <ShiftAxis1>-674.374</ShiftAxis1>
+        <ShiftAxis2>-15.056</ShiftAxis2>
+        <ShiftAxis3>-405.346</ShiftAxis3>
+        <RotationAxis1>-0:0:0</RotationAxis1>
+        <RotationAxis2>-0:0:0</RotationAxis2>
+        <RotationAxis3>-0:0:0</RotationAxis3>
+        <NewScale>1.0</NewScale>
+      </BidirectGeoCartesian3D>
+      <TransverseMercator>
+        <From5 ili:ref="BCoordSys.Switzerland"/>
+        <To5 ili:ref="BCoordSys.CHLV03"/>
+        <FromCo1_FundPt>46:57:08.66</FromCo1_FundPt>
+        <FromCo2_FundPt>7:26:22.50</FromCo2_FundPt>
+        <ToCoord1_FundPt>600000</ToCoord1_FundPt>
+        <ToCoord2_FundPt>200000</ToCoord2_FundPt>
+      </TransverseMercator>
+      <TransverseMercator>
+        <From5 ili:ref="BCoordSys.Switzerland"/>
+        <To5 ili:ref="BCoordSys.CHLV95"/>
+        <FromCo1_FundPt>46:57:08.66</FromCo1_FundPt>
+        <FromCo2_FundPt>7:26:22.50</FromCo2_FundPt>
+        <ToCoord1_FundPt>2600000</ToCoord1_FundPt>
+        <ToCoord2_FundPt>1200000</ToCoord2_FundPt>
+      </TransverseMercator>
+      <HeightConversion>
+        <FromHeight ili:ref="BCoordSys.SwissEllipsoidalAlt"/>
+        <ToHeight ili:ref="BCoordSys.SwissOrthometricAlt"/>
+      </HeightConversion>
+      <HeightConversion>
+        <FromHeight ili:ref="BCoordSys.SwissOrthometricAlt"/>
+        <ToHeight ili:ref="BCoordSys.SwissEllipsoidalAlt"/>
+      </HeightConversion>
+    </CoordsysTopic>
+  </ili:datasection>
+</ili:transfer>
+----
+
+[unnumbered]
+== Beispiel
+
+Was müsste innerhalb eines Applikationsmodells (bzw. Applikationsschemas) angegeben werden, um das verwendete Koordinatensystem, bzw. Koordinaten-Referenzsystem eindeutig zu identifizieren?
+
+[source,interlis]
+----
+INTERLIS 2.4;
+
+MODEL Beispiel (de) AT "http://www.interlis.ch/"
+  VERSION "2014-08-05" =
+
+  IMPORTS CoordSys;
+
+  REFSYSTEM BASKET BCoordSys ~ CoordSys.CoordsysTopic =
+    OBJECTS OF GeoCartesian2D: CHLV03;
+    OBJECTS OF GeoHeight: SwissNormalAlt;
+  END BCoordSys;
+
+  DOMAIN
+    LKoord = COORD
+      480000.000 .. 850000.000 [INTERLIS.m] {CHLV03[1]},
+      60000.000 .. 320000.000 [INTERLIS.m] {CHLV03[2]}
+      ROTATION 2 -> 1;
+
+    Hoehe = COORD
+      -200.000 .. 5000.000 [INTERLIS.m] {SwissNormalAlt[1]};
+
+    HKoord = COORD
+      480000.000 .. 850000.000 [INTERLIS.m] {CHLV03[1]},
+      60000.000 .. 320000.000 [INTERLIS.m] {CHLV03[2]},
+      -200.000 .. 5000.000 [INTERLIS.m] {SwissNormalAlt[1]}
+      ROTATION 2 -> 1;
+  END DOMAIN;
+
+  TOPIC T =
+
+    CLASS Fixpunkt =
+      Name: TEXT*20;
+      Position: LKoord;
+    END Fixpunkt;
+
+  END T;
+
+END Beispiel.
+----
