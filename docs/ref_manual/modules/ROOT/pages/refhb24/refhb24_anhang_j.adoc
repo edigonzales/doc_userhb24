@@ -41,7 +41,7 @@ In der grafischen Branche recht verbreitet ist der Farbraum _L* a* b*_ (manchmal
 .Die Umrechnung von XYZ zu _L* a* b*_.
 image::refhb24/refhb24_figj2.png[]
 
-In die Berechnung von xref:figj2[xrefstyle=short] fliesst mit ‹Xn, Yn, Zn› ein "Referenzweiss" ein, um eine allfällige Färbung des Lichts zu kompensieren. Häufig werden die Werte von CIE-Standardlichtquellen (meist D50, gelegentlich D65) eingesetzt. Die XYZ-Koordinaten dieser Lichtquellen finden sich beispielsweise in [Sangwine/Horne, 1989], Tabelle 3.1.
+In die Berechnung von xref:figj2[xrefstyle=short] fliesst mit ‹Xn, Yn, Zn› ein "Referenzweiss" ein, um eine allfällige Färbung des Lichts zu kompensieren. Häufig werden die Werte von CIE-Standardlichtquellen (meist D50, gelegentlich D65) eingesetzt. Die XYZ-Koordinaten dieser Lichtquellen finden sich beispielsweise in <<sangwinehorne1989,[Sangwine/Horne89]>>, Tabelle 3.1.
 
 Dieser Raum besitzt eine Reihe von nützlichen Eigenschaften:
 
@@ -55,12 +55,12 @@ Dieser Raum besitzt eine Reihe von nützlichen Eigenschaften:
 
 * *Zunehmende Verbreitung* — _L* a* b*_ findet im professionellen Druck zunehmende Verbreitung. Programme wie Adobe Photoshop oder Acrobat (PDF) unterstützen den _L* a* b*_-Farbraum.
 
-* *Leichte Transformierbarkeit zu RGB* — _L* a* b*_-Tripel sind durch Multiplikation mit einer 3×3-Matrix, gefolgt von einer Potenzierung (Gammakorrektur), die effizient mittels einer Tabelle erfolgen kann, in die RGB-Werte eines beliebigen Bildschirms transformierbar (s. [Adobe, 1992], Kapitel 23). Der Aufwand für Systemimplementierer ist somit sehr gering.
+* *Leichte Transformierbarkeit zu RGB* — _L* a* b*_-Tripel sind durch Multiplikation mit einer 3×3-Matrix, gefolgt von einer Potenzierung (Gammakorrektur), die effizient mittels einer Tabelle erfolgen kann, in die RGB-Werte eines beliebigen Bildschirms transformierbar (s. <<adobe1992,[Adobe92]>>, Kapitel 23). Der Aufwand für Systemimplementierer ist somit sehr gering.
 
 * *Gute Komprimierbarkeit* — Nur am Rande erwähnt sei, dass sich _L* a* b*_ besser als RGB für verlustbehaftete Verfahren zum Komprimieren von Bildern eignet. Im Zusammenhang mit INTERLIS ist dies jedoch irrelevant.
 
 [#figj3]
-.Umrechnung vom kartesischen _L* a* b*_-Raum in die polare Form _L* C*~ab~ h*~ab~_ (nach [Sangwine/Horne, 1998]).
+.Umrechnung vom kartesischen _L* a* b*_-Raum in die polare Form _L* C*~ab~ h*~ab~_ (nach <<sangwinehorne1998,[Sangwine/Horne98]>>).
 image::refhb24/refhb24_figj3.png[width=400]
 
 [unnumbered]
@@ -79,7 +79,7 @@ Sind präzise Farben-Angaben gewünscht, dann sollen diese in INTERLIS-Modellen 
 == Nötige Genauigkeit
 Teil eines INTERLIS-Modells ist die Angabe, mit welcher Genauigkeit numerische Grössen festzuhalten sind. Nun ist der _L* a* b*_-Raum so definiert, dass der Unterschied zwischen zwei Farben gerade noch wahrnehmbar ist, wenn der gemäss xref:figj5[xrefstyle=short] berechnete Wert gleich 1 ist.
 
-*Bemerkung:* [Has/Newman, o.D.] weist darauf hin, dass die Wahrnehmbarkeit von Farbunterschieden auch davon abhängt, wie viel Zeit zum Vergleich zur Verfügung steht. Der Artikel zitiert ein Experiment, bei dem gemessen wurde, wie lange ein unerfahrener Betrachter benötigt, bis er den Unterschied bemerkt. Es werden Zahlen von 5 Sekunden für ΔE~ab~ = 15, 10 Sekunden für ΔE~ab~ = 10 und 15 Sekunden für ΔE~ab~ = 5 genannt.
+*Bemerkung:* <<hasnewman,[Has/Newman]>> weist darauf hin, dass die Wahrnehmbarkeit von Farbunterschieden auch davon abhängt, wie viel Zeit zum Vergleich zur Verfügung steht. Der Artikel zitiert ein Experiment, bei dem gemessen wurde, wie lange ein unerfahrener Betrachter benötigt, bis er den Unterschied bemerkt. Es werden Zahlen von 5 Sekunden für ΔE~ab~ = 15, 10 Sekunden für ΔE~ab~ = 10 und 15 Sekunden für ΔE~ab~ = 5 genannt.
 
 [#figj5]
 .Berechnung des Farbunterschieds im kartesischen _L* a* b*_-Raum.
@@ -87,7 +87,7 @@ image::refhb24/refhb24_figj5.png[width=300]
 
 Genauigkeit der _L*_-Achse: Für die Helligkeit reicht damit eine Genauigkeit von einer Nachkommastelle aus.
 
-Genauigkeit der _C*~ab~_- und _h*~ab~_-Achsen: Zwar sind _a*_ und _b*_ theoretisch unbeschränkt, aber in der Praxis werden Grenzen von ±128, auf ganze Zahlen gerundet, als mehr als ausreichend betrachtet (siehe [Adobe, 1992]). Welche Genauigkeit ist damit für _C*~ab~_ und _h*~ab~_ nötig, damit die Ungenauigkeit in der _a*_/b*-Ebene nicht grösser als 1 wird?
+Genauigkeit der _C*~ab~_- und _h*~ab~_-Achsen: Zwar sind _a*_ und _b*_ theoretisch unbeschränkt, aber in der Praxis werden Grenzen von ±128, auf ganze Zahlen gerundet, als mehr als ausreichend betrachtet (siehe <<adobe1992,[Adobe92]>>). Welche Genauigkeit ist damit für _C*~ab~_ und _h*~ab~_ nötig, damit die Ungenauigkeit in der _a*_/b*-Ebene nicht grösser als 1 wird?
 
 Die durch die Winkelangabe eingeführte Ungenauigkeit steigt mit zunehmender Distanz vom Nullpunkt. Damit kann eine Genauigkeit als ausreichend erachtet werden, wenn ⟨127, 128⟩ und ⟨128, 128⟩ in der _a*_/b*-Ebene noch unterscheidbar sind. Wie aus xref:figj3[xrefstyle=short] ersichtlich ist, reicht für diesen extremen Fall eine Nachkommastelle aus. Es handelt sich dort um zwei gerade noch unterscheidbare Orangetöne, die allerdings so stark gesättigt sind, dass sie von kaum einem Gerät darstellbar sein dürften.
 
@@ -188,49 +188,53 @@ Ein konkretes Anwendungsbeispiel mit Farben-Definitionen ist im xref:refhb24/ref
 == Hinweise für Systemimplementierer
 Den Implementierern von INTERLIS-konformen Systemen stellt sich die Frage, wie die Farbwerte aus dem geräteunabhängigen _L* C*~ab~ h*~ab~_-System in das Farb-Koordinatensystem eines konkreten Bildschirms oder Druckers zu transformieren sind.
 
-Ein standardisiertes Dateiformat ermöglicht es, die Farbverzerrung eines bestimmten Gerätes in Form so genannter Geräte- oder Farbprofile festzuhalten (so genanntes ICC-Profil-Format). Unter anderem enthalten diese Dateien Parameter, welche in die Umrechnung von einem geräteunabhängigen Farbraum zum gerätespezifischen Farb-Koordinatensystem einfliessen. Ersteres ist entweder XYZ oder _L* a* b*_, Letzteres typischerweise RGB oder CMYK. Das Format und die nötigen Umrechnungsfunktionen werden durch [ICC, 1996] definiert.
+Ein standardisiertes Dateiformat ermöglicht es, die Farbverzerrung eines bestimmten Gerätes in Form so genannter Geräte- oder Farbprofile festzuhalten (so genanntes ICC-Profil-Format). Unter anderem enthalten diese Dateien Parameter, welche in die Umrechnung von einem geräteunabhängigen Farbraum zum gerätespezifischen Farb-Koordinatensystem einfliessen. Ersteres ist entweder XYZ oder _L* a* b*_, Letzteres typischerweise RGB oder CMYK. Das Format und die nötigen Umrechnungsfunktionen werden durch <<icc1996,[ICC96]>> definiert.
 
 Ein Systemimplementierer kann nun in seinem Produkt direkt ICC-Profile unterstützen. Das Dateiformat ist relativ einfach aufgebaut, und die Umrechnungsfunktionen sind schnell implementiert. Für einige Plattformen stehen fertige Programmbibliotheken (wie _Apple ColorSync_ oder _Kodak KCMS_) zur Verfügung.
 
-Es sei in diesem Zusammenhang darauf hingewiesen, dass PDF den Farbraum _L* a* b*_ direkt unterstützt. PostScript ermöglicht es sogar, eigene Farbräume als beliebige Transformationen aus XYZ zu definieren. Die Umkehrfunktion der in xref:figj2[xrefstyle=short] angegebenen Formel findet sich als Beispiel 4.11 in [Adobe, 1990]. Es ist relativ einfach, eine analoge Funktion in PostScript zu programmieren, welche direkt _L* C*~ab~ h*~ab~_ entgegennimmt.
+Es sei in diesem Zusammenhang darauf hingewiesen, dass PDF den Farbraum _L* a* b*_ direkt unterstützt. PostScript ermöglicht es sogar, eigene Farbräume als beliebige Transformationen aus XYZ zu definieren. Die Umkehrfunktion der in xref:figj2[xrefstyle=short] angegebenen Formel findet sich als Beispiel 4.11 in <<adobe1990,[Adobe90]>>. Es ist relativ einfach, eine analoge Funktion in PostScript zu programmieren, welche direkt _L* C*~ab~ h*~ab~_ entgegennimmt.
 
 [unnumbered]
 == Literaturhinweise
 
-* [Adobe, 1990] Adobe Systems: *PostScript Language Reference Manual*. 2nd Ed., 1990. ISBN 0-201-18127-4. 764 Seiten.  
+* [[adobe1990]] [Adobe, 1990] Adobe Systems: *PostScript Language Reference Manual*. 2nd Ed., 1990. ISBN 0-201-18127-4. 764 Seiten.  
 +
-_Das Referenzhandbuch für PostScript unter anderem auch mit Hinweisen auf die Behandlung von Farben und verschiedene Umrechnungsmethoden, die in PostScript verfügbar sind. Beispiel 4.11 auf Seite 191 definiert den _L* a* b*_-Farbraum in PostScript._
+_Das Referenzhandbuch für PostScript unter anderem auch mit Hinweisen auf die Behandlung von Farben und verschiedene Umrechnungsmethoden, die in PostScript verfügbar sind. Beispiel 4.11 auf Seite 191 definiert den L* a* b*-Farbraum in PostScript._
 
-* [Adobe, 1992] Adobe Developers Association: *TIFF Revision 6.0*.  
+* [[adobe1992]] [Adobe, 1992] Adobe Developers Association: *TIFF Revision 6.0*.  
 +
 https://partners.adobe.com/public/developer/en/tiff/TIFF6.pdf  
 +
-_Kapitel 23 definiert eine Variante des TIFF-Formats für Bilder im _L* a* b*_-Farbraum und nennt eine Anzahl von Vorteilen gegenüber RGB. Ausserdem wird eine schnelle Methode zur Umrechnung von _L* a* b*_ zu RGB skizziert._
+_Kapitel 23 definiert eine Variante des TIFF-Formats für Bilder im L* a* b*-Farbraum und nennt eine Anzahl von Vorteilen gegenüber RGB. Ausserdem wird eine schnelle Methode zur Umrechnung von L* a* b* zu RGB skizziert._
 
-* [Apple, 2005] Apple Computer, Inc.: *Introduction to Color and Color Management Systems*. In: _Inside Macintosh — Managing Color with ColorSync_.  
+* [[apple_csintro_intro_2005]] [Apple, 2005] Apple Computer, Inc.: *Introduction to Color and Color Management Systems*. In: _Inside Macintosh — Managing Color with ColorSync_.  
 +
 https://developer.apple.com/library/mac/documentation/GraphicsImaging/Conceptual/csintro/csintro_intro/csintro_intro.html  
 +
 _Allgemein verständliche Einführung in verschiedene Farbräume, mit illustrativen Grafiken._
 
-* [Apple, 2005] Apple Computer, Inc.: *A Brief Overview Of Color*.  
+* [[apple_brief_overview_2005]] [Apple, 2005] Apple Computer, Inc.: *A Brief Overview Of Color*.  
 +
 https://developer.apple.com/library/mac/documentation/GraphicsImaging/Conceptual/csintro/csintro_ovrvw/csintro_ovrvw.html  
 +
 _Sehr kurz gehaltene, allgemein verständliche Grobeinführung in verschiedene Konzepte im Zusammenhang mit Farben. An Laien gerichtet._
 
-* [Has/Newman, o.D.] Michael Has, Todd Newman: *Color Management: Current Practice and the Adoption of a New Standard*.  
+* [[hasnewman]] [Has/Newman, o.D.] Michael Has, Todd Newman: *Color Management: Current Practice and the Adoption of a New Standard*.  
 +
 http://www.color.org/wpaper1.html  
 +
 _Nennt Messdaten für den Rot-, Grün- und Blaureferenzpunkt von zwei typischen Computermonitoren und zeigt, dass sie stark von den häufig zitierten xy-Werten der NTSC-Standard-Phosphorfarben abweichen. Gibt eine Transformation von XYZ zum RGB-Raum eines bestimmten Bildschirms an._
 
-* [ICC, 1996] International Color Consortium: *ICC Profile Format Specification*.  
+* [[icc1996]] [ICC, 1996] International Color Consortium: *ICC Profile Format Specification*.  
 +
 http://www.color.org/profile.html  
 +
 _Definiert ein Dateiformat, mit dem beliebige Geräte im Hinblick auf ihre Farbwiedergabe charakterisiert werden können. Anhang A diskutiert verschiedene Farbräume._
 
-* [Poynton, 1997] Charles A. Poynton: *Frequently Asked Questions about Color*.  
+* [[poynton1997]] [Poynton, 1997] Charles A. Poynton: *Frequently Asked Questions about Color*.  
 +
 http://www.poyn
+
+* [[sangwinehorne1989]] [Sangwine/Horne, 1989] S. J. Sangwine, R. E. N. Horne: (Angabe gemäss Originalquelle; in deinem Text referenziert: Tabelle 3.1).
+
+* [[sangwinehorne1998]] [Sangwine/Horne, 1998] S. J. Sangwine, R. E. N. Horne: (Angabe gemäss Originalquelle; in deinem Text referenziert: Umrechnung in Abb. J.3).

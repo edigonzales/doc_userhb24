@@ -11,11 +11,11 @@ Die folgende Spezifikation ist nicht normativer Bestandteil von INTERLIS. Dies i
 
 Koordinaten beschreiben die Position eines Punktes in einem Raum, für den ein Koordinatensystem eingeführt ist. Ist ein Koordinatensystem bezüglich der Erde fest positioniert – man sagt auch: gelagert – dann nennt man es ein Koordinaten-Referenzsystem. Durch Koordinaten werden aber nicht nur Positionen festgehalten, sondern auch metrische Grössen, die aus Koordinaten ableitbar sind. Dazu gehören unter anderem Distanzen, Flächen, Volumen, Winkel und Richtungen, sowie weitere Eigenschaften wie Steigungen und Krümmungen.
 
-Es gibt eine Vielzahl von Klassen (Typen) von Koordinatensystemen, und eine noch viel grössere Anzahl von Objekten, d.h. von Realisierungen (Instanzen) von Koordinatensystemen (siehe z.B. [Voser 1999]). Die schweizerischen Landeskoordinaten beispielsweise stützen sich auf eine besondere Instanz (Objekt) eines Koordinaten-Referenzsystems [Gubler et al. 1996], das über eine Kartenprojektion aus einem geodätischen Referenzsystem hergeleitet werden kann [Snyder 1987, Bugayevskiy 1995]. Diese geodätischen Referenzsysteme bilden eine eigene Kategorie von Koordinaten-Referenzsystemen, welche die Geometrie eines Erdmodells beschreiben. Dabei wird z.B. zur Beschreibung der 2-dimensionalen Lage eine Kugel oder ein Ellipsoid zu Hilfe genommen und auf deren Oberfläche werden geografische Koordinaten definiert. Etwas komplizierter sieht es für die Höhe aus: Als geometrisch-physikalisches Erdmodell wird das Geoid [Marti 1997] bzw. ein Schwere­modell [Torge 1975] verwendet, welches orthometrische bzw. normale Höhen definiert. Doch oft sind in der Praxis nur Gebrauchshöhen in Verwendung.
+Es gibt eine Vielzahl von Klassen (Typen) von Koordinatensystemen, und eine noch viel grössere Anzahl von Objekten, d.h. von Realisierungen (Instanzen) von Koordinatensystemen (siehe z.B. <<voser1999,[Voser99]>>). Die schweizerischen Landeskoordinaten beispielsweise stützen sich auf eine besondere Instanz (Objekt) eines Koordinaten-Referenzsystems <<gubler1996,[Gubler96]>>, das über eine Kartenprojektion aus einem geodätischen Referenzsystem hergeleitet werden kann <<snyder1987,[Snyder87]>>, <<bugayevskiy1995,[Bugayevskiy95]>>. Diese geodätischen Referenzsysteme bilden eine eigene Kategorie von Koordinaten-Referenzsystemen, welche die Geometrie eines Erdmodells beschreiben. Dabei wird z.B. zur Beschreibung der 2-dimensionalen Lage eine Kugel oder ein Ellipsoid zu Hilfe genommen und auf deren Oberfläche werden geografische Koordinaten definiert. Etwas komplizierter sieht es für die Höhe aus: Als geometrisch-physikalisches Erdmodell wird das Geoid <<marti1997,[Marti97]>> bzw. ein Schwere­modell <<torge1975,[Torge75]>> verwendet, welches orthometrische bzw. normale Höhen definiert. Doch oft sind in der Praxis nur Gebrauchshöhen in Verwendung.
 
 Da Geodaten von Geomatik-Anwendungen einen Raumbezug aufweisen, muss jedem Geodatensatz ein Koordinatensystem zu Grunde liegen. Da sich einzelne Koordinatensysteme wesentlich voneinander unterscheiden, so ist es notwendig, entsprechende Referenzdaten mit den Geodaten mitzuliefern. Aus diesem Grund ermöglicht auch INTERLIS, diese Daten zum Koordinatensystem zu beschreiben.
 
-Erst durch die Kenntnis des zu Grunde liegenden Koordinatensystems wird es möglich, die darin beschriebenen Geodaten in ein anderes Koordinatensystem überzuführen. Dies wiederum ist notwendig, um Geodaten, welche in unterschiedlichen Koordinatensystemen vorliegen, gemeinsam nutzen zu können [Voser 1996].
+Erst durch die Kenntnis des zu Grunde liegenden Koordinatensystems wird es möglich, die darin beschriebenen Geodaten in ein anderes Koordinatensystem überzuführen. Dies wiederum ist notwendig, um Geodaten, welche in unterschiedlichen Koordinatensystemen vorliegen, gemeinsam nutzen zu können <<voser1996,[Voser96]>>.
 
 Wir betrachten zuerst Koordinatensysteme allgemeiner Art, dann die Beziehungen (Abbildungen) zwischen (allgemeinen) Koordinatensystemen, und anschliessend führen wir die Koordinaten-Referenzsysteme ein und beschäftigen uns damit.
 
@@ -41,7 +41,7 @@ Sehr unterschiedliche Gründe führen zur Definition von Koordinatensystemen in 
 
 * *Sensorik:* Die Datenerfassung der klassischen Geodäsie (z.B. mit dem Theodolit) aber auch Photogrammetrie und Fernerkundung verwenden in ihren Erfassungssensoren das der jeweiligen Methode entsprechende (lokale) Koordinatensystem für die Erfassung.
 
-* *Geopositionierung:* Die Positionsbeschreibung auf der Erde mit Hilfe eines (geodätischen) Erdmodells. Es gibt dabei drei Arten von (geodätischen) Erdmodellen [Voser 1999]:
+* *Geopositionierung:* Die Positionsbeschreibung auf der Erde mit Hilfe eines (geodätischen) Erdmodells. Es gibt dabei drei Arten von (geodätischen) Erdmodellen <<voser1999,[Voser99]>>:
 
 ** _physikalisch:_ Das Erdmodell wird durch das Schwerefeld beschrieben oder durch das Geoid.
 ** _mathematisch:_ Das Erdmodell ist ein symmetrischer Körper (z.B. eine Kugel oder ein Ellipsoid).
@@ -58,9 +58,9 @@ Da viele Geodaten in unterschiedlichen Koordinatensystemen erfasst werden, oder 
 
 Es sind zwei wesentlich verschiedene Abbildungen von Koordinatensystemen zu unterscheiden, wenn man die Herkunft der Formeln und ihrer Parameter in Betracht zieht, nämlich Konversionen und Transformationen.
 
-Eine _Konversion_ ist eine durch Formeln und deren Parameter fest definierte Abbildung zwischen zwei Koordinatensystemen. Die Formeln und vor allem die Werte der notwendigen Parameter sind im Voraus festgelegt [Voser 1999]. Zu den Konversionen gehören beispielsweise die Kartenprojektionen, das heisst z.B. die Abbildungen von der Ellipsoidoberfläche in die Ebene. Ebenfalls in die Kategorie der Konversionen fällt die Umrechnung von ellipsoidischen Koordinaten in die zugehörigen kartesischen Koordinaten mit dem Ursprung im Ellipsoidzentrum oder umgekehrt.
+Eine _Konversion_ ist eine durch Formeln und deren Parameter fest definierte Abbildung zwischen zwei Koordinatensystemen. Die Formeln und vor allem die Werte der notwendigen Parameter sind im Voraus festgelegt <<voser1999,[Voser99]>>. Zu den Konversionen gehören beispielsweise die Kartenprojektionen, das heisst z.B. die Abbildungen von der Ellipsoidoberfläche in die Ebene. Ebenfalls in die Kategorie der Konversionen fällt die Umrechnung von ellipsoidischen Koordinaten in die zugehörigen kartesischen Koordinaten mit dem Ursprung im Ellipsoidzentrum oder umgekehrt.
 
-Als _Transformation_ bezeichnet man eine Abbildung zwischen zwei Koordinatensystemen, wenn die Abbildungsvorschrift (Formel) auf Grund von Annahmen (Hypothesen) festgelegt wird und die Parameter durch statistische Analyse von Messungen in beiden Koordinatensystemen ermittelt werden [Voser 1999]. Typische Transformationen werden beim Übergang zwischen unterschiedlichen geodätischen Erdmodellen vorgenommen (geodätische Datumstransformationen), oder bei der Einpassung lokaler Koordinaten in übergeordnete Systeme, wie beispielsweise beim Digitalisieren die Umrechnung von Blatt- oder Digitalisiertisch-Koordinaten in Projektionskoordinaten.
+Als _Transformation_ bezeichnet man eine Abbildung zwischen zwei Koordinatensystemen, wenn die Abbildungsvorschrift (Formel) auf Grund von Annahmen (Hypothesen) festgelegt wird und die Parameter durch statistische Analyse von Messungen in beiden Koordinatensystemen ermittelt werden <<voser1999,[Voser99]>>. Typische Transformationen werden beim Übergang zwischen unterschiedlichen geodätischen Erdmodellen vorgenommen (geodätische Datumstransformationen), oder bei der Einpassung lokaler Koordinaten in übergeordnete Systeme, wie beispielsweise beim Digitalisieren die Umrechnung von Blatt- oder Digitalisiertisch-Koordinaten in Projektionskoordinaten.
 
 [unnumbered]
 == Koordinaten-Referenzsysteme
@@ -92,19 +92,19 @@ Für die Beschreibung von Koordinatensystemen stellt INTERLIS zwei interne Klass
 [unnumbered]
 == Literaturhinweise
 
-* [Bugayevskiy 1995] Bugayevskiy, Lev M.; Snyder, John P.: *Map Projections, A Reference Manual*. Taylor & Francis, London, Bristol, 1995.
+* [[bugayevskiy1995]] [Bugayevskiy 1995] Bugayevskiy, Lev M.; Snyder, John P.: *Map Projections, A Reference Manual*. Taylor & Francis, London, Bristol, 1995.
 
-* [Gubler et al. 1996] Gubler, E.; Gutknecht, D.; Marti, U.; Schneider, D.; Signer, Th.; Vogel, B.; Wiget, A.: *Die neue Landesvermessung der Schweiz LV95*. VPK 2/96.
+* [[gubler1996]] [Gubler et al. 1996] Gubler, E.; Gutknecht, D.; Marti, U.; Schneider, D.; Signer, Th.; Vogel, B.; Wiget, A.: *Die neue Landesvermessung der Schweiz LV95*. VPK 2/96.
 
-* [Marti 1997] Marti, Urs: *Geoid der Schweiz 1997*. Geodätisch-geophysikalische Arbeiten in der Schweiz, Schweizerische Geodätische Kommission, Volume 56, Zürich, 1997.
+* [[marti1997]] [Marti 1997] Marti, Urs: *Geoid der Schweiz 1997*. Geodätisch-geophysikalische Arbeiten in der Schweiz, Schweizerische Geodätische Kommission, Volume 56, Zürich, 1997.
 
-* [Torge 1975] Torge, Wolfgang: *Geodäsie*. Sammlung Göschen 2163, de Gruyter, Berlin – New York, 1975.
+* [[torge1975]] [Torge 1975] Torge, Wolfgang: *Geodäsie*. Sammlung Göschen 2163, de Gruyter, Berlin – New York, 1975.
 
-* [Snyder 1987] Snyder, John P.: *Map Projections – A Working Manual*. U.S. Geological Survey Professional Paper 1395, Washington, 1987.
+* [[snyder1987]] [Snyder 1987] Snyder, John P.: *Map Projections – A Working Manual*. U.S. Geological Survey Professional Paper 1395, Washington, 1987.
 
-* [Voser 1996] Voser, Stefan A.: *Anforderungen an die Geometrie zur gemeinsamen Nutzung unterschiedlicher Datenquellen*. 4. deutsche Arc/Info-Anwender-Konferenz, Proceedings, März 1996, Freising.
+* [[voser1996]] [Voser 1996] Voser, Stefan A.: *Anforderungen an die Geometrie zur gemeinsamen Nutzung unterschiedlicher Datenquellen*. 4. deutsche Arc/Info-Anwender-Konferenz, Proceedings, März 1996, Freising.
 
-* [Voser 1999] Voser, Stefan A.: *MapRef – The Internet Collection of Map Projections and Reference Systems for Europe*. 14. ESRI European User Conference, Presentation and Proceedings, 15.–17. Nov. 1999, Munich.  
+* [[voser1999]] [Voser 1999] Voser, Stefan A.: *MapRef – The Internet Collection of Map Projections and Reference Systems for Europe*. 14. ESRI European User Conference, Presentation and Proceedings, 15.–17. Nov. 1999, Munich.  
 +
 https://www.mapref.org/
 
@@ -206,7 +206,7 @@ REFSYSTEM MODEL CoordSys (en) AT "http://www.interlis.ch/models/refhb24"
 
     ASSOCIATION HeightGeoid =
       GeoHeightRef -- {*} GeoHeight;
-      GeoidRef -- {1} GeoidModel;
+      GeoidRef -- {1} GeoIdModel;
     END HeightGeoid;
 
     CLASS GeoCartesian2D EXTENDS INTERLIS.COORDSYSTEM =
