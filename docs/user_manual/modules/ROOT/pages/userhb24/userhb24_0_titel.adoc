@@ -1,0 +1,7 @@
+= Vorwort 
+
+****
+Das vorliegende INTERLIS-Benutzerhandbuch basiert auf dem https://www.interlis.ch/download/interlis2/ili2-refman_2006-04-13_d.pdf[INTERLIS 2.3 Benutzerhandbuch (Modellieren raumbezogener Daten)]. Es wurde an die aktuelle Sprachversion 2.4 angepasst und mit Beispieldaten versehen.
+
+Die ursprüngliche Version stammt von Joseph Dorfschmid und Sascha Brawer (Adasys).
+****

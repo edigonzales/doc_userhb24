@@ -1,0 +1,273 @@
+= Aufbruchstimmung im Ilistal
+
+== Der Startschuss
+
+Die Ferienregion Ilistal hat sich entschlossen, ihre Webpage auf Vordermann zu bringen. Das vielfältige Transportangebot soll interaktiv mittels eines grafischen Dialogs abrufbar sein. Die Präsentation im Gemeindehaus war beeindruckend: Schöne Bilder, trendige Abkürzungen wie HTML, XML, GIS, SVG! Sogleich kamen natürlich weitere Wünsche auf. Im Bauamt entschloss man sich kürzlich, die Adressen nach der neuen Norm zu erfassen. Das könnte man doch nutzen! Der Direktor der Ilishornbahnen erinnert sich, dass der nationale Bergbahnenverband einen Dienst einrichten möchte, über den das landesweite Bergbahnangebot verfügbar ist. Dabei sollen auch die Fahrpreise und insbesondere die verschiedenen Verbundabonnemente abrufbar sein. Sein Kollege, der für die technischen Belange zuständig ist, macht darauf aufmerksam, dass er auf seinem Compi die ganze Infrastruktur verwalte. Informationen über die Bahntrassees und die Pisten könne er schon liefern. Da sei aber nicht alles klar. Kürzlich habe er nämlich auf dem Bauamt gefragt, ob er nicht die Daten der neuen Überbauung «Im Oberboden» haben könne. Sie hätten es dann schliesslich hingekriegt. Einige Informationen seien zwar verloren gegangen. Die seien aber nicht so wichtig gewesen.
+
+Da wird die Gemeindepräsidentin hellhörig. Eine Kollegin, die in einer Gemeinde nahe der Hauptstadt tätig ist, hat ihr doch erzählt, dass sie in einem Teilbereich bereits die dritte Software im Einsatz hätten. Zusatzwünsche, die sie eigentlich normal fand, führten jeweils zur vollständigen Überarbeitung. Sie hätten dann Unterstützung von einem Informatiker erhalten, der weniger von den verschiedenen Techniken sprach. Vielmehr habe man zuerst gemeinsam überlegt, welche Daten mit den Problemen verbunden seien. Seitdem man so vorgehe, sei es auch viel besser möglich, schrittweise Erfolge zu erzielen.
+
+Die Gemeindepräsidentin, eine freundliche aber entschlossene Frau, beauftragt darum den Bausekretär, sich zusammen mit dem technischen Leiter der Ilishornbahnen um die Sache zu kümmern. Als Fachmann zieht sie den Informatiker ihrer Kollegin bei.
+
+== Erste Auslegeordnung
+
+Beim ersten Gespräch der Arbeitsgruppe purzelten die verschiedenen Stichworte und Argumente anfänglich noch wild durcheinander: Mit welchem Programmpaket arbeitet der nationale Verband? Meint man nur die Bahnunternehmung oder jede einzelne Bahn, jeden Skilift? Die einzelnen Bahnen, aber auch die Gebäude sind ja bereits in der amtlichen Vermessung enthalten. Wie kann man diese Daten brauchen? Was passiert, wenn Daten ändern, wenn neue Daten hinzukommen? Aber mein Programmpaket versteht nur DXF! Und ich nur Bahnhof!
+
+Das gab das Zeichen, um kurz inne zu halten. Man erinnerte sich an die alte römische Devise «Divide et impera» und begann Ordnung zu machen, um der Sache Herr zu werden. Im Vordergrund standen zuerst folgende Fragen:
+
+* Wer braucht welche Daten?
+* Wer erfasst sie und führt sie nach?
+
+[[abb1]]
+.Die verschiedenen Beteiligten und die Datenströme.
+[plantuml,abbildung-1,svg]
+----
+@startuml
+
+skinparam shadowing false
+skinparam linetype ortho
+hide stereotype
+
+rectangle "Ilishornbahnen" as IL
+rectangle "Bauamt\nIlistal" as BA
+rectangle "Tourismus\nNational" as TN
+rectangle "Tourismus\nIlistal" as TI
+
+BA --> IL
+BA --> TI
+IL --> TN
+IL --> TI
+@enduml
+----
+
+Aber wie kommen die Daten nun vom Bearbeiter zum Nutzer? E-Mail, FTP, DXF, ASCII – schon ging’s wieder los. Der Informatiker empfahl, diese Frage mal etwas zurückzustellen und sich darum zu kümmern, wie die Daten modelliert seien. Modelliert? Wir wollen doch eine Informatiklösung und kein Holzmodell für unser schönes Ilistal. Die Frage, was ein Datenmodell ist, sprengte den Rahmen der ersten Sitzung. Nur soviel: Es soll beschreiben, wie die Daten aufgebaut sind. Welche Eigenschaften haben die verschiedenen Objekte? Welche Objekte stehen mit welchen anderen Objekten in Beziehung? Und das nicht einfach als Aufsatz, sondern in einer klaren, präzisen bildlichen oder formalen Sprache!
+
+== Erste Gehversuche
+
+=== Der nationale Tourismusverband hat Vorarbeit geleistet
+
+Der nationale Tourismusverband bietet mit seinem Programmpaket NatTourSys einen Überblick zu den verschiedenen Billette(n) der Bergbahnen an. Die Billette werden durch die einzelnen Bahngesellschaften herausgegeben. Der Tourist interessiert sich aber vor allem dafür, auf welchen Bergbahnen welche Billette gültig sind. Bevor sie in ihr eigenes Projekt einsteigen, wollen sich die Ilistaler zunächst eine Übersicht verschaffen.
+
+Eines ist klar: Im Zusammenhang mit dem Programmpaket muss man über Bergbahnen, Bahngesellschaften und Billette sprechen.
+
+Was meint man wirklich, wenn man von Billetten spricht? Wirklich das einzelne Billett, das verkauft wird? In dieser Anwendung sicher nicht. Man möchte die einzelnen Arten von Billetten beschreiben. Besser sprechen wir darum gleich von Billettarten. Die verschiedenen Gegenstände haben offensichtlich weitergehende Eigenschaften: Bei den Billettarten kann man z.B. von einem Preis und von einer Gültigkeitsdauer sprechen.
+
+* *Bergbahn* — Eine Bergbahn transportiert Passagiere zwischen ihrer Tal- und ihrer Bergstation. Ein Beispiel für eine Bergbahn ist die Standseilbahn Ilisdorf — Ilishorn. Es gibt aber auch Zahnrad-, Luftseil- und Gondelbahnen sowie Ski- und Sessellifte. Auch der neuartige Schneebus kann als Bergbahn angesehen werden. Jede Bergbahn besitzt einen Namen.
+
+* *Billettart* — Eine Billettart ist eine bestimmte Art eines Billetts. Beispiele für Billettarten sind der Sportpass zu 195 Talern, der sieben Tage lang auf allen Bahnen in der ganzen Region Ilistal gültig ist, oder der am Ausstellungstag gültige «Dino-Pass» für den Ponylift zu 10 Talern.
+
+* *Bahngesellschaft* — Eine Bahngesellschaft betreibt Bergbahnen. Sie besitzt einen Namen und manchmal auch eine Kurzbezeichnung. Ein Beispiel sind die Ilishornbahnen mit der Abkürzung IhB. Jede Bahngesellschaft erhält einen bestimmten Anteil an den Verkäufen jener Billette, die auf ihren Bahnen gültig sind. Eine Bahngesellschaft kann die Tochter- oder Muttergesellschaft einer anderen sein.
+
+[NOTE]
+====
+Der *Objektkatalog* einer Anwendung listet die Gegenstände auf, die dabei wesentlich sind, und beschreibt sie in Worten möglichst gut.
+====
+
+Beschreibt man nun alle Eigenschaften der Gegenstände in Worten, wird bald einmal die Übersicht relativ schwierig. «Ein Bild sagt mehr als tausend Worte» kommt einem in den Sinn. Ein Objektdiagramm – das wär’s! Aber eigentlich wollen wir ja gar nicht die einzelnen Objekte beschreiben. Wir möchten vor allem aufzeigen, welche gleichartigen Gegenstände es gibt und welche Eigenschaften sie haben.
+
+Mit einem solchen Diagramm sieht man das Wichtigste ganz gut:
+
+[[abb2]]
+.Ein erster Ansatz eines Datenmodells.
+[plantuml,abbildung-2,svg]
+----
+@startuml
+
+skinparam shadowing false
+skinparam linetype ortho
+hide stereotype
+
+class Bahngesellschaft
+class Bergbahn
+class Billettart
+
+Bahngesellschaft -- Bergbahn
+Bahngesellschaft -- Billettart
+@enduml
+----
+
+[NOTE]
+====
+Bergbahn, Billettart und Bahngesellschaft sind *Objektklassen* (Kästchen). Zwischen ihnen bestehen *Beziehungen* (Verbindungslinien). Die Gesamtheit der Definitionen für die Klassen und ihre Beziehungen bildet das *Datenmodell*. Ihre bildliche Darstellung erfolgt mit *Klassendiagrammen*.
+
+Mit Objektklassen verwandte Begriffe sind: Entitätsmenge, Tabelle, Typ, …
+
+Mit Beziehungen verwandte Begriffe sind: Assoziation, Verweis, Verknüpfung, (gegenseitige) Zeiger, …
+
+Mit Datenmodell verwandte Begriffe sind: (konzeptuelles) Schema, Datenbeschreibung, …
+====
+
+Objektklassen werden mit Substantiven bezeichnet. Es wird die Einzahl verwendet, weil man ausdrücken möchte, dass jedes einzelne Objekt (z.B. also jede einzelne Bergbahn) die mit der Klasse beschriebenen Eigenschaften hat.
+
+[NOTE]
+====
+Jede einzelne Bergbahn, jede Bahngesellschaft, jede Billettart wird durch ein konkretes *Objekt* beschrieben. Die Objekte sind die *Daten*, deren Struktur und Zusammenhänge durch das Modell beschrieben werden.
+
+Mit Objekt verwandte Begriffe sind: Exemplar, Instanz, Ausprägung, Datensatz, Zeile, Tupel, Eintrag, …
+====
+
+Jede Bergbahn wird von einer Bahngesellschaft betrieben. Diese bietet bestimmte Billettarten an. Ohne zusätzliche Informationen müssen sie jeweils für alle ihre Bergbahnen gültig sein. Damit wird man kaum zufrieden sein, da grössere Gesellschaften durchaus Billettarten herausgeben, die nur für einen Teil ihrer Bahnen gelten. Als nahe liegende Idee führt man eine weitere Beziehung zwischen Bergbahn und Billettart ein. Es wird also bei jeder Billettart aufgezählt, für welche Bergbahnen sie gilt:
+
+[[abb3]]
+.Das Datenmodell wurde um eine Beziehung Bergbahn – Billettart erweitert.
+[plantuml,abbildung-3,svg]
+----
+@startuml
+hide stereotype
+skinparam shadowing false
+skinparam linetype ortho
+
+class Bahngesellschaft
+class Bergbahn
+class Billettart
+
+Bahngesellschaft -- Bergbahn
+Bahngesellschaft -- Billettart
+Bergbahn -- Billettart
+@enduml
+----
+
+Häufig sind aber mehrere Billettarten (z.B. Tageskarte, Wochenkarte, etc.) im gleichen Bereich gültig. Mit dem bis jetzt formulierten Modell müssten die Zuordnungen für jede Billettart einzeln erstellt werden. Das ist eher mühsam und fehleranfällig. Darum hat wohl auch der nationale Tourismusverband ein etwas verfeinertes Modell gewählt:
+
+[[abb4]]
+.Revidiertes Datenmodell.
+[plantuml,abbildung-4,svg]
+----
+@startuml
+hide stereotype
+skinparam shadowing false
+skinparam linetype ortho
+
+class Bahngesellschaft
+class Bergbahn
+class Tarifbereich
+class Billettart
+
+Bahngesellschaft -- Bergbahn
+Bahngesellschaft -- Billettart
+Bergbahn -- Tarifbereich
+Tarifbereich -- Billettart
+@enduml
+----
+
+[WARNING]
+====
+Es lohnt sich, zunächst zu überlegen, welche Objektklassen für die Problemstellung nötig sind und wie sie zueinander in Beziehung stehen. Dabei sind die Eigenschaften der Objekte noch relativ unbedeutend. Wichtiger ist, dass geeignete Begriffe gesucht werden.
+====
+
+=== Wie viele Bahnen betreibt eine Bahngesellschaft?
+
+Mehrere Bergbahnen können einer Bahngesellschaft zugeordnet werden. Einer Bahngesellschaft können umgekehrt mehrere Bergbahnen zugeordnet werden. Mehrere? Wie viele genau?
+
+[NOTE]
+====
+Die *Kardinalität* hält fest, wie viele Objekte der anderen Art einem Objekt der einen Art zugeordnet sind.
+====
+
+In der Grafik wird die minimale und maximale Zahl der zulässigen anderen Objekte am Ende der Beziehungslinie bei der Klasse der anderen Objekte angemerkt. Ist die Zahl nach oben nicht beschränkt, schreibt man einen Stern (*) oder lässt die Angabe weg.
+
+[[abb5]]
+.Eine Bergbahn wird von genau einer (1) Bahngesellschaft betrieben. Umgekehrt kann aber eine Bahngesellschaft beliebig viele (*) Bergbahnen betreiben.
+[plantuml,abbildung-5,svg]
+----
+@startuml
+hide stereotype
+skinparam shadowing false
+skinparam linetype ortho
+
+class Bahngesellschaft
+class Bergbahn
+class Tarifbereich
+class Billettart
+
+Bahngesellschaft "1" -- "*" Bergbahn
+Bergbahn -- Tarifbereich
+Tarifbereich -- Billettart
+@enduml
+----
+
+=== Bergbahnen, Bahngesellschaften und Abonnements haben Eigenschaften
+
+Selbstverständlich ist es für die geplante Anwendung nötig, dass eine Bergbahn, eine Bahngesellschaft usw. detaillierter beschrieben wird. Eine Gesellschaft wird einen Namen und (bei Bahnen typisch) eine Kurzbezeichnung haben (z.B. Ilishornbahnen, IhB).
+
+[[abb6]]
+.Die Objektklasse Bahngesellschaft mit Namen und Kurzbezeichnung.
+[plantuml,abbildung-6,svg]
+----
+@startuml
+hide stereotype
+skinparam shadowing false
+
+class Bahngesellschaft {
+  +Name
+  +Kurzbezeichnung
+}
+@enduml
+----
+
+[NOTE]
+====
+Name und Kurzbezeichnung bezeichnen *Attribute* der Objektklasse Bahngesellschaft.
+
+Mit Attribut verwandte Begriffe sind: Kolonne, Feld, Eigenschaft, …
+====
+
+Bei diesen beiden Attributen ist es bereits durch die Bezeichnung recht offensichtlich, von welcher Art sie sind: Texte. Beim Preis einer Billettart werden weitere Angaben schon etwas wichtiger: Franken, Euro, Dollar, Ahländer Taler? Bei der Gültigkeitsdauer würde es vor allem dann anspruchsvoller, wenn sie nicht einfach mit einer Anzahl von Tagen beschrieben werden kann. Will man bei einer Bahn die Länge angeben, ist es natürlich auch von Belang, ob sie in Meter oder Kilometer beschrieben wird.
+
+Für die bearbeitenden Programme ist es wichtig zu wissen, wie lang die vorgesehenen Textattribute werden dürfen oder in welchem Bereich die vorgesehenen Zahlen liegen dürfen.
+
+[NOTE]
+====
+Der *Typ* eines Attributs beschreibt, welche Werte das Attribut annehmen kann und welche Bedeutung sie haben.
+
+Ein mit Typ verwandter Begriff ist Wertebereich.
+====
+
+[[abb7]]
+.Die Objektklasse «Bahngesellschaft» besitzt einen Namen und eine Kurzbezeichnung. Der Typ der Eigenschaft «Name» ist ein Text mit maximal hundert Zeichen. Für die Eigenschaft «Kurzbezeichnung» sind dagegen höchstens zehn Zeichen zugelassen.
+[cols="1,1,3",frame=none,grid=none]
+|===
+|*Objektklasse* | |*Bahngesellschaft*
+
+|Name: |Text |
+*Länge:* Höchstens hundert Zeichen
+
+|Kurzbezeichnung: |Text |
+*Länge:* Höchstens zehn Zeichen
+|===
+
+Man kann sich aber auch gut andere Attributtypen vorstellen:
+
+[[abb8]]
+.Die Objektklasse Billettart mit ihren Eigenschaften und deren Typen.
+[cols="1,1,3",frame=none,grid=none]
+|===
+|*Objektklasse* | |*Billettart*
+
+|Name: |Text |
+Text mit höchstens hundert Zeichen
+
+|Preis: |Zahl |
+*Genauigkeit:* Zwei Stellen nach dem Komma +
+*Zulässiger Bereich:* Zwischen 0 und 5000 +
+*Einheit:* Ahländer Taler
+|===
+
+Anders als eine Billettart oder eine Bergbahngesellschaft ist die Talstation einer Bergbahn ein Gegenstand, der real an einem bestimmten Ort existiert. Orte werden sinnvollerweise mittels Koordinaten innerhalb eines bestimmten Koordinatensystems, z.B. des Landessystems, beschrieben.
+
+[[abb9]]
+.Die Objektklasse Bergbahn mit ihren Eigenschaften und deren Typen.
+[cols="1,1,3",frame=none,grid=none]
+|===
+|*Objektklasse* | |*Bergbahn*
+
+|Name: |Text |
+Text mit höchstens hundert Zeichen
+
+|Lage der Talstation: |Punkt |
+*Koordinatensystem:* Ahländer Landeskoordinaten
+
+|Lage der Bergstation: |Punkt |
+*Koordinatensystem:* Ahländer Landeskoordinaten
+|===
+
+Für jede Eigenschaft wird somit ein passender Attributtyp festgelegt. Im Fall einer Skipiste ist der Schwierigkeitsgrad eine Aufzählung. Der Verlauf der Skipiste ist dagegen eine gerichtete Linie in Ahländer Landeskoordinaten. Details zu verschiedenen Typen werden in Kapitel 6 besprochen.

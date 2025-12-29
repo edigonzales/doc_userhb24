@@ -1,3 +1,6 @@
-** xref:userhb24/userhb_index.adoc[Titelseite]
-** xref:userhb24/userhb24_1.adoc[Lektüre zwischen Dichtung und Wahrheit]
-** xref:userhb24/userhb24_2.adoc[Installation]
+** xref:userhb24/userhb24_0_titel.adoc[Vorwort]
+** xref:userhb24/userhb24_1_lektuere_zwischen_dichtung_und_wahrheit.adoc[Lektüre zwischen Dichtung und Wahrheit]
+** xref:userhb24/userhb24_2_ueberblick_am_beispiel_ilistal.adoc[Überblick am Beispiel Ilistal]
+** xref:userhb24/userhb24_6_das_datenmodell_unter_der_lupe.adoc[Das Datenmodell unter der Lupe]
+
+

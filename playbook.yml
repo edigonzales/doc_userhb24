@@ -1,6 +1,6 @@
 site:
   title: INTERLIS // Dokumentation
-  start_page: user_manual::userhb24/userhb_index.adoc
+  start_page: user_manual::userhb24/userhb24_0_titel.adoc
   
 content:
   sources:

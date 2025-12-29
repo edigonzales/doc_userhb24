@@ -1,0 +1,17 @@
+= Lektüre zwischen Dichtung und Wahrheit
+
+Wer kennt ihn nicht, diesen Eindruck: Das verstehe ich doch nicht! Und all diese Fachwörter! Muss das wirklich so kompliziert sein?
+
+«Modellieren raumbezogener Daten» nähert sich darum dem Thema aus Laiensicht und bettet das Ganze in eine Geschichte ein: Die Erfolgsstory von Ilistal. Ilistal ist nirgendwo, weil es erfunden ist. Ilistal ist aber gleichzeitig überall, weil die Geschichte typische Situationen und Fragestellungen aufnimmt, die wir alle manchmal nur zu gut kennen. In diesem Dokument liegt Ilistal in Ahland, das ebenfalls erfunden ist. Dieses Hin und Her zwischen der erdichteten Welt des Ilistals und derjenigen der harten Wahrheiten von Theorie und Praxis findet mehrmals statt, für verschiedene Stufen des Interesses und des Kenntnisstandes.
+
+* *Überblick* — Der Überblick im Kapitel 2 führt die wichtigsten Elemente der Datenmodellierung und des modellbasierten Datentransfers ein.
+
+* *Modellierungsmethoden* — Kapitel 3 beleuchtet verschiedene bekannte Modellierungsmethoden, zeigt auf, wo UML und INTERLIS positioniert sind, und wo zusätzliche Informationen gefunden werden können.
+
+* *Ilistaler Beispiel* — Im Kapitel 4 wird das Ilistaler Beispiel detaillierter ausgeführt. Dabei werden mögliche Anliegen im Bereich des Tourismus modelliert. Es wird dabei aber nicht der Anspruch erhoben, eine sachgerechte Lösung zu definieren. Das Hauptaugenmerk liegt darin, Modellierungsprinzipien an Hand von Beispielen aufzuzeigen. Verweise auf zusätzliche Erklärungen in den Kapiteln 5 bis 8 erleichtern den Zugang zur Theorie. Für diejenigen, die bereits einiges über Datenmodellierung und modellbasierten Transfer wissen, ist dieses Kapitel vermutlich der ideale Einstieg.
+
+* *Diskussion des Beispiels* — Da die Vererbung ein zentrales Prinzip der vorgestellten Modellierungsmethode ist, befasst sich Kapitel 5 näher damit. Die folgenden Kapitel behandeln die Datenmodellierung im Allgemeinen (Kapitel 6), die Auswirkungen auf die eingesetzten Softwarepakete (Kapitel 7) und den Datentransfer (Kapitel 8). Wem das zu sehr ins Detail geht, der lässt Kapitel 5–8 einfach weg. Diese Kapitel können auch punktuell gelesen werden. Die Titel der Unterkapitel bestehen darum immer aus einem Teil gemäss der Ilistaler Geschichte und einem Fachausdruck.
+
+* *Grundsätzliche Überlegungen* — Kapitel 9 greift einige grundsätzliche Aspekte auf, die beim Modellieren beachtet werden sollten. Die Lektüre dürfte daher auch für jene von Interesse sein, die sich weniger für die Details interessieren.
+
+* *Schlussbericht für Behörden und Management* — Das abschliessende Kapitel 10 fasst nochmals die wichtigsten Punkte (zuhanden der Ilistaler Behörden und des Managements von Bahnen und Tourismusorganisation) zusammen. Der gehetzte Manager der realen Welt springt am besten gleich zu diesem Kapitel und verschafft sich damit einen Einstieg in die Problematik und die Möglichkeiten.
