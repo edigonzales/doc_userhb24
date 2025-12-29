@@ -1,5 +1,89 @@
+:noindex:
 == Einleitung
 
-****
-Kapitel 1 (Status des Standards, Vorwort) steht nicht online zur Verfügung.
-****
+=== Status
+
+Genehmigt: Das Dokument wurde vom Expertenausschuss genehmigt. Es hat für das definierte Einsatzgebiet im festgelegten Gültigkeitsbereich normative Kraft.
+
+=== Vorwort
+
+Dieses Referenzhandbuch richtet sich an Fachleute, die sich mit Informationssystemen, insbesondere mit Geo-Informationssystemen oder Landinformationssystemen befassen. Es dürfte insbesondere auch für Entscheidungsträger von Interesse sein, für die der sorgfältige Umgang mit den Daten ein Anliegen ist.
+
+Im Jahre 1991 erschien erstmals «INTERLIS – ein Datenaustausch-Mechanismus für Land-Informationssysteme». Hauptziel und Zweck von INTERLIS ist die möglichst präzise Beschreibung von Daten. Dieser Mechanismus besteht aus einer konzeptionellen Beschreibungssprache und einem sequentiellen Transferformat mit besonderer Berücksichtigung raumbezogener Daten (kurz Geodaten). Damit wird die Kompatibilität unter den Systemen und eine langfristige Verfügbarkeit, d.h. Archivierung und Dokumentation der Daten ermöglicht. Wird INTERLIS bei Entscheidungs-, Planungs- und Verwaltungs-Prozessen sinnvoll eingesetzt, kann daraus ein grosser Nutzen entstehen. Oft lassen sich – zum Beispiel durch Mehrfachverwendung und einheitlicher Abgabe von dokumentierten und geprüften Daten – erhebliche Einsparungen erzielen.
+
+Fünf Jahre nach seiner Veröffentlichung ist INTERLIS, das wir rückblickend Version 1, bzw. INTERLIS 1 nennen, aus seinem «Dornröschenschlaf» geweckt worden. Seither ist eine beachtliche Palette von Softwarewerkzeugen verfügbar, mit denen die Benutzer in INTERLIS beschriebene und codierte Geodaten verarbeiten können. INTERLIS ist aus einem Bedürfnis der Amtlichen Vermessung heraus entstanden, sein Anwendungsspektrum ist aber wesentlich umfassender. Das zeigen die weit über hundert Datenmodelle und Projekte, die zehn Jahre nach der Publikation von INTERLIS damit arbeiten. Der Standard «INTERLIS 1» wird als Schweizer Norm SN 612030 – parallel zu seinen Nachfolge-Versionen – noch eine Weile von Nutzen sein.
+
+Aufgrund von gestiegenen Benutzeranforderungen drängten sich verschiedene Erweiterungen von INTERLIS 1 auf, wie zum Beispiel die inkrementelle Nachlieferung, die strukturelle Objektorientierung oder die formale Beschreibung der grafischen Abbildung von Objekten. 1998 war der Beginn eines mehrjährigen Konsensprozesses, für den ein halbes Dutzend Fachleute aus Forschung, Verwaltung, Beratung und Softwareindustrie zusammengearbeitet haben. Herausgekommen ist ein Produkt, das man eine Erweiterung von INTERLIS 1 und gleichzeitig eine Synthese neuester Konzepte bezeichnen darf.
+
+Beim INTERLIS-2-Referenzhandbuch wurde wieder darauf geachtet, dass nur das absolut Notwendigste festgelegt wird: Beispiele und Figuren erscheinen nur dort, wo der knappe Text sinnvoll ergänzt wird. Damit bleibt die Spezifikation übersichtlich und einfach implementierbar. Wenn einige Sprachelemente, wie z.B. Sichten oder Darstellungsbeschreibungen, anspruchsvoll wirken, so liegt das höchst wahrscheinlich nicht an INTERLIS selbst, sondern am komplexen Sachverhalt. Zur Lösung dieses Problems sind uns folgende Wege bekannt: gute Beispiele, Aus- und Weiterbildung, sowie so genannte «Profile», d.h. Untermengen von wohl definierten INTERLIS-Werkzeugfähigkeiten.
+
+Für ein erstes Grundverständnis von den INTERLIS-2-Konzepten wird jedem Leser empfohlen, mindestens das Kapitel 2 _Grundprinzipien_ durchzulesen.
+
+[unnumbered]
+=== Erweiterungen von INTERLIS 2.4 gegenüber INTERLIS 2.3
+
+INTERLIS 2.3 wurde im Interesse von Verlässlichkeit und Investitionsschutz über eine längere Zeit stabil gehalten. Aus der Praxis mit Datenmodellierung und Datenaustausch haben sich in der Zwischenzeit verschiedene Verbesserungswünsche ergeben. Mit der Version INTERLIS 2.4 sollen vor allem diejenigen Anliegen rasch umgesetzt werden, welche für die Praxis von besonderer Bedeutung und relativ einfach realisierbar sind.
+
+Dies betrifft vor allem den Bereich des Datentransfers. Transfer-Files gemäss INTERLIS 2.4 unterscheiden sich erheblich von solchen gemäss INTERLIS 2.3 wegen wesentlicher Vereinfachungen und der Anpassung an die Gepflogenheiten in der XML-Welt (XML Best Practice). Wichtige Stichworte sind:
+
+* Präzise Definition der Zeichencodierung,
+* Regelung des Umgangs mit XML-Namespaces,
+* Verzicht auf die Alias-Tabelle in der Header-Section, weil sich das ursprünglich angestrebte polymorphe Lesen nicht durchgesetzt hat,
+* Für Objekt-Tags muss im Normalfall nur noch der Klassenname angegeben werden. Die Tags werden darum wesentlich kürzer, das Transfer-File kleiner und übersichtlicher,
+* Vereinfachung bei der Behandlung von Untermengen (LIST, BAG).
+
+Es wurden zudem die Regeln für die Ableitung von XML-Schemas (XSD) aus INTERLIS-Modellen in die Norm aufgenommen.
+
+Die meisten Änderungen der Modellierungssprache betreffen eher Detailpunkte:
+
+* Konsistenzbedingungen (Constraints) können mit Namen versehen werden, damit sie klar gekennzeichnet sind.
+* Constraints können auch zu Domains formuliert werden.
+* Eindeutigkeitsbedingungen können auf den einzelnen Transfer beschränkt werden.
+* Implikation als Vereinfachung für Ausdrücke in Constraints.
+* MULTI-Geometrien zur verbesserten Kompatibilität mit OGC, insbesondere das «Exklaven»-Problem wird damit vereinfacht.
+* Vereinfachung des Umgangs mit Zeit.
+* Untermengen (LIST und BAG) sind auch mit primitiven Typen (nicht nur mit Strukturen) möglich.
+* Linienattribute werden abgeschafft.
+
+Von spezieller Bedeutung dürfte die neue Möglichkeit generischer Koordinaten-Wertebereiche sein. Damit können Modelle definiert werden, deren konkrete Koordinaten noch offen sind (insbesondere kann offen gelassen werden, ob es sich um LV03- oder LV95-Koordinaten handelt). Die konkrete Festlegung erfolgt in spezifischen Modellen oder sogar erst in den Transferdaten.
+
+Für die Praxis ohne Belang dürfte die Änderung sein, dass die Deklaration von Modellen als «CONTRACTED» keine Bedeutung mehr hat. Das Konzept der Kontrakte hat in der Praxis keinen Niederschlag gefunden und wurde darum jetzt aufgegeben.
+
+Sprachlich wurden alle Änderungen so vorgenommen, dass gültige INTERLIS-2.3-Modelle durch die Änderung der Versions-Nummer auf 2.4 zu gültigen INTERLIS-2.4-Modellen werden. Trotzdem kann es aber für bestehende Modelle Sinn machen, die Modelle anzupassen und dabei die verschiedenen Neuerungen zu nutzen.
+
+[unnumbered]
+=== Erweiterungen von INTERLIS 2 gegenüber INTERLIS 1
+
+Die bestehende INTERLIS-1-Beschreibungssprache wurde bis auf wenige Ausnahmen erweitert und nicht abgeändert. Erweitert wurden zum Beispiel die Möglichkeiten, Beziehungen zwischen Objekten zu beschreiben (eigentliche Beziehungen als Assoziationsklasse und Referenzattribute mit REFERENCE TO). Hinweis: Die «->»-Syntax des INTERLIS-1-Beziehungsattributs erhielt eine andere Bedeutung, wobei darauf geachtet wurde, dass der Übergang von INTERLIS 1 auf 2 nicht unnötig erschwert wird (vgl. Kapitel 3.7 Eigentliche Beziehungen). Eigentliche Beziehungen und Referenzattribute können neu mit bestimmten Bedingungen auf Objekte in anderen Behältern verweisen. Behälter ist ein neuer Begriff für die uns wohlbekannte Organisation von Objekten (d.h. von Daten, die Realweltobjekte beschreiben, auch Objektinstanzen oder Instanzen genannt) in einer Datenbank.
+
+Verändert hat sich der Begriff Tabelle (TABLE), der neu Klasse (CLASS) heisst, entsprechend dem Übergang vom relationalen zum objekt-orientierten Formalismus. Ohne weitere Angaben gilt ein Attribut als fakultativ (OPTIONAL entfällt) und es muss angegeben werden, wenn es obligatorisch ist (MANDATORY). Ferner hat die Eindeutigkeitsbezeichnung (IDENT) ebenfalls einen neuen Namen bekommen (UNIQUE). Die neuen objekt-orientierten Konzepte umfassen Vererbung unter anderem von Themen, Klassen, Sichten, Darstellungsbeschreibungen und Wertebereichen. Weitere mächtige Erweiterungen sind Mengen-Datentypen (LIST, BAG), Konsistenzbedingungen, Datensichten, Darstellungsbeschreibungen, Beschreibungen von Einheiten, Beschreibung von Meta-Objekten (Koordinatensysteme und Grafiksig­naturen) und die inkrementelle Nachlieferung. Zudem sind spezielle, anwendungsspezifische Erweiterungen wie z.B. Funktionen und weitere Liniengeometrien definierbar. Dafür sollen aber Kontrakte, d.h. Vereinbarungen mit den Werkzeuganbietern, eingegangen werden.
+
+Neu übernimmt die eXtensible Markup Language (XML) die Codierung für das INTERLIS-2-Transferformat. Durch die absehbare internationale Verbreitung von XML erwarten wir eine gute Akzeptanz dieses Formats und eine grosse Anzahl kompatibler Softwareprodukte.
+
+Für den mit INTERLIS 1 vertrauten Benutzer ändert sich nicht viel, solange er die neuen Konzepte, wie Objekt-Orientierung oder Darstellungsbeschreibung, nicht nutzen will: Er kann seine bisherigen Kenntnisse in INTERLIS 2 weiterhin einsetzen. Werkzeuge, wie der frei erhältliche INTERLIS-2-Compiler, unterstützen ihn beim Umsteigen. Diejenigen Hersteller, welche bereits bei der Implementierung von INTERLIS 1 auf flexible Konfigurationsmöglichkeiten und auf die Regeln der Software-Entwicklungskunst (z.B. Modularisierung und Abstraktion) geachtet haben, werden ihre bisherigen Investitionen erhalten können; durch frei erhältliche Programmbibliotheken können sich die Softwarehersteller auf die Anbindung ihrer Systeme an INTERLIS 2 konzentrieren.
+
+[unnumbered]
+=== Ausblick
+
+INTERLIS 1 erschien zu einem Zeitpunkt, in dem beispielsweise die relationale Datendefinitionssprache SQL-92 noch nicht standardisiert und von Objektorientierung noch kaum die Rede war. Einige dieser heute etablierten Konzepte hat der Urheber von INTERLIS 1, Joseph Dorfschmid, in vorausschauender Weise in die Sprache einfliessen lassen. Mit dem Überarbeitungsprozess und der Einbindung objekt-orientierter und spezifischer Informatikkonzepte hat INTERLIS einen neuen Reifegrad erreicht. INTERLIS 2 kann damit heute – und nicht erst morgen – als effizientes Werkzeug eingesetzt werden.
+
+Es ist uns bewusst, dass die Suche nach der universellen Datenbeschreibungssprache noch nicht abgeschlossen ist. Jedes Zuwarten wäre aber mit ähnlichen Folgen verbunden, wie der kurzsichtige Umgang mit den Ressourcen unserer Erde. INTERLIS hat es verdient, nicht nur als Austauschformat sondern auch als nachhaltiges Werkzeug wahrgenommen zu werden: Mit INTERLIS bekam die Forderung nach nachhaltigem Umgang mit der Technik einen Namen!
+
+_Wabern, März 2016 / Rolf Zürcher_
+
+[unnumbered]
+=== Anmerkung zur Version 2.1.0
+
+Auch während der «Corona-Zeit 2021/22» wurde weiter intensiv an der Verbesserung von INTERLIS gearbeitet. Resultat sind die Ergebnisse des NGDI-Projekts 21-08 «Klärungen zum Umgang mit Geometrie in INTERLIS». Das Ergebnis sind Vorschläge, wie der Umgang mit Geo­metrien vereinfacht werden kann. Wesentliche Grundgedanken dabei waren: Die in INTERLIS bzw. in Systemen festgehaltene geometrische Beschreibung von Sachobjekten ist zwangsläufig mit Unsicherheiten behaftet, aber am Grundsatz von INTERLIS, nicht in die Systeme hinein zu regulieren, soll weiterhin festgehalten werden.
+
+Daraus ergaben sich folgende, grundsätzlich neue Regelungen, um die das Referenzhandbuch in xref:refhb24/refhb24_root.adoc#_umgang_mit_rundung_von_numerischen_werten_und_koordinaten[Umgang mit Rundung von numerischen Werten und Koordinaten] (neu), refhb24_root.adoc#_verwendete_syntax[Verwendete Syntax], refhb24_root.adoc#_grundsymbole_der_sprache[Grundsymbole der Sprache] und refhb24_root.adoc#_hauptregel[Hauptregel] erweitert worden ist:
+
+* Umgang mit flachen Kreisbögen.
+* Flächenberandung gemäss OGC/ISO.
+* Hinweis betr. Umgang/Berechnung von Bogenmitten.
+* Präzisierung betr. Umgang mit Lücken in Gebietsnetzen.
+* Zusätzliche Funktionen (insbesondere für Flächeninhalt und Linienlänge) zur Verwendung für abgeleitete Attribute.
+
+Wir sind überzeugt, dass INTERLIS damit neben seinen praktischen Vorzügen weiterhin auch ein höchst zeitgemässes Werkzeug im Umgang mit Geodaten bleibt.
+
+_Wabern, Januar 2024 / Frank Gottsmann_
