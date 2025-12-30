@@ -1,6 +1,8 @@
-= Aufbruchstimmung im Ilistal
+= Überblick am Beispiel Ilistal
 
-== Der Startschuss
+== Aufbruchstimmung im Ilistal
+
+=== Der Startschuss
 
 Die Ferienregion Ilistal hat sich entschlossen, ihre Webpage auf Vordermann zu bringen. Das vielfältige Transportangebot soll interaktiv mittels eines grafischen Dialogs abrufbar sein. Die Präsentation im Gemeindehaus war beeindruckend: Schöne Bilder, trendige Abkürzungen wie HTML, XML, GIS, SVG! Sogleich kamen natürlich weitere Wünsche auf. Im Bauamt entschloss man sich kürzlich, die Adressen nach der neuen Norm zu erfassen. Das könnte man doch nutzen! Der Direktor der Ilishornbahnen erinnert sich, dass der nationale Bergbahnenverband einen Dienst einrichten möchte, über den das landesweite Bergbahnangebot verfügbar ist. Dabei sollen auch die Fahrpreise und insbesondere die verschiedenen Verbundabonnemente abrufbar sein. Sein Kollege, der für die technischen Belange zuständig ist, macht darauf aufmerksam, dass er auf seinem Compi die ganze Infrastruktur verwalte. Informationen über die Bahntrassees und die Pisten könne er schon liefern. Da sei aber nicht alles klar. Kürzlich habe er nämlich auf dem Bauamt gefragt, ob er nicht die Daten der neuen Überbauung «Im Oberboden» haben könne. Sie hätten es dann schliesslich hingekriegt. Einige Informationen seien zwar verloren gegangen. Die seien aber nicht so wichtig gewesen.
 
@@ -8,7 +10,7 @@ Da wird die Gemeindepräsidentin hellhörig. Eine Kollegin, die in einer Gemeind
 
 Die Gemeindepräsidentin, eine freundliche aber entschlossene Frau, beauftragt darum den Bausekretär, sich zusammen mit dem technischen Leiter der Ilishornbahnen um die Sache zu kümmern. Als Fachmann zieht sie den Informatiker ihrer Kollegin bei.
 
-== Erste Auslegeordnung
+=== Erste Auslegeordnung
 
 Beim ersten Gespräch der Arbeitsgruppe purzelten die verschiedenen Stichworte und Argumente anfänglich noch wild durcheinander: Mit welchem Programmpaket arbeitet der nationale Verband? Meint man nur die Bahnunternehmung oder jede einzelne Bahn, jeden Skilift? Die einzelnen Bahnen, aber auch die Gebäude sind ja bereits in der amtlichen Vermessung enthalten. Wie kann man diese Daten brauchen? Was passiert, wenn Daten ändern, wenn neue Daten hinzukommen? Aber mein Programmpaket versteht nur DXF! Und ich nur Bahnhof!
 
@@ -89,11 +91,11 @@ Bahngesellschaft -- Billettart
 ====
 Bergbahn, Billettart und Bahngesellschaft sind *Objektklassen* (Kästchen). Zwischen ihnen bestehen *Beziehungen* (Verbindungslinien). Die Gesamtheit der Definitionen für die Klassen und ihre Beziehungen bildet das *Datenmodell*. Ihre bildliche Darstellung erfolgt mit *Klassendiagrammen*.
 
-Mit Objektklassen verwandte Begriffe sind: Entitätsmenge, Tabelle, Typ, …
+[.small]#Mit Objektklassen verwandte Begriffe sind: Entitätsmenge, Tabelle, Typ, ...#
 
-Mit Beziehungen verwandte Begriffe sind: Assoziation, Verweis, Verknüpfung, (gegenseitige) Zeiger, …
+[.small]#Mit Beziehungen verwandte Begriffe sind: Assoziation, Verweis, Verknüpfung, (gegenseitige) Zeiger, ...#
 
-Mit Datenmodell verwandte Begriffe sind: (konzeptuelles) Schema, Datenbeschreibung, …
+[.small]#Mit Datenmodell verwandte Begriffe sind: (konzeptuelles) Schema, Datenbeschreibung, ...#
 ====
 
 Objektklassen werden mit Substantiven bezeichnet. Es wird die Einzahl verwendet, weil man ausdrücken möchte, dass jedes einzelne Objekt (z.B. also jede einzelne Bergbahn) die mit der Klasse beschriebenen Eigenschaften hat.
@@ -102,7 +104,7 @@ Objektklassen werden mit Substantiven bezeichnet. Es wird die Einzahl verwendet,
 ====
 Jede einzelne Bergbahn, jede Bahngesellschaft, jede Billettart wird durch ein konkretes *Objekt* beschrieben. Die Objekte sind die *Daten*, deren Struktur und Zusammenhänge durch das Modell beschrieben werden.
 
-Mit Objekt verwandte Begriffe sind: Exemplar, Instanz, Ausprägung, Datensatz, Zeile, Tupel, Eintrag, …
+[.small]#Mit Objekt verwandte Begriffe sind: Exemplar, Instanz, Ausprägung, Datensatz, Zeile, Tupel, Eintrag, ...#
 ====
 
 Jede Bergbahn wird von einer Bahngesellschaft betrieben. Diese bietet bestimmte Billettarten an. Ohne zusätzliche Informationen müssen sie jeweils für alle ihre Bergbahnen gültig sein. Damit wird man kaum zufrieden sein, da grössere Gesellschaften durchaus Billettarten herausgeben, die nur für einen Teil ihrer Bahnen gelten. Als nahe liegende Idee führt man eine weitere Beziehung zwischen Bergbahn und Billettart ein. Es wird also bei jeder Billettart aufgezählt, für welche Bergbahnen sie gilt:
@@ -208,7 +210,7 @@ class Bahngesellschaft {
 ====
 Name und Kurzbezeichnung bezeichnen *Attribute* der Objektklasse Bahngesellschaft.
 
-Mit Attribut verwandte Begriffe sind: Kolonne, Feld, Eigenschaft, …
+[.small]#Mit Attribut verwandte Begriffe sind: Kolonne, Feld, Eigenschaft, ...#
 ====
 
 Bei diesen beiden Attributen ist es bereits durch die Bezeichnung recht offensichtlich, von welcher Art sie sind: Texte. Beim Preis einer Billettart werden weitere Angaben schon etwas wichtiger: Franken, Euro, Dollar, Ahländer Taler? Bei der Gültigkeitsdauer würde es vor allem dann anspruchsvoller, wenn sie nicht einfach mit einer Anzahl von Tagen beschrieben werden kann. Will man bei einer Bahn die Länge angeben, ist es natürlich auch von Belang, ob sie in Meter oder Kilometer beschrieben wird.
@@ -219,7 +221,7 @@ Für die bearbeitenden Programme ist es wichtig zu wissen, wie lang die vorgeseh
 ====
 Der *Typ* eines Attributs beschreibt, welche Werte das Attribut annehmen kann und welche Bedeutung sie haben.
 
-Ein mit Typ verwandter Begriff ist Wertebereich.
+[.small]#Ein mit Typ verwandter Begriff ist Wertebereich.#
 ====
 
 [[abb7]]
@@ -306,3 +308,121 @@ Zu den Ilishornbahnen gehören folgende Bergbahnen:
 .Die Ilishornbahnen betreiben mehrere Bahnen.
 image::userhb24/userhb24_fig11.png[]
 
+Die Ilishornbahnen bieten dafür folgende Billettarten an:
+
+* Einzelbillette für die Standseilbahn
+  (Preis für eine einfache Fahrt: 10 Taler; für eine Retourfahrt: 18 Taler);
+* Einzelbillette für die Gondelbahn
+  (Preis für eine einfache Fahrt: 8 Taler; für eine Retourfahrt: 14 Taler);
+* den Wanderer-Pass für die Standseilbahn und die Gondelbahn
+  (Preis für einen Tag: 15 Taler; für sieben Tage: 55 Taler);
+* den Sportpass für alle Bahnen
+  (Preis für einen Tag: 40 Taler, für zwei Tage: 70 Taler,
+  für sieben Tage: 195 Taler, für ein ganzes Jahr: 635 Taler);
+* die «Dino-Tageskarte» (10 Taler) und den «Wochenpass Ilosaurus Maximus»
+  (45 Taler) für die Ponylifte.
+
+=== Ilistal sendet
+
+Für den Test konnte mit dem Programm eine Datei erstellt werden, die alle Daten enthält.
+
+[NOTE]
+====
+Die einfachste Transferart ist der *Volltransfer*, bei dem alle Daten vollständig übermittelt werden.
+====
+
+Ein kurzer Blick in die Datei zeigte zwar viel Unverständliches, aber immerhin fand man die Texte
+«Ilishornbahnen», gleich daneben «IhB», und auch der Abonnementspreis war leicht zu finden.
+
+Gleich noch ein Test: Der Jahrespreis für den Sportpass wird von 635 auf 600 Taler gesenkt und mit
+der Funktion Nachlieferung eine neue Datei erstellt. Der Anfang sieht zwar noch gleich aus.
+Die Texte «Ilishornbahnen» und «IhB» fehlen. Aber hier, fast am Schluss – das könnte der neue Preis sein!
+
+[NOTE]
+====
+Dank der *inkrementellen Nachlieferung* müssen nach einer Änderung nicht alle Daten,
+sondern nur die geänderten Objekte übermittelt werden.
+====
+
+Beide Dateien wurden dann wie vereinbart dem Tourismusverband geschickt. Dieser konnte sie offenbar
+problemlos lesen. Einwand des Informatikers: Das ist ja auch nicht verwunderlich. Solange wir genau
+die Daten erfassen, die der Verband will, und dies erst noch mit einem Programm, das der Verband zur
+Verfügung stellt, kann man das ja schon erwarten.
+
+Aber wir Ilistaler wollen doch mehr! Und wir möchten doch, wenn immer möglich,
+unsere bisherigen Programmpakete einsetzen.
+
+== Ilistal will mehr
+
+=== Zielsetzung
+
+Ilistal möchte also nicht einfach den gleichen Service anbieten, wie dies der nationale
+Tourismusverband tut. Folgende Zusatzleistungen stehen im Vordergrund:
+
+* Anzeige der aktuellen Betriebs- und Wartezeiten der verschiedenen Bahnen
+  und ob sie von Wanderern und Schlittlern benutzt werden können;
+* Anzeige der Pisten inkl. Schwierigkeitsgrad und Befahrbarkeit;
+* bildliche Darstellung (inkl. Anzeige der Wälder und Strassen);
+* Anzeige der Gasthäuser der Region;
+* Anzeige, wo sich die Gebäude mit welcher Postadresse befinden.
+
+=== Ilistal nutzt Vorhandenes
+
+Die für die bildliche Darstellung nötigen Daten der Wälder und Strassen möchte man
+natürlich nicht selbst erfassen, denn das Bauamt hat schliesslich die Daten der
+amtlichen Vermessung, welche auch Wälder und Strassen enthalten. Und das Bauamt hat
+doch damit begonnen, die Gebäudeadressen gemäss der neuen Norm zu erfassen.
+
+Nun macht es wenig Sinn, im Datenmodell von Ilistal all diese Definitionen zu
+wiederholen. Man möchte einfach die vorhandenen Modelle der amtlichen Vermessung und
+der Gebäudeadressen nutzen.
+
+[NOTE]
+====
+Ein Datenmodell ist nicht eine isolierte Beschreibung, sondern kann auf bereits
+bestehenden Datenmodellen aufbauen.
+
+[.small]#Im Sinne des Aufbaus verwandte Begriffe zu Datenmodell sind:
+Module, Pakete, Packages, ...#
+====
+
+[[abb12]]
+.Das Ilistaler Tourismus-Datenmodell (IlisTour) braucht nicht alles selbst zu definieren.
+Stattdessen baut es auf anderen Modellen auf: Es verwendet Teile des nationalen
+Tourismus-Modells (NatTour), der nationalen Grundlagen von Ahland, der amtlichen
+Vermessung, der Gebäudeadressen sowie allgemeine Grundlagen. Die gestrichelte
+Linie mit gefülltem Pfeil steht für die Abhängigkeit. Häufig wird die allgemeine Grundlage
+wie hier oben, der Spezialfall unten gezeichnet. Die umgekehrte Schreibweise ist jedoch
+ebenfalls verbreitet.
+[plantuml, abbildung-12, svg]
+----
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+package "Allgemeine\nGrundlagen" as AG
+
+package "Nationale\nGrundlagen\nAhland" as NGA
+
+package "Amtliche\nVermessung" as AV
+package "Gebäude-\nadressen" as GA
+
+package "Tourismus National\n(NatTour)" as NT
+package "Tourismus Ilistal\n(IlisTour)" as IT
+
+NGA ..> AG
+AV  ..> NGA
+AV  ..> AG
+GA  ..> NGA
+GA  ..> AG
+
+NT  ..> NGA
+NT  ..> AV
+NT  ..> GA
+NT  ..> AG
+
+IT  ..> NT
+IT  ..> AG
+IT  ..> NGA
+@enduml
+----
